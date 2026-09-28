@@ -15,6 +15,12 @@ public final class OpenAIProvider: LLMProvider, @unchecked Sendable {
     private let authHeaderField: String
     private let authValuePrefix: String
 
+    /// When set (for example `"LM Studio"`), this transport serves a local
+    /// model server instead of a cloud endpoint: ZeroCloud still permits
+    /// loopback endpoints but rejects anything else. `nil` keeps the cloud
+    /// behavior that refuses all network egress under ZeroCloud.
+    private let localServerName: String?
+
     public init(
         apiKey: String,
         model: String = "gpt-4o",
@@ -22,7 +28,8 @@ public final class OpenAIProvider: LLMProvider, @unchecked Sendable {
         capabilities: ModelCapabilities = .cloudStandard,
         urlSession: URLSession = .shared,
         authHeaderField: String = "Authorization",
-        authValuePrefix: String = "Bearer "
+        authValuePrefix: String = "Bearer ",
+        localServerName: String? = nil
     ) {
         self.id = "openai.\(model)"
         self.capabilities = capabilities
@@ -32,6 +39,15 @@ public final class OpenAIProvider: LLMProvider, @unchecked Sendable {
         self.urlSession = urlSession
         self.authHeaderField = authHeaderField
         self.authValuePrefix = authValuePrefix
+        self.localServerName = localServerName
+    }
+
+    private func ensureZeroCloudCompliant() throws {
+        if let localServerName {
+            try ZeroCloudMode.ensureLoopbackServerAllowed(endpoint, provider: localServerName)
+        } else {
+            try ZeroCloudMode.ensureAllowed(provider: "OpenAI")
+        }
     }
 
     public func generate(
@@ -39,7 +55,7 @@ public final class OpenAIProvider: LLMProvider, @unchecked Sendable {
         tools: [ToolDefinition],
         options: GenerationOptions
     ) async throws -> ModelResponse {
-        try ZeroCloudMode.ensureAllowed(provider: "OpenAI")
+        try ensureZeroCloudCompliant()
 
         let bodyData = try Self.requestBody(
             model: model,
@@ -117,7 +133,7 @@ public final class OpenAIProvider: LLMProvider, @unchecked Sendable {
         AsyncThrowingStream { continuation in
             let task = Task {
                 do {
-                    try ZeroCloudMode.ensureAllowed(provider: "OpenAI")
+                    try self.ensureZeroCloudCompliant()
                     let bodyData = try Self.requestBody(
                         model: model,
                         prompt: prompt,

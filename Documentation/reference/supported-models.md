@@ -64,7 +64,14 @@ boundary for user-facing discovery:
 - `LocalModelCatalog` for validated manifests already in the app's model
   library;
 - `HuggingFaceCatalog` for explicit Hugging Face metadata and lower-level MLX
-  package discovery;
+  package discovery (dependency-free metadata path; the
+  [swift-huggingface](https://github.com/huggingface/swift-huggingface)
+  `HubClient` is the supported ecosystem Hub/download client, linked by
+  `ArchonAgent` for `MLXLocalProvider`, with credentials host-owned);
+- `CoreAIModelZooCatalog` for verified Core AI (`.aimodel`) bundles from the
+  [Core AI model zoo](https://github.com/john-rocky/coreai-model-zoo)
+  `models/index.json` — lower-level developer use only, never wrapped in
+  `MLXModelCatalog`/`OfficialModelCatalog`;
 - `OfficialModelCatalog` for user-facing first-party MLX discovery using the
   conservative publisher namespace policy;
 - `AppleCoreAIModelCatalog`, `ArchonCompatibleModelCatalog`, or

@@ -31,6 +31,20 @@ public struct ZeroCloudMode: Sendable {
 
     /// Local model servers remain available in ZeroCloudMode, but a custom endpoint
     /// must still be loopback-only so the mode cannot be bypassed by configuration.
+    /// Use this for any loopback-hosted server (LM Studio, Ollama via a custom
+    /// label, or a host LAN endpoint that must fail closed under ZeroCloud).
+    public static func ensureLoopbackServerAllowed(_ endpoint: URL, provider: String) throws {
+        do {
+            try ArchonNetworkSecurity.ensureLoopbackEndpointAllowed(endpoint, provider: provider)
+        } catch {
+            throw GraphError.zeroCloudViolation(
+                "Blocked \(provider) endpoint '\(endpoint.absoluteString)'. ZeroCloudMode only permits loopback model servers."
+            )
+        }
+    }
+
+    /// Local model servers remain available in ZeroCloudMode, but a custom endpoint
+    /// must still be loopback-only so the mode cannot be bypassed by configuration.
     public static func ensureOllamaEndpointAllowed(_ endpoint: URL) throws {
         do {
             try ArchonNetworkSecurity.ensureLoopbackEndpointAllowed(endpoint, provider: "Ollama")

@@ -77,6 +77,27 @@ overrides any of them via `model`. Live inference against vendor endpoints
 stays a consuming-app gate — package tests prove endpoints, auth headers,
 and factory wiring with stubbed transport only.
 
+## Local model servers
+
+Ollama and LM Studio are explicit localhost integrations over Archon-owned
+provider types — not in-process runtimes, catalog entries, or adaptive
+routing candidates (see D-005):
+
+| Server | Case | Endpoint / auth notes |
+| --- | --- | --- |
+| Ollama | `.ollama` | `localhost:11434` + `/api/chat`, native Ollama API, no key |
+| LM Studio | `.lmStudio` | `localhost:1234/v1/chat/completions`, OpenAI-compatible, no key unless the server sets one |
+
+`ArchonAI.lmStudio(model:)` targets the server's default root with the model
+loaded in LM Studio; a custom `baseURL` covers changed ports or LAN hosts.
+`LMStudioProvider` shares the `OpenAIProvider` transport with
+`localServerName` set, so `ZeroCloudMode` keeps permitting loopback endpoints
+while failing closed on anything else before a request is built. Server
+lifecycle, weights, keys, sandbox entitlements, and ATS allowances stay
+host-owned. The macOS setup path is covered in [Serve a macOS app from a
+local LM Studio server](../../how-to/lm-studio-local-server.md); live local
+inference stays a consuming-app gate.
+
 ## Adaptive local model selection
 
 `AdaptiveModelCatalog` is the family-neutral input to

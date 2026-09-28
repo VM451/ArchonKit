@@ -37,6 +37,7 @@ publisher-aware symbol fallback visible when artwork is missing or unavailable.
 | `ArchonCompatibleModelCatalog` | Static entries or an injected HTTP registry | Depends on initializer |
 | `RemoteModelCatalog` | HTTP registry returning model descriptors | Yes |
 | `HuggingFaceCatalog` | Hugging Face metadata and repository inventory | Yes |
+| `CoreAIModelZooCatalog` | Verified Core AI (`.aimodel`) recipes from the Core AI model zoo index | Yes when fetching the index |
 | `CompositeModelCatalog` | Ordered composition of other catalogs | Inherits its providers |
 | `MLXModelCatalog` | Strict MLX-only wrapper around another catalog | Inherits its provider |
 | `OfficialModelCatalog` | First-party namespace plus MLX-only wrapper for user-facing discovery | Inherits its provider |
@@ -95,6 +96,45 @@ lower-level metadata or conversion inspection, but it is not a user-facing
 official discovery catalog. The default official policy requires the model
 descriptor and MLX variant to share a first-party namespace; community
 conversion namespaces are rejected.
+
+## Core AI model zoo
+
+`CoreAIModelZooCatalog` is the lower-level developer catalog for verified
+Core AI bundles published through the [Core AI model
+zoo](https://github.com/john-rocky/coreai-model-zoo). It reads the zoo's
+machine-readable `models/index.json` (same document agents should start
+from), keeps only `verified` recipes that publish both an `hf_repo` and a
+bundle, and maps each one to a `.coreAI`/`.aimodel` variant with an
+`.appleCoreAI` source. Draft entries and recipes without a published bundle
+are skipped; variants carry no `downloadURL` because this catalog never
+invents bundle byte URLs — hosts resolve bundle bytes through
+`HuggingFaceCatalog.inspect(repositoryID:)` or a host-owned
+[swift-huggingface](https://github.com/huggingface/swift-huggingface)
+`HubClient`, then run the normal validation and install path.
+
+```swift
+let zoo = CoreAIModelZooCatalog() // fetches models/index.json on search
+let models = try await zoo.search(ModelSearchRequest(
+    query: "Nemotron",
+    runtime: .coreAI,
+    format: .aimodel
+))
+```
+
+The zoo catalog must never be wrapped in `MLXModelCatalog` or
+`OfficialModelCatalog`: user-facing discovery stays official-publisher
+MLX-only, and Core AI entries are excluded from those boundaries by
+construction. Zoo conversion tooling (`zoo_convert.py`, `coreai-torch`) is
+developer-side preparation and never an app runtime requirement.
+
+## Hugging Face ecosystem client
+
+[swift-huggingface](https://github.com/huggingface/swift-huggingface) is the
+supported Hub and Inference Providers API client. `ArchonModels` keeps its own
+dependency-free Hub metadata path (`HuggingFaceCatalog`) so lightweight
+products never inherit the client; `ArchonAgent` links the `HuggingFace`
+product for `MLXLocalProvider` downloads and `Tokenizers` support via
+`swift-transformers`. Hub credentials stay host-owned in every path.
 
 ## Authentication
 

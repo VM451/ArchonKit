@@ -11,4 +11,5 @@ Swift and Swift Package Manager.
 - [Configure the local WebKit sandbox](configure-sandbox.md)
 - [Host semantic actions](host-semantic-actions.md)
 - [Build a realtime voice + vision agent](realtime-voice-agent.md)
+- [Serve a macOS app from a local LM Studio server](lm-studio-local-server.md)
 - [Validate a release](validate-a-release.md)

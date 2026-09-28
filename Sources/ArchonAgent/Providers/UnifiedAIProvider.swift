@@ -113,6 +113,16 @@ public enum ArchonAIModel: Sendable {
     /// Local Ollama inference server.
     case ollama(endpoint: URL = URL(string: "http://localhost:11434")!, model: String = "gemma4:latest")
 
+    /// Local LM Studio inference server over its OpenAI-compatible endpoint.
+    /// The default base URL is LM Studio's local server root
+    /// (`http://localhost:1234/v1`); `model` must name the model loaded in
+    /// LM Studio. No API key is needed unless the server sets one.
+    case lmStudio(
+        baseURL: URL = LMStudioProvider.defaultBaseURL,
+        model: String = "local-model",
+        apiKey: String = ""
+    )
+
     /// Custom user-provided LLM provider.
     case custom(any LLMProvider)
 }
@@ -219,6 +229,9 @@ public enum ArchonAI: Sendable {
         case .ollama(let endpoint, let model):
             return OllamaProvider(model: model, endpoint: endpoint)
 
+        case .lmStudio(let baseURL, let model, let apiKey):
+            return LMStudioProvider(model: model, baseURL: baseURL, apiKey: apiKey)
+
         case .custom(let provider):
             return provider
         }
@@ -315,6 +328,18 @@ public enum ArchonAI: Sendable {
         model: String = "nvidia/nemotron-3.5-lightning:free"
     ) -> any LLMProvider {
         OpenRouterProvider(apiKey: apiKey, model: model)
+    }
+
+    /// Local LM Studio server (default `http://localhost:1234/v1`). Pass the
+    /// model identifier loaded in LM Studio via `model`; no API key is needed
+    /// unless the server sets one. macOS setup is covered in
+    /// `Documentation/how-to/lm-studio-local-server.md`.
+    public static func lmStudio(
+        model: String = "local-model",
+        baseURL: URL = LMStudioProvider.defaultBaseURL,
+        apiKey: String = ""
+    ) -> any LLMProvider {
+        LMStudioProvider(model: model, baseURL: baseURL, apiKey: apiKey)
     }
 
     /// Cerebras Cloud provider.

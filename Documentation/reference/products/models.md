@@ -38,6 +38,18 @@ return nil), and the runtime still rejects raw weights through
 `ModelCompatibilityAnalyzer`, `ModelArtifactInspector.isRunnable`, and
 `MLXModelCatalog`.
 
+## Core AI model zoo and Hugging Face client
+
+`CoreAIModelZooCatalog` discovers verified Core AI (`.aimodel`) bundles from
+the [Core AI model zoo](https://github.com/john-rocky/coreai-model-zoo)
+`models/index.json`: only `verified` recipes with a published `hf_repo` and
+bundle become `.coreAI`/`.aimodel` variants, and bundle bytes are resolved
+through `HuggingFaceCatalog` or a host-owned
+[swift-huggingface](https://github.com/huggingface/swift-huggingface)
+`HubClient`. The zoo catalog is lower-level developer surface and is never
+part of user-facing MLX discovery. See the [catalog
+reference](../model-catalogs.md) for wiring.
+
 ## Download attempts and storage analytics
 
 `ModelDownloadState` carries `ModelDownloadAttempt` snapshots (try count
