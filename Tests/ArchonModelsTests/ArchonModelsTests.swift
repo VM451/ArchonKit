@@ -1645,10 +1645,13 @@ struct ArchonModelsTests {
 
         await transfer.waitForRequest()
         consumer.cancel()
-        _ = await consumer.result
-        try await Task.sleep(for: .milliseconds(50))
+        var isDownloading = await manager.isDownloading(variantID: variant.id)
+        for _ in 0..<50 where isDownloading {
+            try await Task.sleep(for: .milliseconds(50))
+            isDownloading = await manager.isDownloading(variantID: variant.id)
+        }
 
-        #expect(await manager.isDownloading(variantID: variant.id) == false)
+        #expect(isDownloading == false)
         #expect(try await library.contains(modelID: variant.modelID) == false)
         await transfer.finishCurrent()
     }
@@ -1836,9 +1839,13 @@ struct ArchonModelsTests {
         try await Task.sleep(for: .milliseconds(50))
         consumer.cancel()
         _ = await consumer.result
-        try await Task.sleep(for: .milliseconds(50))
+        var isDownloading = await manager.isDownloading(variantID: identifier)
+        for _ in 0..<50 where isDownloading {
+            try await Task.sleep(for: .milliseconds(50))
+            isDownloading = await manager.isDownloading(variantID: identifier)
+        }
 
-        #expect(await manager.isDownloading(variantID: identifier) == false)
+        #expect(isDownloading == false)
         try? await coordinator.cancel(identifier: "\(identifier)#0")
     }
 

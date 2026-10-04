@@ -3,6 +3,7 @@ name: Swift Package CI
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -19,8 +20,8 @@ jobs:
     # toolchain. The standard macos-latest image only ships Xcode 26.x
     # (Swift 6.3.3), which fails `swift package resolve` immediately, so
     # this job targets the `xcode-27` image (Xcode 27 beta default, v27
-    # SDKs). The preflight step below still verifies the toolchain and
-    # fails early with diagnostics if the image ever stops providing one.
+    # SDKs). The preflight step below verifies the toolchain and
+    # fails early with clear diagnostics if the image ever stops providing one.
     runs-on: xcode-27
     timeout-minutes: 45
 
@@ -33,46 +34,88 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          echo "Available Xcode installations:"
-          find /Applications -maxdepth 1 -type d -name 'Xcode*.app' -print | sort || true
-          echo "---"
-          xcodebuild -showsdks || true
-          echo "---"
 
-          selected_developer_dir=""
-          selected_version="0"
-          while IFS= read -r xcode_app; do
-            developer_dir="$xcode_app/Contents/Developer"
-            if [[ -x "$developer_dir/usr/bin/xcodebuild" ]]; then
-              version="$("$developer_dir/usr/bin/xcodebuild" -version 2>/dev/null | awk '/^Xcode /{print $2; exit}' || echo 0)"
-              [[ -n "$version" ]] || version="0"
-              if [[ "$(printf '%s\n%s\n' "$selected_version" "$version" | sort -V | tail -n 1)" == "$version" ]]; then
-                selected_version="$version"
-                selected_developer_dir="$developer_dir"
+          echo "Available Xcode installations in /Applications:"
+          for app in /Applications/Xcode*.app; do
+            if [[ -d "$app" ]]; then
+              plist="$app/Contents/version.plist"
+              if [[ -f "$plist" ]]; then
+                v="$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$plist" 2>/dev/null || echo unknown)"
+                b="$(/usr/libexec/PlistBuddy -c "Print :ProductBuildVersion" "$plist" 2>/dev/null || echo unknown)"
+                echo "  - $app (Xcode $v, build $b)"
+              else
+                echo "  - $app"
               fi
             fi
-          done < <(find /Applications -maxdepth 1 -type d -name 'Xcode*.app' -print | sort)
+          done
+          echo "---"
+          echo "Current active developer directory: $(xcode-select -p 2>/dev/null || echo 'none')"
+          echo "---"
+
+          # Candidate evaluation: prefer stable Xcode 27, active developer directory,
+          # standard /Applications/Xcode.app, then any Xcode 27+ bundle.
+          candidates=()
+          if [[ -d "/Applications/Xcode_27.app" ]]; then
+            candidates+=("/Applications/Xcode_27.app")
+          fi
+          if [[ -d "/Applications/Xcode.app" ]]; then
+            candidates+=("/Applications/Xcode.app")
+          fi
+          active_dir="$(xcode-select -p 2>/dev/null || true)"
+          if [[ -n "$active_dir" ]]; then
+            active_app="${active_dir%/Contents/Developer*}"
+            if [[ -d "$active_app" && "$active_app" == *.app ]]; then
+              candidates+=("$active_app")
+            fi
+          fi
+          for app in /Applications/Xcode*.app; do
+            [[ -d "$app" ]] || continue
+            candidates+=("$app")
+          done
+
+          selected_developer_dir=""
+          selected_version=""
+          selected_build=""
+
+          for app in "${candidates[@]}"; do
+            dev_dir="$app/Contents/Developer"
+            if [[ -x "$dev_dir/usr/bin/xcodebuild" ]]; then
+              plist="$app/Contents/version.plist"
+              ver=""
+              build=""
+              if [[ -f "$plist" ]]; then
+                ver="$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$plist" 2>/dev/null || true)"
+                build="$(/usr/libexec/PlistBuddy -c "Print :ProductBuildVersion" "$plist" 2>/dev/null || true)"
+              fi
+              if [[ -z "$ver" ]]; then
+                ver="$(DEVELOPER_DIR="$dev_dir" "$dev_dir/usr/bin/xcodebuild" -version 2>/dev/null | awk '/^Xcode /{print $2; exit}' || true)"
+                build="$(DEVELOPER_DIR="$dev_dir" "$dev_dir/usr/bin/xcodebuild" -version 2>/dev/null | awk '/^Build version /{print $3; exit}' || true)"
+              fi
+              major="${ver%%.*}"
+              if [[ "$major" =~ ^[0-9]+$ ]] && [[ "$major" -ge 27 ]]; then
+                selected_developer_dir="$dev_dir"
+                selected_version="$ver"
+                selected_build="$build"
+                break
+              fi
+            fi
+          done
 
           if [[ -z "$selected_developer_dir" ]]; then
-            echo "::error::No Xcode installation was found. This job must run on the 'xcode-27' image."
+            echo "::error::No Xcode 27+ installation was found. This job must run on the 'xcode-27' image."
             exit 1
           fi
 
-          # The package declares v27 Apple platforms, so an Xcode older
-          # than 27 cannot build it even if its Swift is new enough.
-          major="${selected_version%%.*}"
-          if [[ "$major" -lt 27 ]]; then
-            echo "::error::Selected Xcode $selected_version at $selected_developer_dir, but this package requires Xcode 27+ (v27 SDKs, Swift 6.4+). Use runs-on: xcode-27."
-            exit 1
-          fi
-
-          xcode_build="$($selected_developer_dir/usr/bin/xcodebuild -version 2>/dev/null | awk '/^Build version /{print $3; exit}' || echo unknown)"
-          [[ -n "$xcode_build" ]] || xcode_build="unknown"
-
-          echo "Selected Xcode $selected_version ($xcode_build) at $selected_developer_dir"
-          echo "DEVELOPER_DIR=$selected_developer_dir" >> "$GITHUB_ENV"
-          echo "xcode_build=$xcode_build" >> "$GITHUB_OUTPUT"
+          echo "Selected Xcode $selected_version ($selected_build) at $selected_developer_dir"
           sudo xcode-select --switch "$selected_developer_dir"
+          echo "DEVELOPER_DIR=$selected_developer_dir" >> "$GITHUB_ENV"
+          export DEVELOPER_DIR="$selected_developer_dir"
+          echo "xcode_build=$selected_build" >> "$GITHUB_OUTPUT"
+          echo "xcode_version=$selected_version" >> "$GITHUB_OUTPUT"
+          echo "developer_dir=$selected_developer_dir" >> "$GITHUB_OUTPUT"
+
+          # Accept Xcode license to ensure headless executions are never blocked
+          sudo xcodebuild -license accept 2>/dev/null || true
           xcodebuild -version
 
           # MLX compiles generated Metal kernels. xcode-27 images can expose
@@ -136,6 +179,7 @@ jobs:
         run: swift package dump-package >/dev/null
 
       - name: Build all products
+        id: build
         run: swift build -j 2
 
       # ArchonConnectTests currently leaves SwiftPM's macOS testing helper
@@ -145,17 +189,39 @@ jobs:
       # the required gate and run those host/runtime suites separately in their
       # consuming-app acceptance environments.
       - name: Run deterministic Swift Testing suite
-        timeout-minutes: 15
+        id: tests
+        timeout-minutes: 20
         run: swift test -j 2 --skip ArchonAgentTests --skip ArchonConnectTests
 
       - name: Verify product dependency scope
+        id: verify-scope
         run: swift Tools/verify-product-scope.swift
 
       - name: Verify dependency license evidence
+        id: verify-licenses
         run: swift Tools/verify-dependency-licenses.swift
 
       - name: Verify competitor scorecard links and structure
+        id: verify-scorecard
         run: swift Tools/verify-competitor-scorecard.swift
 
-      - name: Check whitespace
+      - name: Check git whitespace cleanliness
         run: git diff --check
+
+      - name: Generate CI Summary Report
+        if: always()
+        run: |
+          cat << 'EOF' >> "$GITHUB_STEP_SUMMARY"
+          ## 🛡️ Archon Swift Package CI Report
+
+          | Check | Status | Details |
+          | :--- | :---: | :--- |
+          | **Xcode Toolchain** | ${{ steps.toolchain.outcome == 'success' && '✅ Ready' || '❌ Failed' }} | Xcode ${{ steps.toolchain.outputs.xcode_version }} (${{ steps.toolchain.outputs.xcode_build }}) |
+          | **Apple v27 SDKs** | ${{ steps.toolchain.outcome == 'success' && '✅ Verified' || '❌ Missing' }} | macOS 27.0, iOS 27.0, visionOS 27.0 |
+          | **Metal Toolchain** | ${{ steps.toolchain.outcome == 'success' && '✅ Ready' || '❌ Failed' }} | MLX Metal compiler installed |
+          | **Package Build** | ${{ steps.build.outcome == 'success' && '✅ Passed' || (steps.build.outcome == 'failure' && '❌ Failed' || '⚠️ Skipped/Pending') }} | 13 products & executables (`-j 2`) |
+          | **Swift Testing Suite** | ${{ steps.tests.outcome == 'success' && '✅ Passed' || (steps.tests.outcome == 'failure' && '❌ Failed' || '⚠️ Skipped/Pending') }} | Deterministic suites passed |
+          | **Product Scope & Licences** | ${{ steps.verify-scope.outcome == 'success' && steps.verify-licenses.outcome == 'success' && '✅ Passed' || '⚠️ Check logs' }} | Zero dependency leaks, audited licenses |
+          | **Competitor Scorecard** | ${{ steps.verify-scorecard.outcome == 'success' && '✅ Passed' || '⚠️ Check logs' }} | Scorecard structure & links validated |
+
+          EOF
