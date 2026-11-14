@@ -62,6 +62,29 @@ public struct ArchonSearchAgentTools: Sendable {
               },
               "required": ["query"]
             }
+          },
+          {
+            "name": "agent_reach",
+            "description": "Read-only multi-platform reach across GitHub, YouTube (metadata & subtitles), Twitter/X, Reddit (posts & comments), Facebook, Instagram, Bilibili, Xiaohongshu, LinkedIn, Boss Zhipin, V2EX, Xueqiu, Xiaoyuzhou podcasts, and Web.",
+            "parameters": {
+              "type": "object",
+              "properties": {
+                "channel": { "type": "string", "enum": ["github", "youtube", "twitter", "reddit", "facebook", "instagram", "bilibili", "xiaohongshu", "linkedin", "boss", "v2ex", "xueqiu", "xiaoyuzhou", "web"], "description": "Target channel; omit to auto-detect from URL or default to 'web'" },
+                "action": { "type": "string", "enum": ["search", "read", "profile", "comments", "subtitle", "transcribe", "thread", "tweets", "subreddit", "hot", "node", "user", "quote", "hot_posts", "hot_stocks", "jobs", "posts"], "description": "Action to perform on the channel (default: 'read' for URLs, 'search' for queries)" },
+                "target": { "type": "string", "description": "Target URL, search query, repository ('owner/repo'), video/topic ID, stock symbol, or username" },
+                "limit": { "type": "integer", "description": "Maximum items to return (default: 5)" },
+                "language": { "type": "string", "description": "Preferred language code for subtitles/transcripts (e.g. 'en', 'zh')" }
+              },
+              "required": ["target"]
+            }
+          },
+          {
+            "name": "reach_channels",
+            "description": "Lists all 14 supported Agent Reach channels, their tiers, domains, and declared actions.",
+            "parameters": {
+              "type": "object",
+              "properties": {}
+            }
           }
         ]
         """
@@ -195,6 +218,17 @@ public struct ArchonSearchAgentTools: Sendable {
             ## Synthesis
             Evidence collection completed. No model-backed synthesis was claimed or fabricated; provide an explicit structured-generation adapter when a synthesized answer is required.
             """
+
+        case "agent_reach":
+            let tool = AgentReachTool()
+            return try await tool.call(argumentsJSON: argumentsJSON)
+
+        case "reach_channels":
+            let descriptors = ReachChannel.allCases.map(ReachChannelDescriptor.init(channel:))
+            return descriptors.map { d in
+                let actions = d.actions.map(\.rawValue).joined(separator: ", ")
+                return "- \(d.channel.rawValue) (\(d.level.rawValue)): actions=[\(actions)]"
+            }.joined(separator: "\n")
 
         default:
             return "Error: Unsupported tool '\(toolName)'."
