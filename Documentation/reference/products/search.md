@@ -608,3 +608,42 @@ public enum SearchError: Error, LocalizedError, Sendable, Codable, Equatable {
     case noResultsFound
 }
 ```
+
+---
+
+## Agent Reach (Multi-Platform Content Reach)
+
+`ArchonSearch` includes native, read-only **Agent Reach** support via `AgentReachClient`, `ArchonSearchClient.reach(...)`, `RetrievalRouter` (channel-aware reading), and `AgentReachTool`.
+
+### Supported Channels (14)
+
+| Channel | Tier | Declared Actions |
+| --- | --- | --- |
+| `github` | `default` | `search`, `read` (repos, READMEs, issues, PRs + comments) |
+| `youtube` | `default` | `read`, `search`, `subtitle`, `transcribe` |
+| `bilibili` | `default` | `search`, `read`, `hot`, `subtitle` |
+| `v2ex` | `default` | `hot`, `node`, `read`, `user`, `search` |
+| `web` | `default` | `search`, `read` (NativeReader + Jina Reader + Exa MCP fallback) |
+| `reddit` | `optional` | `search`, `read` (post + comments), `subreddit` |
+| `xiaohongshu` | `optional` | `search`, `read`, `comments` |
+| `linkedin` | `optional` | `jobs`, `read`, `search` |
+| `boss` | `optional` | `search`, `read` |
+| `xueqiu` | `optional` | `quote`, `search`, `hot_posts`, `hot_stocks`, `read` |
+| `xiaoyuzhou` | `optional` | `transcribe`, `read`, `search` |
+| `twitter` | `experimental` | `search`, `profile`, `tweets`, `thread`, `read` |
+| `facebook` | `experimental` | `search`, `profile`, `read` |
+| `instagram` | `experimental` | `search`, `profile`, `posts`, `read` |
+
+### Usage
+
+```swift
+let client = ArchonSearchClient()
+
+// Auto-detect channel from any URL (GitHub, YouTube, Reddit, V2EX, Bilibili, X, Xiaoyuzhou, Web...)
+let doc = await client.reach(url: URL(string: "https://github.com/apple/swift")!)
+
+// Run a channel-specific action
+let hotV2EX = await client.reach(
+    ReachRequest(channel: .v2ex, action: .hot, target: "", limit: 5)
+)
+```
