@@ -1401,7 +1401,7 @@ struct ArchonModelsTests {
         #expect(report.errors.contains { $0.contains("Directory artifact size mismatch") })
     }
 
-    @Test("Local catalog discovers explicit Archon model packages")
+    @Test("Local catalog discovers explicit ArchonKit model packages")
     func discoversLocalModelPackage() async throws {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("archon-local-catalog-\(UUID().uuidString)")
         defer { try? FileManager.default.removeItem(at: root) }

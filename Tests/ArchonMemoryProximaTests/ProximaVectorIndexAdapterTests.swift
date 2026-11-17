@@ -12,7 +12,7 @@ struct ProximaVectorIndexAdapterTests {
         levelSeed: 42
     )
 
-    @Test("Adapter maps local HNSW results to Archon similarities and filters IDs")
+    @Test("Adapter maps local HNSW results to ArchonKit similarities and filters IDs")
     func mapsAndFilters() async throws {
         let index = try ProximaVectorIndexAdapter(
             dimension: 2,
@@ -38,7 +38,7 @@ struct ProximaVectorIndexAdapterTests {
         #expect(results.first?.similarity == 0)
     }
 
-    @Test("Adapter upsert and remove preserve Archon index semantics")
+    @Test("Adapter upsert and remove preserve ArchonKit index semantics")
     func upsertAndRemove() async throws {
         let index = try ProximaVectorIndexAdapter(
             dimension: 2,
