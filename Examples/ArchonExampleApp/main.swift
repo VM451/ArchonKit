@@ -30,7 +30,7 @@ struct ArchonExampleApp: App {
     }
 
     var body: some Scene {
-        WindowGroup("Archon Models") {
+        WindowGroup("ArchonKit Models") {
             ArchonExampleRootView(
                 library: library,
                 catalog: catalog,
@@ -105,7 +105,7 @@ private struct ArchonExampleRootView: View {
                 Label(destination.title, systemImage: destination.systemImage)
                     .tag(destination)
             }
-            .navigationTitle("Archon")
+            .navigationTitle("ArchonKit")
         } detail: {
             NavigationStack {
                 switch selection ?? .library {
