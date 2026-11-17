@@ -1,7 +1,7 @@
 # Integrate MCP connectivity
 
 `ArchonConnect` reuses the official MCP Swift SDK for protocol behavior while
-keeping Archon-owned transport, risk, typed-error, and host-credential
+keeping ArchonKit-owned transport, risk, typed-error, and host-credential
 boundaries.
 
 ## Connect to an HTTP server
@@ -67,4 +67,4 @@ try await client.connect()
 
 Sampling responses are text completions; elicitation content submits only on
 `.accept`. Keep inference, UI, and filesystem resolution in the app —
-Archon only translates the wire shape.
+ArchonKit only translates the wire shape.

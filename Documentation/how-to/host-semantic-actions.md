@@ -1,7 +1,7 @@
 # Host semantic actions
 
 `ArchonComputerUse` is semantic-first. The host supplies observations and
-side-effect closures; Archon coordinates risk checks, stale-state protection,
+side-effect closures; ArchonKit coordinates risk checks, stale-state protection,
 pause/resume, cancellation, and optional postconditions.
 
 ## Define an observation provider
