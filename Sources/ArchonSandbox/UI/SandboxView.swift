@@ -1,4 +1,4 @@
-#if canImport(SwiftUIMacros)
+#if !LOCAL_STUB
 import SwiftUI
 
 /// iOS/macOS SwiftUI view that renders the embedded Web Sandbox and wires it to platform features.

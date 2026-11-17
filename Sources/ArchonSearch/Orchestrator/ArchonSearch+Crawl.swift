@@ -1,5 +1,5 @@
 import Foundation
-#if canImport(SwiftDataMacros)
+#if !LOCAL_STUB
 import SwiftData
 #endif
 

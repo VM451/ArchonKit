@@ -1,10 +1,10 @@
 import Foundation
-#if canImport(SwiftDataMacros)
+#if !LOCAL_STUB
 import SwiftData
 #endif
 import ArchonCore
 
-#if canImport(SwiftDataMacros)
+#if !LOCAL_STUB
 @ModelActor
 public actor FrontierQueueActor {
     private var robotsParser = RobotsParser()

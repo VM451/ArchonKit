@@ -1,4 +1,4 @@
-#if canImport(SwiftUIMacros)
+#if !LOCAL_STUB
 import SwiftUI
 
 /// Main conversational search view adhering to Liquid Glass HIG.

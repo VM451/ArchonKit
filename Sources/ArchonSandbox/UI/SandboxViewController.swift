@@ -1,4 +1,4 @@
-#if canImport(SwiftUIMacros)
+#if !LOCAL_STUB
 import SwiftUI
 import Combine
 #if canImport(WebKit)

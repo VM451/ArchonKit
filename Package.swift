@@ -1,7 +1,11 @@
 // swift-tools-version: 6.4
 
 import CompilerPluginSupport
+import Foundation
 import PackageDescription
+
+let isLocalForStubs = ProcessInfo.processInfo.environment["GITHUB_ACTIONS"] != "true"
+let localStubSettings: [SwiftSetting] = isLocalForStubs ? [.define("LOCAL_STUB")] : []
 
 let package = Package(
     name: "ArchonKit",
@@ -43,19 +47,19 @@ let package = Package(
         .target(
             name: "ArchonCore",
             path: "Sources/ArchonCore",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .target(
             name: "ArchonModels",
             dependencies: ["ArchonCore"],
             path: "Sources/ArchonModels",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .target(
             name: "ArchonContext",
             dependencies: ["ArchonCore"],
             path: "Sources/ArchonContext",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .target(
             name: "ArchonConnect",
@@ -64,13 +68,13 @@ let package = Package(
                 .product(name: "MCP", package: "swift-sdk")
             ],
             path: "Sources/ArchonConnect",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .target(
             name: "ArchonComputerUse",
             dependencies: ["ArchonCore"],
             path: "Sources/ArchonComputerUse",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .macro(
             name: "ArchonAgentMacros",
@@ -80,7 +84,7 @@ let package = Package(
                 .product(name: "SwiftSyntax", package: "swift-syntax"),
                 .product(name: "SwiftSyntaxBuilder", package: "swift-syntax")
             ],
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .target(
             name: "ArchonAgent",
@@ -96,7 +100,7 @@ let package = Package(
                 .product(name: "Tokenizers", package: "swift-transformers")
             ],
             path: "Sources/ArchonAgent",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .target(
             name: "ArchonMemory",
@@ -107,7 +111,7 @@ let package = Package(
             ],
             path: "Sources/ArchonMemory",
             exclude: ["Documentation.docc"],
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .target(
             name: "ArchonMemoryProxima",
@@ -116,7 +120,7 @@ let package = Package(
                 .product(name: "ProximaKit", package: "ProximaKit")
             ],
             path: "Sources/ArchonMemoryProxima",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .target(
             name: "ArchonSearch",
@@ -125,20 +129,20 @@ let package = Package(
                 .product(name: "GRDB", package: "GRDB.swift")
             ],
             path: "Sources/ArchonSearch",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .target(
             name: "ArchonSandbox",
             dependencies: ["ArchonCore"],
             path: "Sources/ArchonSandbox",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .target(
             name: "ArchonModelsUI",
             dependencies: ["ArchonCore", "ArchonModels"],
             path: "Sources/ArchonModelsUI",
             resources: [.process("Resources")],
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .target(
             name: "ArchonFull",
@@ -155,7 +159,7 @@ let package = Package(
                 "ArchonModelsUI"
             ],
             path: "Sources/ArchonFull",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .executableTarget(
             name: "ArchonModelCLI",
@@ -165,31 +169,31 @@ let package = Package(
                 .product(name: "ArgumentParser", package: "swift-argument-parser")
             ],
             path: "Tools/ArchonModelCLI",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .executableTarget(
             name: "ArchonExampleApp",
             dependencies: ["ArchonAgent", "ArchonModels", "ArchonModelsUI"],
             path: "Examples/ArchonExampleApp",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .testTarget(
             name: "ArchonCoreTests",
             dependencies: ["ArchonCore"],
             path: "Tests/ArchonCoreTests",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .testTarget(
             name: "ArchonModelsTests",
             dependencies: ["ArchonModels"],
             path: "Tests/ArchonModelsTests",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .testTarget(
             name: "ArchonContextTests",
             dependencies: ["ArchonContext"],
             path: "Tests/ArchonContextTests",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .testTarget(
             name: "ArchonConnectTests",
@@ -198,13 +202,13 @@ let package = Package(
                 .product(name: "MCP", package: "swift-sdk")
             ],
             path: "Tests/ArchonConnectTests",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .testTarget(
             name: "ArchonComputerUseTests",
             dependencies: ["ArchonComputerUse", "ArchonCore"],
             path: "Tests/ArchonComputerUseTests",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .testTarget(
             name: "ArchonAgentTests",
@@ -214,43 +218,43 @@ let package = Package(
                 .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax")
             ],
             path: "Tests/ArchonAgentTests",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .testTarget(
             name: "ArchonMemoryTests",
             dependencies: ["ArchonMemory", "ArchonContext"],
             path: "Tests/ArchonMemoryTests",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .testTarget(
             name: "ArchonMemoryProximaTests",
             dependencies: ["ArchonMemoryProxima"],
             path: "Tests/ArchonMemoryProximaTests",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .testTarget(
             name: "ArchonSearchTests",
             dependencies: ["ArchonSearch"],
             path: "Tests/ArchonSearchTests",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .testTarget(
             name: "ArchonSandboxTests",
             dependencies: ["ArchonSandbox"],
             path: "Tests/ArchonSandboxTests",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .testTarget(
             name: "ArchonFullTests",
             dependencies: ["ArchonFull", "ArchonContext", "ArchonComputerUse", "ArchonConnect"],
             path: "Tests/ArchonFullTests",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
         .testTarget(
             name: "ArchonModelsUITests",
             dependencies: ["ArchonModelsUI", "ArchonModels"],
             path: "Tests/ArchonModelsUITests",
-            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")]
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         )
     ],
     swiftLanguageModes: [.v6]

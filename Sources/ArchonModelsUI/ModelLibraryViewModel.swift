@@ -1,4 +1,4 @@
-#if canImport(ObservationMacros)
+#if !LOCAL_STUB
 import Foundation
 import SwiftUI
 import ArchonCore

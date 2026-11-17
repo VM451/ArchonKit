@@ -1,4 +1,4 @@
-#if canImport(SwiftUIMacros)
+#if !LOCAL_STUB
 import Foundation
 
 /// Represents a single message in the ArchonChat UI.

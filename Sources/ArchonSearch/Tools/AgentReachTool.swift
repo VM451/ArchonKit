@@ -3,7 +3,7 @@ import Foundation
 import FoundationModels
 #endif
 
-#if canImport(FoundationModelsMacros)
+#if !LOCAL_STUB
 @FoundationModels.Generable
 public struct AgentReachArguments: Sendable, Codable {
     public var channel: String?
@@ -156,7 +156,7 @@ public struct AgentReachTool: Tool, Sendable {
     }
 }
 
-#if canImport(FoundationModelsMacros)
+#if !LOCAL_STUB
 @available(macOS 26.0, iOS 26.0, visionOS 26.0, *)
 extension AgentReachTool: FoundationModels.Tool {
     public typealias Arguments = AgentReachArguments

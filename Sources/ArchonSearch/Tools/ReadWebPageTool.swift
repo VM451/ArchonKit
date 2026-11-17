@@ -3,7 +3,7 @@ import Foundation
 import FoundationModels
 #endif
 
-#if canImport(FoundationModelsMacros)
+#if !LOCAL_STUB
 @FoundationModels.Generable
 public struct ReadWebPageArguments: Sendable, Codable {
     public var url: String
@@ -57,7 +57,7 @@ public struct ReadWebPageTool: Tool, Sendable {
     }
 }
 
-#if canImport(FoundationModelsMacros)
+#if !LOCAL_STUB
 @available(macOS 26.0, iOS 26.0, visionOS 26.0, *)
 extension ReadWebPageTool: FoundationModels.Tool {
     public typealias Arguments = ReadWebPageArguments

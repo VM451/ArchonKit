@@ -1,4 +1,4 @@
-#if canImport(SwiftUIMacros)
+#if !LOCAL_STUB
 import SwiftUI
 
 /// Compact citation badge rendering e.g. `[1]`, expanding on tap to display source verification details.

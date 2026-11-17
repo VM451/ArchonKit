@@ -1,5 +1,5 @@
 import Foundation
-#if canImport(SwiftDataMacros)
+#if !LOCAL_STUB
 import SwiftData
 #endif
 
@@ -10,7 +10,7 @@ public enum CrawlStatus: String, Codable, Sendable {
     case failed
 }
 
-#if canImport(SwiftDataMacros)
+#if !LOCAL_STUB
 @Model
 public final class CrawlNode {
     @Attribute(.unique)

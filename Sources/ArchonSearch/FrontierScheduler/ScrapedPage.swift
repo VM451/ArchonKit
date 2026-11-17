@@ -1,9 +1,9 @@
 import Foundation
-#if canImport(SwiftDataMacros)
+#if !LOCAL_STUB
 import SwiftData
 #endif
 
-#if canImport(SwiftDataMacros)
+#if !LOCAL_STUB
 @Model
 public final class ScrapedPage {
     @Attribute(.unique)

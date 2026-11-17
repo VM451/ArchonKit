@@ -1,5 +1,5 @@
 import Foundation
-#if canImport(SwiftDataMacros)
+#if !LOCAL_STUB
 import SwiftData
 #endif
 
@@ -9,7 +9,7 @@ public final class ArchonSearch: Sendable {
     internal let discoveryEngine: DiscoveryEngine
     internal let semanticCore: ArchonSemanticCore
     internal let structuredExtractionHandler: StructuredExtractionHandler?
-#if canImport(SwiftDataMacros)
+#if !LOCAL_STUB
     internal let modelContainer: ModelContainer?
 #endif
     internal let queueActor: FrontierQueueActor?
@@ -27,7 +27,7 @@ public final class ArchonSearch: Sendable {
         self.semanticCore = ArchonSemanticCore(structuredExtractionHandler: structuredExtractionHandler)
         self.structuredExtractionHandler = structuredExtractionHandler
         
-#if canImport(SwiftDataMacros)
+#if !LOCAL_STUB
         let container: ModelContainer?
         let initializationFailure: String?
         do {
