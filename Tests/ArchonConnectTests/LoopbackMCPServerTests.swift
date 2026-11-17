@@ -226,7 +226,7 @@ private final class LoopbackMCPServer: @unchecked Sendable {
 
         if holdsToolCall {
             // Leave this request open. The client must cancel the underlying
-            // HTTP request when Archon's transport is disconnected.
+            // HTTP request when ArchonKit's transport is disconnected.
             return
         }
 
@@ -241,7 +241,7 @@ private final class LoopbackMCPServer: @unchecked Sendable {
                 result = [
                     "protocolVersion": "2025-11-25",
                     "capabilities": ["tools": [:]],
-                    "serverInfo": ["name": "Archon loopback", "version": "1"]
+                    "serverInfo": ["name": "ArchonKit loopback", "version": "1"]
                 ]
             case "tools/call":
                 result = [

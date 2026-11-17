@@ -490,7 +490,7 @@ struct ArchonConnectTests {
         #expect(result.structuredContent == .object(["answer": .string("ok")]))
     }
 
-    @Test("Official MCP SDK adapter surfaces progress notifications through Archon events")
+    @Test("Official MCP SDK adapter surfaces progress notifications through ArchonKit events")
     func officialSDKAdapterStreamsProgress() async throws {
         let endpoint = URL(string: "https://mcp.example.test/rpc-\(UUID().uuidString)")!
         StubURLProtocol.configure(responseBodies: [
