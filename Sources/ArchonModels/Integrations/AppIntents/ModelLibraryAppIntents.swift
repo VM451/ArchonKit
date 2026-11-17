@@ -62,10 +62,10 @@ public struct InstalledModelEntityQuery: EntityQuery, Sendable {
     }
 }
 
-/// Lists MLX models currently installed in the host application's Archon library.
+/// Lists MLX models currently installed in the host application's ArchonKit library.
 public struct ListInstalledModelsIntent: AppIntent {
     public static let title: LocalizedStringResource = "List Installed MLX Models"
-    public static let description = IntentDescription("Lists runnable MLX models installed in the Archon model library.")
+    public static let description = IntentDescription("Lists runnable MLX models installed in the ArchonKit model library.")
 
     public init() {}
 
@@ -81,7 +81,7 @@ public struct ListInstalledModelsIntent: AppIntent {
 /// Deletes a selected MLX model entity through the same guarded library API used by the UI.
 public struct DeleteInstalledModelEntityIntent: AppIntent {
     public static let title: LocalizedStringResource = "Delete Selected MLX Model"
-    public static let description = IntentDescription("Deletes a selected MLX model from the Archon model library.")
+    public static let description = IntentDescription("Deletes a selected MLX model from the ArchonKit model library.")
 
     @Parameter(title: "Model")
     public var model: InstalledModelEntity
@@ -115,7 +115,7 @@ public struct DeleteInstalledModelEntityIntent: AppIntent {
 /// Reports managed model storage usage to Siri and Shortcuts.
 public struct ModelLibraryStorageIntent: AppIntent {
     public static let title: LocalizedStringResource = "Check MLX Model Storage"
-    public static let description = IntentDescription("Reports storage used by MLX models in the Archon model library.")
+    public static let description = IntentDescription("Reports storage used by MLX models in the ArchonKit model library.")
 
     public init() {}
 
@@ -150,7 +150,7 @@ public struct ArchonModelAppShortcuts: AppShortcutsProvider {
 /// Deletes one installed MLX model through the same guarded library API used by the UI.
 public struct DeleteInstalledModelIntent: AppIntent {
     public static let title: LocalizedStringResource = "Delete Installed MLX Model"
-    public static let description = IntentDescription("Deletes one MLX model from the Archon model library.")
+    public static let description = IntentDescription("Deletes one MLX model from the ArchonKit model library.")
 
     @Parameter(title: "Model ID", description: "The exact installed model identifier.")
     public var modelID: String
@@ -191,9 +191,9 @@ private enum ModelLibraryIntentError: Error, LocalizedError, Sendable {
         case .invalidModelID:
             return "A non-empty installed model identifier is required."
         case .libraryNotRegistered:
-            return "The host application has not registered its Archon model library for App Intents."
+            return "The host application has not registered its ArchonKit model library for App Intents."
         case .notAnMLXModel:
-            return "Only MLX models are exposed through Archon model-library actions."
+            return "Only MLX models are exposed through ArchonKit model-library actions."
         }
     }
 }

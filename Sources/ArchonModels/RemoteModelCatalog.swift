@@ -1,6 +1,6 @@
 import Foundation
 
-/// HTTP-backed catalog for Apple-curated, Archon-hosted, or developer-hosted
+/// HTTP-backed catalog for Apple-curated, ArchonKit-hosted, or developer-hosted
 /// registries. The endpoint returns either a JSON array of ModelDescriptor
 /// values or an object containing `models`, optional `hasMore`, and optional
 /// `nextContinuationToken` fields.

@@ -25,7 +25,7 @@ import ArchonCore
 ///   [swift-huggingface](https://github.com/huggingface/swift-huggingface)
 ///   `HubClient`; this catalog never invents bundle byte URLs.
 /// - Descriptor tasks default to `[.textGeneration]`. The zoo index carries
-///   no per-model task contract, and Archon never infers tasks from family
+///   no per-model task contract, and ArchonKit never infers tasks from family
 ///   names. Hosts serving vision/audio zoo entries must refine tasks from
 ///   the model card before routing.
 ///
