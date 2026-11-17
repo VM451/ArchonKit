@@ -1,6 +1,6 @@
 # Policies and typed failures
 
-Archon uses explicit policy values and typed errors at boundaries where a
+ArchonKit uses explicit policy values and typed errors at boundaries where a
 silent fallback could violate privacy, safety, or correctness.
 
 ## Core policy types
@@ -42,5 +42,5 @@ performed a side effect.
 
 The consuming app owns API keys, Keychain service policy, entitlements, privacy
 usage descriptions, App Intents registration, lifecycle forwarding, semantic
-observations, and user-facing approval UI. Archon provides the typed boundary;
+observations, and user-facing approval UI. ArchonKit provides the typed boundary;
 the host supplies the authority.

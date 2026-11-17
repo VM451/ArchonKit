@@ -1,10 +1,10 @@
 # Product reference
 
-Archon products are independent SwiftPM imports. Prefer the smallest product
+ArchonKit products are independent SwiftPM imports. Prefer the smallest product
 set that satisfies the application so optional runtimes and UI do not become
 unnecessary dependencies.
 
-The `Honest winner` column states who wins each row — Archon or its
+The `Honest winner` column states who wins each row — ArchonKit or its
 competitors — because every product runs locally on the user's device with no
 required hosting, so some rows are wins and some are honest losses. Scores and
 evidence live in the [competitor comparison](competitor-comparison.md);
@@ -13,17 +13,17 @@ latency/recall device proof lives in
 
 | Product | Use it for | Honest winner | Key boundary |
 | --- | --- | --- | --- |
-| [`ArchonCore`](products/core.md) | Capabilities, device facts, permissions, logging, identifiers, errors | 🤝 Split — Apple/upstream wins primitives (reused by design); Archon wins the unified policy/error layer | Shared foundation only |
-| [`ArchonModels`](products/models.md) | Catalogs, model formats, licensing, compatibility, downloads, installation, loading hooks | 🤝 Split — Hugging Face wins catalog breadth; Archon wins native lifecycle + official-publisher MLX browsing, now with prep recipes and measured benchmarks | Host supplies model-family adapters and credentials |
-| [`ArchonAgent`](products/agent.md) | Graph execution, routing, tools, handoffs, guardrails, interrupts, checkpoints, tracing, evaluation, provider adapters, realtime voice + vision sessions, 20+ API-key cloud providers | 🏆 Archon on-device — durability, handoffs, guardrails, eval, full-duplex realtime sessions, broad cloud-provider coverage proven; LangGraph still leads hosted/Python ecosystem maturity | Does not own model downloads |
-| [`ArchonContext`](products/context.md) | Deterministic request-scoped context assembly | 🏆 Archon — no local rival; token profiles, summarization seam, latency budgets extend the lead | Does not persist or execute |
-| [`ArchonMemory`](products/memory.md) | Durable facts, graph/vector retrieval, RAG, profile/context synthesis, source-linked competitive research, local feedback, optional CloudKit sync | 🏆 Archon on-device — beats Wax (6.4x ingest, 1.4x p95, equal recall); hybrid ranking + temporal supersession extend the lead; hosted rivals win zero-ops convenience | Local store is authoritative |
-| [`ArchonMemoryProxima`](products/memory-proxima.md) | Optional ProximaKit dense-index adapter | 🏆 Archon leads — beats USearch 2.8x on iPhone 16 at equal recall; stays optional until ceiling/device gates close | Not included in `ArchonFull` |
-| [`ArchonSearch`](products/search.md) | Discovery, registry fan-out, keyword + neural rerank, freshness, crawl, extraction, research, citations, monitoring | 🤝 Split — rivals win whole-web scale (structural); Archon wins offline corpus, privacy, explicit policy; local rerank + answer evals narrow the quality gap | Network sources require explicit policy |
-| [`ArchonSandbox`](products/sandbox.md) | Capability-restricted WebKit workspaces, DOM/JS bridge, workspace sync | 🤝 Split — rivals win isolation strength (microVM, structural); Archon wins native in-process embedding + policy; capability grants, audit stream, WASM path extend it | In-process WebKit is not VM isolation |
-| [`ArchonConnect`](products/connect.md) | MCP tools, resources, prompts, JSON-RPC/streamable HTTP, permissions | 🤝 Split — official SDK wins wire protocol (adapted); Archon wins permission/policy + hosted capabilities; teardown + conformance probes harden the adapter | Host resolves credentials and server lifecycle |
-| [`ArchonComputerUse`](products/computer-use.md) | Semantic snapshots, risk checks, host actions, postconditions | 🤝 Split — rivals win automation breadth; Archon wins semantic-first safety (approvals, postconditions, catalogued actions, no coordinate taps) | Host supplies observations and side effects |
-| [`ArchonModelsUI`](products/models-ui.md) | SwiftUI model library, discovery, detail, storage, and download surfaces | 🤝 Split — LM Studio/Jan win full-app UX maturity; Archon wins embeddable native SwiftUI, now with benchmark badges + storage analytics | Uses the host-registered `ModelLibrary` |
+| [`ArchonCore`](products/core.md) | Capabilities, device facts, permissions, logging, identifiers, errors | 🤝 Split — Apple/upstream wins primitives (reused by design); ArchonKit wins the unified policy/error layer | Shared foundation only |
+| [`ArchonModels`](products/models.md) | Catalogs, model formats, licensing, compatibility, downloads, installation, loading hooks | 🤝 Split — Hugging Face wins catalog breadth; ArchonKit wins native lifecycle + official-publisher MLX browsing, now with prep recipes and measured benchmarks | Host supplies model-family adapters and credentials |
+| [`ArchonAgent`](products/agent.md) | Graph execution, routing, tools, handoffs, guardrails, interrupts, checkpoints, tracing, evaluation, provider adapters, realtime voice + vision sessions, 20+ API-key cloud providers | 🏆 ArchonKit on-device — durability, handoffs, guardrails, eval, full-duplex realtime sessions, broad cloud-provider coverage proven; LangGraph still leads hosted/Python ecosystem maturity | Does not own model downloads |
+| [`ArchonContext`](products/context.md) | Deterministic request-scoped context assembly | 🏆 ArchonKit — no local rival; token profiles, summarization seam, latency budgets extend the lead | Does not persist or execute |
+| [`ArchonMemory`](products/memory.md) | Durable facts, graph/vector retrieval, RAG, profile/context synthesis, source-linked competitive research, local feedback, optional CloudKit sync | 🏆 ArchonKit on-device — beats Wax (6.4x ingest, 1.4x p95, equal recall); hybrid ranking + temporal supersession extend the lead; hosted rivals win zero-ops convenience | Local store is authoritative |
+| [`ArchonMemoryProxima`](products/memory-proxima.md) | Optional ProximaKit dense-index adapter | 🏆 ArchonKit leads — beats USearch 2.8x on iPhone 16 at equal recall; stays optional until ceiling/device gates close | Not included in `ArchonFull` |
+| [`ArchonSearch`](products/search.md) | Discovery, registry fan-out, keyword + neural rerank, freshness, crawl, extraction, research, citations, monitoring | 🤝 Split — rivals win whole-web scale (structural); ArchonKit wins offline corpus, privacy, explicit policy; local rerank + answer evals narrow the quality gap | Network sources require explicit policy |
+| [`ArchonSandbox`](products/sandbox.md) | Capability-restricted WebKit workspaces, DOM/JS bridge, workspace sync | 🤝 Split — rivals win isolation strength (microVM, structural); ArchonKit wins native in-process embedding + policy; capability grants, audit stream, WASM path extend it | In-process WebKit is not VM isolation |
+| [`ArchonConnect`](products/connect.md) | MCP tools, resources, prompts, JSON-RPC/streamable HTTP, permissions | 🤝 Split — official SDK wins wire protocol (adapted); ArchonKit wins permission/policy + hosted capabilities; teardown + conformance probes harden the adapter | Host resolves credentials and server lifecycle |
+| [`ArchonComputerUse`](products/computer-use.md) | Semantic snapshots, risk checks, host actions, postconditions | 🤝 Split — rivals win automation breadth; ArchonKit wins semantic-first safety (approvals, postconditions, catalogued actions, no coordinate taps) | Host supplies observations and side effects |
+| [`ArchonModelsUI`](products/models-ui.md) | SwiftUI model library, discovery, detail, storage, and download surfaces | 🤝 Split — LM Studio/Jan win full-app UX maturity; ArchonKit wins embeddable native SwiftUI, now with benchmark badges + storage analytics | Uses the host-registered `ModelLibrary` |
 | [`ArchonFull`](products/full.md) | Convenient import of the base SDK family | — (facade; no matchup) | Facade only; excludes optional adapters |
 
 ## Executable products
