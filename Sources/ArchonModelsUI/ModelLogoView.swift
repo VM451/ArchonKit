@@ -132,5 +132,10 @@ struct ModelLogoView: View {
 
 #else
 import SwiftUI
-public struct ModelLogoView: View { public var body: some View { EmptyView() } }
+import ArchonModels
+struct ModelLogoView: View {
+    public var body: some View { EmptyView() }
+    init(model: ModelDescriptor, size: CGFloat = 44) {}
+    init(logoURL: URL?, name: String, size: CGFloat = 44) {}
+}
 #endif
