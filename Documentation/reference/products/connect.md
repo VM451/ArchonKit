@@ -1,10 +1,10 @@
 # ArchonConnect
 
-`ArchonConnect` provides the Archon-owned MCP boundary for tools, resources,
+`ArchonConnect` provides the ArchonKit-owned MCP boundary for tools, resources,
 prompts, schemas, progress notifications, cancellation, and HTTP/streamable
 HTTP transport.
 
-The official MCP Swift SDK owns wire-level interoperability. Archon retains
+The official MCP Swift SDK owns wire-level interoperability. ArchonKit retains
 typed transport errors, risk classification, schema validation, connection
 lifecycle, and host authorization. `MCPHTTPTransport` accepts already-resolved
 headers; it never discovers, persists, or prints credentials.

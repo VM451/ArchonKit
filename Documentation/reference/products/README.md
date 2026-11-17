@@ -1,6 +1,6 @@
 # Product guides
 
-Each page below is the canonical cross-product guide for one Archon product.
+Each page below is the canonical cross-product guide for one ArchonKit product.
 Exact symbols and overloads remain in the product's Swift DocC/API reference.
 
 - [ArchonCore](core.md)

@@ -79,7 +79,7 @@ and factory wiring with stubbed transport only.
 
 ## Local model servers
 
-Ollama and LM Studio are explicit localhost integrations over Archon-owned
+Ollama and LM Studio are explicit localhost integrations over ArchonKit-owned
 provider types — not in-process runtimes, catalog entries, or adaptive
 routing candidates (see D-005):
 
