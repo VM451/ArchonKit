@@ -4,7 +4,7 @@ import SwiftUI
 import WebKit
 #endif
 
-#if os(iOS)
+#if os(iOS) || os(visionOS)
 #if canImport(WebKit)
 public struct NativeSandboxRepresentable: UIViewRepresentable {
     @ObservedObject var controller: SandboxViewController
@@ -243,10 +243,34 @@ public struct NativeSandboxRepresentable: NSViewRepresentable {
     }
 }
 #endif
+#else
+// WebKit is not available on this platform (e.g. watchOS / tvOS) — placeholder.
+public struct NativeSandboxRepresentable: View { public var body: some View { EmptyView() } }
 #endif
 
 #else
+// LOCAL_STUB fallback: minimal cross-platform placeholders that never import
+// AppKit on iOS/iPadOS/visionOS. The AppKit branch is macOS-only.
+// This stub is only reachable on CLT macOS (the Package gates LOCAL_STUB to
+// macOS), but it is written to compile on every target if ever forced.
 import SwiftUI
+#if os(macOS) && canImport(AppKit)
 import AppKit
-public struct NativeSandboxRepresentable: NSViewRepresentable { public func makeNSView(context: Context) -> NSView { NSView() }; public func updateNSView(_ nsView: NSView, context: Context) {}; public typealias NSViewType = NSView }
+public struct NativeSandboxRepresentable: NSViewRepresentable {
+    public func makeNSView(context: Context) -> NSView { NSView() }
+    public func updateNSView(_ nsView: NSView, context: Context) {}
+    public typealias NSViewType = NSView
+}
+#elseif os(iOS) || os(visionOS)
+#if canImport(UIKit)
+import UIKit
+#endif
+public struct NativeSandboxRepresentable: UIViewRepresentable {
+    public func makeUIView(context: Context) -> UIView { UIView() }
+    public func updateUIView(_ uiView: UIView, context: Context) {}
+    public typealias UIViewType = UIView
+}
+#else
+public struct NativeSandboxRepresentable: View { public var body: some View { EmptyView() } }
+#endif
 #endif
