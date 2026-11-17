@@ -1,6 +1,6 @@
 # Product diagrams
 
-One file per Archon product. Each diagram shows how that product works —
+One file per ArchonKit product. Each diagram shows how that product works —
 its entry points, internal flow, and boundaries with other products.
 
 | Product | Diagram |

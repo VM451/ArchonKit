@@ -1,7 +1,7 @@
 # ArchonConnect — how it works
 
 `ArchonConnect` owns MCP transport, schema validation, streaming, and
-permissions. Archon value types and policy stay in front; the official MCP
+permissions. ArchonKit value types and policy stay in front; the official MCP
 Swift SDK backs the `OfficialMCPTransport` adapter behind the
 vendor-neutral transport surface.
 
@@ -22,6 +22,6 @@ flowchart TD
 ```
 
 Endpoint policy, auth/header ownership, lifecycle, and error boundaries
-remain Archon's. The custom transport stays until full conformance and
+remain ArchonKit's. The custom transport stays until full conformance and
 production-server lifecycle evidence close. Hosted capabilities install
 before `connect()` and advertise exactly what the host implements.

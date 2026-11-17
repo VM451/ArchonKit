@@ -16,5 +16,5 @@ flowchart TD
     Rebuild[Atomic rebuild] --> Adapter
 ```
 
-No ProximaKit type enters Archon's public API. Durable records, filtering,
+No ProximaKit type enters ArchonKit's public API. Durable records, filtering,
 history, and recovery stay owned by `ArchonMemory`.
