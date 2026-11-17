@@ -48,5 +48,8 @@ public struct SandboxIsolationDisclosureView: View {
 
 #else
 import SwiftUI
-public struct SandboxIsolationDisclosureView: View { public var body: some View { EmptyView() } }
+public struct SandboxIsolationDisclosureView: View {
+    public var body: some View { EmptyView() }
+    public init(configuration: SandboxConfiguration) {}
+}
 #endif
