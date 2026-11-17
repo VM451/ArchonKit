@@ -29,7 +29,7 @@ public struct ArchonChatView: View {
                 }
             }
             .navigationTitle("ArchonSearch")
-            #if os(iOS)
+            #if os(iOS) || os(visionOS)
             .navigationBarTitleDisplayMode(.inline)
             #endif
             .background(Self.platformBackgroundColor)
@@ -104,5 +104,9 @@ public struct ArchonChatView: View {
 
 #else
 import SwiftUI
-public struct ArchonChatView: View { public var body: some View { EmptyView() } }
+public struct ArchonChatView: View {
+    public var body: some View { EmptyView() }
+    public init(client: ArchonSearchClient) {}
+    public init(viewModel: ArchonChatViewModel) {}
+}
 #endif
