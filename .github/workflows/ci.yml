@@ -139,6 +139,17 @@ jobs:
           metal_path="$(xcrun --find metal)"
           test -x "$metal_path"
           echo "Metal compiler: $metal_path"
+          # Retry waiting for stable metal path – the toolchain asset mount can change after download
+          for i in 1 2 3; do
+            metal_path="$(xcrun --find metal 2>/dev/null || true)"
+            if [[ -x "$metal_path" ]]; then echo "Metal stable: $metal_path"; break; fi
+            echo "Waiting for metal to stabilize (attempt $i)..."
+            sleep 5
+            sudo xcodebuild -downloadComponent MetalToolchain 2>/dev/null || true
+          done
+          metal_path="$(xcrun --find metal)"
+          test -x "$metal_path" || { echo "::error::Metal not found after retries"; exit 1; }
+          echo "Metal verified: $metal_path"
 
           # The package requires Swift 6.4+ (swift-tools-version 6.4). Fail
           # early with a clear message instead of an opaque resolve error.
