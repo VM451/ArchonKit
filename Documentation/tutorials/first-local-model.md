@@ -5,7 +5,7 @@ network service or a cloud model.
 
 ## Before you start
 
-The directory must contain one or more Archon model packages with a valid
+The directory must contain one or more ArchonKit model packages with a valid
 `archon-model.json` manifest. Raw `GGUF`, `SafeTensors`, and Transformers files
 are source artifacts and require developer-side conversion before they can be
 installed as runnable models.
