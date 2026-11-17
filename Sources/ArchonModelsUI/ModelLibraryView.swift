@@ -1143,5 +1143,15 @@ private extension Collection {
 
 #else
 import SwiftUI
-public struct ModelLibraryView: View { public var body: some View { EmptyView() } }
+import ArchonCore
+import ArchonModels
+public struct ModelLibraryView: View {
+    public var body: some View { EmptyView() }
+    public init(library: ModelLibrary = .makeDefault(), catalog: (any ModelCatalogProvider)? = nil, downloadManager: ModelDownloadManager = ModelDownloadManager(), device: ArchonDeviceCapabilities? = nil) {}
+}
+public struct ModelBrowserView: View {
+    public var body: some View { EmptyView() }
+    public init(title: String = "MLX Models", catalog: any ModelCatalogProvider, library: ModelLibrary = .makeDefault(), downloadManager: ModelDownloadManager = ModelDownloadManager(), device: ArchonDeviceCapabilities? = nil) {}
+    public static func statusText(_ s: String, attempt: ModelDownloadAttempt? = nil) -> String { s }
+}
 #endif
