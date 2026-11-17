@@ -2,7 +2,7 @@ import Testing
 import Foundation
 @testable import ArchonAgent
 
-@Suite("Archon Ecosystem Capabilities Integration Tests")
+@Suite("ArchonKit Ecosystem Capabilities Integration Tests")
 struct EcosystemIntegrationTests {
 
     @Test("ToolRegistry registers all ecosystem capabilities successfully")

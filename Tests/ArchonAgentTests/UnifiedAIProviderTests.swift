@@ -2,7 +2,7 @@ import Foundation
 import Testing
 @testable import ArchonAgent
 
-@Suite("Unified Archon AI Provider & Model Architecture Tests")
+@Suite("Unified ArchonKit AI Provider & Model Architecture Tests")
 struct UnifiedAIProviderTests {
 
     @Test("ArchonAI resolves Apple Foundation Model target")
@@ -82,12 +82,12 @@ struct UnifiedAIProviderTests {
     @Test("FoundationModelsBridge formats transcripts and schemas cleanly")
     func foundationModelsBridgeFormatting() {
         let transcript = FoundationModelsBridge.formatTranscript(for: [
-            .system("You are an Archon agent."),
+            .system("You are an ArchonKit agent."),
             .user("How do actors work?"),
             .assistant("Actors protect mutable state.")
         ])
 
-        #expect(transcript.systemInstruction == "You are an Archon agent.")
+        #expect(transcript.systemInstruction == "You are an ArchonKit agent.")
         #expect(transcript.userPrompt.contains("How do actors work?"))
         #expect(transcript.userPrompt.contains("Actors protect mutable state."))
 

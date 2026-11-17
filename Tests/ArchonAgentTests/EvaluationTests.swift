@@ -17,7 +17,7 @@ struct EvaluationTests {
         let scenario = EvalScenario(
             name: "Greeting Test",
             inputState: EvalTestState(input: "Hello"),
-            expectedOutputSubstrings: ["Archon", "Apple"]
+            expectedOutputSubstrings: ["ArchonKit", "Apple"]
         )
 
         let finalState = EvalTestState(output: "ArchonAgent runs on Apple platforms.")
@@ -107,7 +107,7 @@ struct EvaluationTests {
         let builderB = GraphBuilder<EvalTestState>()
         let nodeB = ClosureNode<EvalTestState>(id: "NodeB") { state in
             var copy = state
-            copy.output = "Result: \(state.input) (Enhanced with Archon Agentic Context)"
+            copy.output = "Result: \(state.input) (Enhanced with ArchonKit Agentic Context)"
             return copy
         }
         builderB.addNode(nodeB)
