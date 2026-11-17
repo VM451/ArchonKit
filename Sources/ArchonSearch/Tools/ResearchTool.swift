@@ -3,7 +3,7 @@ import Foundation
 import FoundationModels
 #endif
 
-#if canImport(FoundationModels)
+#if canImport(FoundationModelsMacros)
 @FoundationModels.Generable
 public struct ResearchArguments: Sendable, Codable {
     public var topic: String
@@ -93,7 +93,7 @@ public struct ResearchTool: Tool, Sendable {
     }
 }
 
-#if canImport(FoundationModels)
+#if canImport(FoundationModelsMacros)
 @available(macOS 26.0, iOS 26.0, visionOS 26.0, *)
 extension ResearchTool: FoundationModels.Tool {
     public typealias Arguments = ResearchArguments

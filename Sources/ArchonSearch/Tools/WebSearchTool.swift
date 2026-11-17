@@ -3,7 +3,7 @@ import Foundation
 import FoundationModels
 #endif
 
-#if canImport(FoundationModels)
+#if canImport(FoundationModelsMacros)
 @FoundationModels.Generable
 public struct WebSearchArguments: Sendable, Codable {
     public var query: String
@@ -73,7 +73,7 @@ public struct WebSearchTool: Tool, Sendable {
     }
 }
 
-#if canImport(FoundationModels)
+#if canImport(FoundationModelsMacros)
 @available(macOS 26.0, iOS 26.0, visionOS 26.0, *)
 extension WebSearchTool: FoundationModels.Tool {
     public typealias Arguments = WebSearchArguments
