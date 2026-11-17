@@ -201,10 +201,47 @@ jobs:
       - name: Build all products
         id: build
         run: |
+          # Keep MetalToolchain mounted during the long swift build – the ephemeral /var/run path can disappear
+          # Start a background keeper that re-mounts metal if it disappears
+          metal_keeper() {
+            while true; do
+              MP="$(xcrun --find metal 2>/dev/null || true)"
+              if [[ -z "$MP" || ! -x "$MP" ]]; then
+                echo "[metal-keeper] metal missing, reinstalling..." >&2
+                sudo xcodebuild -downloadComponent MetalToolchain 2>&1 | tail -n 2 >&2
+                sleep 2
+                MP="$(xcrun --find metal 2>/dev/null || true)"
+                if [[ -n "$MP" && -x "/tmp/metal-stable" ]]; then
+                  # Create symlink at expected ephemeral path pointing to stable copy
+                  sudo mkdir -p "$(dirname "$MP")" 2>/dev/null || true
+                  sudo cp /tmp/metal-stable "$MP" 2>/dev/null || true
+                fi
+              fi
+              sleep 5
+            done
+          }
+          # Stage a stable copy first
+          if MP="$(xcrun --find metal 2>/dev/null)" && [[ -x "$MP" ]]; then
+            sudo cp "$MP" /tmp/metal-stable 2>/dev/null && sudo chmod +x /tmp/metal-stable 2>/dev/null && echo "Staged metal-stable at /tmp/metal-stable" || true
+            sudo cp "$MP" /usr/local/bin/metal 2>/dev/null || true
+          fi
+          metal_keeper &
+          KEEPER_PID=$!
+          trap "kill $KEEPER_PID 2>/dev/null || true" EXIT
           for attempt in 1 2 3; do
             echo "Build attempt $attempt/3"
+            # Re-stage right before each attempt so SwiftPM's xcrun sees a live binary
+            if MP="$(xcrun --find metal 2>/dev/null)" && [[ -x "$MP" ]]; then
+              sudo cp /tmp/metal-stable "$MP" 2>/dev/null || true
+            elif [[ -x /tmp/metal-stable ]]; then
+              echo "[pre-build] restoring metal from stable copy"
+              sudo xcodebuild -downloadComponent MetalToolchain 2>&1 | tail -n 2
+              MP="$(xcrun --find metal 2>/dev/null || true)"
+              if [[ -n "$MP" ]]; then sudo cp /tmp/metal-stable "$MP" 2>/dev/null || true; fi
+            fi
             if swift build -j 2; then
               echo "Build succeeded on attempt $attempt"
+              kill $KEEPER_PID 2>/dev/null || true
               exit 0
             fi
             echo "Build failed on attempt $attempt, checking metal..."
@@ -212,6 +249,7 @@ jobs:
             sudo xcodebuild -downloadComponent MetalToolchain 2>&1 | tail -n 5
             sleep 10
           done
+          kill $KEEPER_PID 2>/dev/null || true
           exit 1
 
       # ArchonConnectTests currently leaves SwiftPM's macOS testing helper
