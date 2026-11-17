@@ -1,8 +1,8 @@
 # Dependency ownership
 
-Archon keeps dependencies at the narrowest product boundary that can own them.
+ArchonKit keeps dependencies at the narrowest product boundary that can own them.
 This reduces binary cost, keeps products independently adoptable, and prevents
-vendor APIs from leaking through default Archon contracts.
+vendor APIs from leaking through default ArchonKit contracts.
 
 ## Direct dependency map
 
@@ -14,12 +14,12 @@ vendor APIs from leaking through default Archon contracts.
 | `ArchonContext` | `ArchonCore` | Request assembly is intentionally independent of durable storage |
 | `ArchonMemory` | `ArchonCore`, GRDB | SQLite-backed durable memory owns its persistence engine |
 | `ArchonMemoryProxima` | `ArchonMemory`, ProximaKit | Optional dense indexing stays replaceable and out of `ArchonFull` |
-| `ArchonSearch` | `ArchonCore`, `GRDB` | Search uses Archon-owned contracts, local-first SearXNG/Crawl4AI clients, in-process SwiftSoup/WebKit extraction, and GRDB SQLite persistence for caching and search sessions |
+| `ArchonSearch` | `ArchonCore`, `GRDB` | Search uses ArchonKit-owned contracts, local-first SearXNG/Crawl4AI clients, in-process SwiftSoup/WebKit extraction, and GRDB SQLite persistence for caching and search sessions |
 | `ArchonSandbox` | `ArchonCore` | WebKit is an Apple platform boundary, not a remote runtime dependency |
-| `ArchonConnect` | `ArchonCore`, official MCP Swift SDK | MCP wire behavior is reused; Archon owns policy and error boundaries |
+| `ArchonConnect` | `ArchonCore`, official MCP Swift SDK | MCP wire behavior is reused; ArchonKit owns policy and error boundaries |
 | `ArchonComputerUse` | `ArchonCore` | Host observation and action closures remain app-owned |
 | `ArchonModelsUI` | `ArchonCore`, `ArchonModels` | UI reads the same model actors used by the library |
-| `ArchonFull` | Base Archon products | Re-export facade only |
+| `ArchonFull` | Base ArchonKit products | Re-export facade only |
 
 ## Out-of-the-box local provider decision
 
@@ -43,7 +43,7 @@ A package is eligible for the local core only when its capability is:
 - available on Apple platforms;
 - callable through an in-process Swift/SwiftPM API;
 - usable without a required cloud service or local server; and
-- maintainable under Archon's Swift 6 strict-concurrency and safety contracts.
+- maintainable under ArchonKit's Swift 6 strict-concurrency and safety contracts.
 
 Apple frameworks are preferred when they already provide the capability. The
 official MCP Swift SDK is reused for protocol behavior. MLX, Hugging Face, GRDB,
@@ -52,7 +52,7 @@ hosted services are adapters, not hidden base dependencies.
 
 ## API hygiene
 
-- Public Archon protocols use vendor-neutral types.
+- Public ArchonKit protocols use vendor-neutral types.
 - Credentials are supplied by the host and never embedded in defaults.
 - Optional products are explicit imports.
 - Runtime, network, isolation, and availability are represented in metadata.

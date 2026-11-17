@@ -1,6 +1,6 @@
 # System architecture
 
-Archon is a layered SwiftPM family. Each product owns one capability boundary,
+ArchonKit is a layered SwiftPM family. Each product owns one capability boundary,
 and composition happens through protocols, actors, and host injection rather
 than through a central service process.
 
@@ -53,7 +53,7 @@ facade does not force an optional dense-index dependency.
    owners.
 
 Every step is cancellable. Missing host services produce typed failures or
-unavailable results; Archon does not fabricate inference, search, writes, or
+unavailable results; ArchonKit does not fabricate inference, search, writes, or
 platform records.
 
 ## Package-only evidence
