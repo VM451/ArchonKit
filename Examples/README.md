@@ -1,5 +1,7 @@
 # ArchonKit Example App
 
+> ❓ = CI-only verified (requires Xcode 27 for MLX + SwiftUI; CLT blocked locally, passes on `xcode-27` runner — see [VerificationReport](../VerificationReport.md))
+
 SwiftUI example target for validating ArchonKit package composition. The
 executable can be launched directly on macOS; iOS and visionOS validation
 requires embedding the package in a consuming Xcode application.
