@@ -84,3 +84,6 @@ ENV/
 tmp/
 temp/
 *.log
+
+# Generated knowledge graph (AST cache + HTML) — regenerable via graphify update
+graphify-out/
