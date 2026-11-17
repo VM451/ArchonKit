@@ -50,7 +50,7 @@ struct UnavailableAdaptiveModelProvider: LLMProvider, Sendable {
 
 /// A catalog entry used by hardware-aware local model selection.
 ///
-/// Scores are optional catalog metadata. Archon never invents benchmark
+/// Scores are optional catalog metadata. ArchonKit never invents benchmark
 /// results: when a score is absent, declared parameter count may provide a
 /// bounded capacity heuristic, followed by deterministic fit, memory, and
 /// stable identifier ordering.
@@ -160,7 +160,7 @@ public struct AdaptiveModelCandidate: Sendable, Equatable, Identifiable {
     }
 
     /// Creates a generic candidate from a model descriptor returned by an
-    /// Archon catalog. Only local runtimes with a source Archon can resolve are
+    /// ArchonKit catalog. Only local runtimes with a source ArchonKit can resolve are
     /// included; Foundation Models remains the system-model path.
     public init?(
         descriptor: ModelDescriptor,
@@ -272,7 +272,7 @@ public struct AdaptiveModelCatalog: Sendable, Equatable {
         })
     }
 
-    /// Fetches MLX descriptors from an Archon model catalog provider and
+    /// Fetches MLX descriptors from an ArchonKit model catalog provider and
     /// converts them into adaptive candidates. The MLX boundary is applied
     /// here as well as in the UI so an AI agent cannot accidentally populate
     /// its user-facing local-model choices with Core AI or raw-weight entries.

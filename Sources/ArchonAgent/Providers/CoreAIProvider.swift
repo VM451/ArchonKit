@@ -76,13 +76,13 @@ public enum CoreAIProviderError: Error, LocalizedError, Sendable, Equatable {
         case .runtimeUnavailable(let reason):
             return "Core AI runtime is unavailable: \(reason)"
         case .memoryEstimateUnavailable:
-            return "Core AI model preparation is blocked because no peak-memory estimate was supplied. Register the model in an Archon catalog or ModelLibrary first."
+            return "Core AI model preparation is blocked because no peak-memory estimate was supplied. Register the model in an ArchonKit catalog or ModelLibrary first."
         case .insufficientMemory(let predictedPeakBytes, let availableBudgetBytes):
             return "Core AI model preparation is blocked: predicted peak memory \(predictedPeakBytes) bytes exceeds the current safe model budget of \(availableBudgetBytes) bytes."
         case .textGenerationAdapterRequired:
             return "Core AI exposes tensor functions, not a universal text-generation contract; inject a model-specific tokenizer and text-generation adapter."
         case .toolCallingUnsupported:
-            return "Dynamic Archon tool definitions cannot be executed without a concrete Core AI tool adapter."
+            return "Dynamic ArchonKit tool definitions cannot be executed without a concrete Core AI tool adapter."
         case .invalidOptions(let reason):
             return "Core AI generation options are invalid: \(reason)"
         }

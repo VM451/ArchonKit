@@ -24,7 +24,7 @@ public enum AppleFoundationModelError: Error, LocalizedError, Sendable, Equatabl
         case .emptyPrompt:
             return "Apple Foundation Model generation requires a non-empty prompt."
         case .toolCallingUnsupported:
-            return "Dynamic Archon tool definitions cannot be converted safely into Foundation Models Tool values."
+            return "Dynamic ArchonKit tool definitions cannot be converted safely into Foundation Models Tool values."
         case .invalidOptions(let reason):
             return "Apple Foundation Model generation options are invalid: \(reason)"
         }
