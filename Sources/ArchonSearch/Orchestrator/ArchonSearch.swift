@@ -1,5 +1,7 @@
 import Foundation
+#if canImport(SwiftDataMacros)
 import SwiftData
+#endif
 
 /// The entry point for local stealth crawl and extraction in ArchonSearch.
 /// For ArchonSearch 2.0 web-grounded retrieval and autonomous research, use `ArchonSearchClient`.
@@ -7,7 +9,9 @@ public final class ArchonSearch: Sendable {
     internal let discoveryEngine: DiscoveryEngine
     internal let semanticCore: ArchonSemanticCore
     internal let structuredExtractionHandler: StructuredExtractionHandler?
+#if canImport(SwiftDataMacros)
     internal let modelContainer: ModelContainer?
+#endif
     internal let queueActor: FrontierQueueActor?
     internal let initializationFailure: String?
     internal let localWorkspaceRoots: [URL]
@@ -23,6 +27,7 @@ public final class ArchonSearch: Sendable {
         self.semanticCore = ArchonSemanticCore(structuredExtractionHandler: structuredExtractionHandler)
         self.structuredExtractionHandler = structuredExtractionHandler
         
+#if canImport(SwiftDataMacros)
         let container: ModelContainer?
         let initializationFailure: String?
         do {
@@ -37,5 +42,10 @@ public final class ArchonSearch: Sendable {
         self.modelContainer = container
         self.queueActor = container.map { FrontierQueueActor(modelContainer: $0) }
         self.initializationFailure = initializationFailure
+#else
+        self.queueActor = FrontierQueueActor()
+        self.initializationFailure = nil
+        _ = localWorkspaceRoots
+#endif
     }
 }

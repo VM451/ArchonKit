@@ -1,5 +1,7 @@
 import Foundation
+#if canImport(SwiftDataMacros)
 import SwiftData
+#endif
 
 extension ArchonSearch {
     /// Runs an autonomous, stealth, on-device search and structured information extraction.
