@@ -34,7 +34,7 @@ local-native equivalent. Detailed capability evidence remains in the
 
 ## ArchonMemory capability map
 
-| Capability | Archon implementation | Boundary and evidence |
+| Capability | ArchonKit implementation | Boundary and evidence |
 | --- | --- | --- |
 | Durable facts | GRDB/SQLite-backed `MemoryItem` lifecycle with history and deletion | Application-owned; package tests cover update/delete and reopen behavior |
 | Working memory | `CoreMemoryBlock` and `CoreMemoryManager` | Explicitly separate from durable memory and request context |
@@ -47,7 +47,7 @@ local-native equivalent. Detailed capability evidence remains in the
 ## Current index evidence
 
 The deterministic [memory/index benchmark](../../../../context/memory-index-benchmark.md)
-compares Archon's current vector store, the optional Proxima adapter, and
+compares ArchonKit's current vector store, the optional Proxima adapter, and
 RecallKit on 2,000- and 10,000-record workloads. At 10k x 64 on the arm64
 macOS package host, the Proxima adapter reached `Recall@10 = 1.000` with
 `efSearch=256` and `0.73 / 0.75 ms` median/p95 query latency.
@@ -67,11 +67,11 @@ Device evidence now covers latency and recall; the remaining gates stay open.
 
 ## Design principles
 
-- Reuse Apple frameworks and qualifying Swift packages behind Archon-owned
+- Reuse Apple frameworks and qualifying Swift packages behind ArchonKit-owned
   contracts; do not copy competitor code or expose vendor types by default.
 - Keep extraction, temporal validity, scopes, forgetting, export, audit, and
-  durable storage as Archon-owned semantics.
+  durable storage as ArchonKit-owned semantics.
 - Keep vectors and indexes replaceable; indexes may store IDs/vectors but not
-  Archon lifecycle or permission state.
+  ArchonKit lifecycle or permission state.
 - Never imply that CloudKit, a cloud model, or a hosted memory service is
   required for the local core.

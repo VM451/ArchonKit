@@ -61,7 +61,7 @@ public actor CoreSpotlightIndexer {
         }
     }
 
-    /// Removes every item owned by Archon from the configured Spotlight domain.
+    /// Removes every item owned by ArchonKit from the configured Spotlight domain.
     public func deindexAll() async throws {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
             CSSearchableIndex.default().deleteSearchableItems(withDomainIdentifiers: [Self.domainIdentifier]) { error in
