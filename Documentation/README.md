@@ -1,6 +1,6 @@
-# Archon documentation
+# ArchonKit documentation
 
-This directory is the cross-product documentation set for Archon Swift. It is
+This directory is the cross-product documentation set for ArchonKit. It is
 organized using the Diátaxis model so each document has one job:
 
 | Section | Purpose | Start here when you need to… |
@@ -8,7 +8,7 @@ organized using the Diátaxis model so each document has one job:
 | [Tutorials](tutorials/) | Learning-oriented, end-to-end paths | Build your first local model flow |
 | [How-to guides](how-to/) | Task-oriented implementation recipes | Integrate a capability into an app |
 | [Reference](reference/) | Exact contracts and boundaries | Check supported models, products, fields, states, or commands |
-| [Explanation](explanation/) | Architecture and design rationale | Understand why Archon is shaped this way |
+| [Explanation](explanation/) | Architecture and design rationale | Understand why ArchonKit is shaped this way |
 | [Decisions](decisions/) | Historical and migration records | Understand what was retained, replaced, or excluded |
 | [Diagrams](diagrams/) | One Mermaid diagram per product | See how a product works at a glance |
 
@@ -25,8 +25,8 @@ documentation surface.
 | Decision | Meaning in this SDK |
 | --- | --- |
 | **REUSE** | Existing Apple or Swift capability is sufficient and used directly. |
-| **PARTIAL / ADAPT** | Existing capability is useful but Archon adds a vendor-neutral boundary, policy, or lifecycle layer. |
-| **BUILD** | Archon owns missing local-native behavior because no qualifying replacement exists. |
+| **PARTIAL / ADAPT** | Existing capability is useful but ArchonKit adds a vendor-neutral boundary, policy, or lifecycle layer. |
+| **BUILD** | ArchonKit owns missing local-native behavior because no qualifying replacement exists. |
 | **INSPIRATION** | Cloud, server, or non-native reference used for outcomes and patterns only. |
 | **PENDING** | Evidence is incomplete; no adoption or parity claim is made. |
 
@@ -34,7 +34,7 @@ documentation surface.
 
 ### New application
 
-1. [Add Archon and choose products](how-to/add-archon.md)
+1. [Add ArchonKit and choose products](how-to/add-archon.md)
 2. [Read the supported model policy](reference/supported-models.md)
 3. [Integrate a local model](tutorials/first-local-model.md)
 4. [Understand product boundaries](reference/products.md)
@@ -42,7 +42,7 @@ documentation surface.
 6. [Build a realtime voice + vision agent](how-to/realtime-voice-agent.md)
 7. [Read the competitor comparison and scorecard](reference/competitor-comparison.md)
 
-### Existing Archon integration
+### Existing ArchonKit integration
 
 1. [Local-first boundaries](explanation/local-first-boundaries.md)
 2. [Supported model policy](reference/supported-models.md)
@@ -68,7 +68,7 @@ capabilities, adapted boundaries, and new native Swift contracts.
 
 ## Current package boundary
 
-Archon is a SwiftPM package family for iOS, iPadOS, macOS, and visionOS 27
+ArchonKit is a SwiftPM package family for iOS, iPadOS, macOS, and visionOS 27
 where the underlying Apple capability is available. The repository includes a
 buildable macOS SwiftUI example and package-level tests, but not a signed
 consuming application. Device, entitlement, permission, live UI, and
