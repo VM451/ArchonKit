@@ -1,11 +1,11 @@
-# Add Archon to an application
+# Add ArchonKit to an application
 
 ## 1. Add the package
 
 In Xcode, add:
 
 ```text
-https://github.com/VM451/archon-swift.git
+https://github.com/VM451/ArchonKit.git
 ```
 
 For development, track `main`. For a production application, pin a release

@@ -3,7 +3,7 @@
 How-to guides solve a specific integration task. They assume familiarity with
 Swift and Swift Package Manager.
 
-- [Add Archon to an application](add-archon.md)
+- [Add ArchonKit to an application](add-archon.md)
 - [Configure network-backed adapters](configure-network-adapters.md)
 - [Host lifecycle, permissions, and App Intents](host-lifecycle.md)
 - [Handle background model transfers](background-model-transfers.md)
