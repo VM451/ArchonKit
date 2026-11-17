@@ -72,6 +72,13 @@ public struct SearchComposerView: View {
 
 #else
 import SwiftUI
-public struct SearchComposerView: View { public var body: some View { EmptyView() } }
-public enum SearchComposerMode: String, CaseIterable, Identifiable, Sendable { case standard = "Search"; case deepResearch = "Deep Research"; public var id: String { rawValue } }
+public enum SearchComposerMode: String, CaseIterable, Identifiable, Sendable {
+    case standard = "Search"
+    case deepResearch = "Deep Research"
+    public var id: String { rawValue }
+}
+public struct SearchComposerView: View {
+    public var body: some View { EmptyView() }
+    public init(text: Binding<String>, mode: Binding<SearchComposerMode>, isSearching: Bool = false, onSend: @escaping () -> Void) {}
+}
 #endif
