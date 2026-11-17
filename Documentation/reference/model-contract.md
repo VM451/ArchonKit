@@ -1,6 +1,6 @@
 # Model contract reference
 
-Archon treats model metadata, model artifacts, and model runtimes as separate
+ArchonKit treats model metadata, model artifacts, and model runtimes as separate
 contracts. A filename or model name is never enough to claim that an artifact
 can execute on a device.
 
@@ -21,7 +21,7 @@ An `archon-model.json` manifest records:
 
 The manifest is descriptive evidence. `estimatedQualityScore` and
 `estimatedTokensPerSecond` are persisted values and deterministic tie-breakers;
-Archon does not infer either value from a model name.
+ArchonKit does not infer either value from a model name.
 
 ## Format and runtime compatibility
 
