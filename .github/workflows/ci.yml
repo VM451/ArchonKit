@@ -212,7 +212,7 @@ jobs:
         if: always()
         run: |
           cat << 'EOF' >> "$GITHUB_STEP_SUMMARY"
-          ## 🛡️ Archon Swift Package CI Report
+          ## 🛡️ ArchonKit Package CI Report
 
           | Check | Status | Details |
           | :--- | :---: | :--- |
