@@ -4,7 +4,7 @@ import Foundation
 ///
 /// Filesystem access stays in the consuming application boundary.
 /// The host supplies only URIs it has already resolved and is willing to
-/// expose; Archon never discovers, broadens, or persists them. Per the MCP
+/// expose; ArchonKit never discovers, broadens, or persists them. Per the MCP
 /// roots specification, URIs use the `file://` scheme.
 public struct MCPHostRoot: Codable, Equatable, Sendable, Identifiable {
     public var id: String { uri }
@@ -46,7 +46,7 @@ public enum MCPSamplingContent: Equatable, Sendable {
 /// A server-initiated sampling request asking the host to run an LLM completion.
 ///
 /// The host owns model selection and inference (on-device or its own
-/// providers); Archon only translates the wire shape. `includeContext` carries
+/// providers); ArchonKit only translates the wire shape. `includeContext` carries
 /// the raw `none` / `thisServer` / `allServers` value so new spec values pass
 /// through instead of failing the request.
 public struct MCPSamplingRequest: Equatable, Sendable {

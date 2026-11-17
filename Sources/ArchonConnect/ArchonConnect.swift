@@ -410,7 +410,7 @@ public actor MCPHTTPTransport: MCPTransport {
         session: URLSession = .shared,
         headers: [String: String] = [:],
         protocolVersion: String = "2025-06-18",
-        clientName: String = "Archon",
+        clientName: String = "ArchonKit",
         clientVersion: String = "1.0",
         requestTimeout: TimeInterval? = 60
     ) {

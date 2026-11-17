@@ -1,6 +1,6 @@
 import Foundation
 
-/// Host-visible choice between the custom Archon transport and the official
+/// Host-visible choice between the custom ArchonKit transport and the official
 /// MCP Swift SDK adapter. Partial ADAPT: the official
 /// `OfficialMCPTransport` is available for SDK-owned wire behavior, while the
 /// custom `MCPHTTPTransport` remains the default so existing hosts keep
@@ -27,11 +27,11 @@ public struct MCPTransportDescriptor: Codable, Equatable, Sendable {
         self.requiresExplicitToolAuthorization = true
         switch choice {
         case .custom:
-            self.summary = "Custom Archon MCP transport. Host-owned JSON-RPC over HTTP; tool calls require explicit host authorization."
+            self.summary = "Custom ArchonKit MCP transport. Host-owned JSON-RPC over HTTP; tool calls require explicit host authorization."
             self.conformanceScope = "Package-provable: JSON-RPC schema validation, 1000-item collections, 100-page pagination with cursor-cycle rejection, bounded streams, and typed errors. Full wire interop stays proven through the official-SDK adapter fixtures."
         case .officialSDK:
-            self.summary = "Official MCP Swift SDK adapter with Archon policy (explicit tool authorization, pagination and size limits, typed errors). Custom transport remains available."
-            self.conformanceScope = "Package-provable: SDK-owned wire behavior plus Archon policy (explicit tool authorization, uniform pagination guard, notification allowlist, bounded teardown, typed errors). Live-server interop remains an open gate."
+            self.summary = "Official MCP Swift SDK adapter with ArchonKit policy (explicit tool authorization, pagination and size limits, typed errors). Custom transport remains available."
+            self.conformanceScope = "Package-provable: SDK-owned wire behavior plus ArchonKit policy (explicit tool authorization, uniform pagination guard, notification allowlist, bounded teardown, typed errors). Live-server interop remains an open gate."
         }
     }
 }
