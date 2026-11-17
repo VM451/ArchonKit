@@ -8,7 +8,7 @@ import Darwin
 import FoundationModels
 #endif
 
-/// The small shared foundation used by Archon's independently adoptable modules.
+/// The small shared foundation used by ArchonKit's independently adoptable modules.
 public enum ArchonCore {}
 
 public enum ArchonLogLevel: String, Codable, Sendable {
@@ -93,21 +93,21 @@ public enum ArchonCapabilityError: Error, LocalizedError, Equatable, Sendable {
     public var errorDescription: String? {
         switch self {
         case .notRegistered(let id):
-            return "Archon capability is not registered: \(id)"
+            return "ArchonKit capability is not registered: \(id)"
         case .unavailable(let id, let reason):
             if let reason {
-                return "Archon capability is unavailable: \(id). \(reason)"
+                return "ArchonKit capability is unavailable: \(id). \(reason)"
             } else {
-                return "Archon capability is unavailable: \(id)"
+                return "ArchonKit capability is unavailable: \(id)"
             }
         case .permissionsRequired(let id, let permissions):
             let values = permissions.map(\.rawValue).sorted().joined(separator: ", ")
-            return "Archon capability requires permission before use: \(id) [\(values)]"
+            return "ArchonKit capability requires permission before use: \(id) [\(values)]"
         }
     }
 }
 
-/// A structured, privacy-safe event emitted at an Archon subsystem boundary.
+/// A structured, privacy-safe event emitted at an ArchonKit subsystem boundary.
 ///
 /// Events contain identifiers and redacted metadata only. Secrets, prompts,
 /// model contents, and credential values remain the responsibility of the
@@ -146,7 +146,7 @@ public actor NoOpArchonAuditSink: ArchonAuditSink {
     public func record(_ event: ArchonAuditEvent) {}
 }
 
-/// Redacts values by key before they cross an Archon audit boundary.
+/// Redacts values by key before they cross an ArchonKit audit boundary.
 public enum ArchonRedactor {
     private static let sensitiveKeyFragments = [
         "token", "secret", "password", "passwd", "credential", "authorization",
@@ -768,10 +768,10 @@ public enum ArchonCoreError: Error, LocalizedError, Equatable, Sendable {
 
     public var errorDescription: String? {
         switch self {
-        case .invalidIdentifier(let value): "Invalid Archon identifier: \(value)"
-        case .invalidConfiguration(let value): "Invalid Archon configuration: \(value)"
+        case .invalidIdentifier(let value): "Invalid ArchonKit identifier: \(value)"
+        case .invalidConfiguration(let value): "Invalid ArchonKit configuration: \(value)"
         case .unsupportedPlatform(let platform): "Unsupported platform: \(platform.rawValue)"
-        case .cancelled: "The Archon operation was cancelled."
+        case .cancelled: "The ArchonKit operation was cancelled."
         }
     }
 }

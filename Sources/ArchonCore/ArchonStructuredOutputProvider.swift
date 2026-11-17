@@ -1,6 +1,6 @@
 import Foundation
 
-/// Shared structured-output boundary used by independent Archon products.
+/// Shared structured-output boundary used by independent ArchonKit products.
 ///
 /// Providers may implement this directly, while richer agent providers can
 /// supply a default JSON-decoding implementation in their own product. Keeping

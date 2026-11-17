@@ -1,6 +1,6 @@
 import Foundation
 
-/// Process and task-scoped network egress guard shared by every Archon
+/// Process and task-scoped network egress guard shared by every ArchonKit
 /// product. Keeping this policy in ArchonCore prevents lower-level products
 /// such as ArchonMemory from depending on ArchonAgent just to honor
 /// ZeroCloudMode.
