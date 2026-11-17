@@ -190,5 +190,44 @@ public final class ModelLibraryViewModel: ObservableObject {
 
 #else
 import Foundation
-public final class ModelLibraryViewModel: ObservableObject { public init(library: Any) {} }
+import ArchonCore
+import ArchonModels
+
+public enum ModelLibraryPresentationState: Equatable, Sendable {
+    case idle
+    case loading
+    case loaded
+    case offline
+    case failed(String)
+}
+
+@MainActor
+public final class ModelLibraryViewModel: ObservableObject {
+    public var models: [InstalledModel] = []
+    public var updates: [String: ModelUpdateCandidate] = [:]
+    public var progress: [String: Double] = [:]
+    public var attempts: [String: ModelDownloadAttempt] = [:]
+    public var state: ModelLibraryPresentationState = .idle
+    public var lastError: String?
+    public var userVisibleError: String?
+    public let library: ModelLibrary
+    public let catalog: (any ModelCatalogProvider)?
+    public let downloadManager: ModelDownloadManager
+    private let deviceOverride: ArchonDeviceCapabilities?
+    public var device: ArchonDeviceCapabilities { deviceOverride ?? .current }
+    public init(
+        library: ModelLibrary,
+        catalog: (any ModelCatalogProvider)? = nil,
+        downloadManager: ModelDownloadManager = ModelDownloadManager(),
+        device: ArchonDeviceCapabilities? = nil
+    ) {
+        self.library = library
+        self.catalog = catalog
+        self.downloadManager = downloadManager
+        self.deviceOverride = device
+    }
+    public func refresh() async {}
+    public func checkForUpdates() async {}
+    public func isNetworkError(_ error: Error) -> Bool { error is URLError }
+}
 #endif
