@@ -85,7 +85,7 @@ public struct ModelDetailView: View {
                     if let measuredOn = benchmark.measuredOn, !measuredOn.isEmpty {
                         LabeledContent("Measured on", value: measuredOn)
                     }
-                    Text("Measured by the catalog or host; never inferred by Archon.")
+                    Text("Measured by the catalog or host; never inferred by ArchonKit.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -450,7 +450,7 @@ private extension ArchonModelSource {
         switch self {
         case .appleCoreAI: "Apple Core AI"
         case .huggingFace: "Hugging Face"
-        case .archonRegistry: "Archon Registry"
+        case .archonRegistry: "ArchonKit Registry"
         case .developerRegistry: "Developer Registry"
         case .directURL: "Direct URL"
         case .localImport: "Local Import"
