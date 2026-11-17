@@ -5,11 +5,11 @@ sibling package source trees. The sibling repositories remain untouched.
 
 ## Initial disposition
 
-| Existing checkout | Disposition in `archon-swift` | Reason |
+| Existing checkout | Disposition in `ArchonKit` | Reason |
 | --- | --- | --- |
 | `archon-agent-swift` | Migrated into `ArchonAgent` | Graph execution and model-policy routing remain package-owned; the legacy model downloader was removed |
 | `archon-memory-swift` | Migrated into `ArchonMemory` | Durable memory lifecycle remains local and GRDB-backed |
-| `archon-search-swift` | Migrated into `ArchonSearch` | Current-information and research behavior remains behind Archon-owned contracts |
+| `archon-search-swift` | Migrated into `ArchonSearch` | Current-information and research behavior remains behind ArchonKit-owned contracts |
 | `archon-sandbox-swift` | Migrated into `ArchonSandbox` | Capability-restricted WebKit mini-app behavior remains local and explicit |
 | `archon-router-swift` | Excluded | The router surface was discontinued and is not part of the unified SDK |
 
