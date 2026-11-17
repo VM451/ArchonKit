@@ -50,7 +50,7 @@ public enum MLXLocalProviderError: Error, LocalizedError, Sendable, Equatable {
         case .emptyPrompt:
             return "MLX generation requires at least one chat message."
         case .memoryEstimateUnavailable:
-            return "MLX model loading is blocked because no peak-memory estimate was supplied. Register the model in an Archon catalog or ModelLibrary first."
+            return "MLX model loading is blocked because no peak-memory estimate was supplied. Register the model in an ArchonKit catalog or ModelLibrary first."
         case .insufficientMemory(let predictedPeakBytes, let availableBudgetBytes):
             return "MLX model loading is blocked: predicted peak memory \(predictedPeakBytes) bytes exceeds the current safe model budget of \(availableBudgetBytes) bytes."
         case .unavailableOnPlatform:
@@ -498,7 +498,7 @@ private actor MLXModelRuntime {
 }
 #endif
 
-/// A concrete `ModelRuntimeAdapter` for installed Archon MLX packages.
+/// A concrete `ModelRuntimeAdapter` for installed ArchonKit MLX packages.
 ///
 /// The adapter deliberately accepts only manifests that declare both the MLX
 /// runtime and MLX artifact format. It does not reinterpret GGUF, SafeTensors,

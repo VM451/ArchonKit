@@ -5,7 +5,7 @@ import ArchonModels
 import CoreAI
 #endif
 
-/// A stable, Archon-owned description of a function exported by a Core AI asset.
+/// A stable, ArchonKit-owned description of a function exported by a Core AI asset.
 public struct CoreAIModelFunctionDescriptor: Sendable, Equatable, Codable {
     public let name: String
     public let inputNames: [String]
@@ -231,7 +231,7 @@ public actor CoreAIModelRuntime {
     #endif
 }
 
-/// A concrete `ModelRuntimeAdapter` for installed Archon Core AI packages.
+/// A concrete `ModelRuntimeAdapter` for installed ArchonKit Core AI packages.
 ///
 /// `ArchonModels` owns compatibility and lifecycle state while this adapter
 /// supplies the public Core AI specialization call. Text generation remains a

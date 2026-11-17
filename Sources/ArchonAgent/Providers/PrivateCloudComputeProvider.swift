@@ -27,7 +27,7 @@ public enum PrivateCloudComputeError: Error, LocalizedError, Sendable, Equatable
         case .emptyPrompt:
             return "Private Cloud Compute generation requires a non-empty prompt."
         case .toolCallingUnsupported:
-            return "Dynamic Archon tool definitions cannot be converted safely into Foundation Models Tool values."
+            return "Dynamic ArchonKit tool definitions cannot be converted safely into Foundation Models Tool values."
         }
     }
 }
