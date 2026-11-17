@@ -4,7 +4,7 @@ import ProximaKit
 
 /// Configuration for the optional ProximaKit-backed dense index.
 ///
-/// These are Archon-owned values so callers do not need to import or understand
+/// These are ArchonKit-owned values so callers do not need to import or understand
 /// ProximaKit configuration types. A fixed seed is useful for reproducible
 /// tests and benchmarks; `nil` uses the candidate's default random level draw.
 public struct ProximaVectorIndexConfiguration: Codable, Equatable, Hashable, Sendable {
@@ -111,12 +111,12 @@ public struct ProximaVectorIndexSnapshot: Codable, Equatable, Sendable {
     }
 }
 
-/// Optional Archon adapter for ProximaKit's local Accelerate HNSW index.
+/// Optional ArchonKit adapter for ProximaKit's local Accelerate HNSW index.
 ///
 /// The durable `ArchonMemory` store remains authoritative. This adapter stores
-/// only vector IDs and embeddings, applies Archon's allow-list before returning
+/// only vector IDs and embeddings, applies ArchonKit's allow-list before returning
 /// results, and translates Proxima's lower-is-better cosine distance into
-/// Archon's higher-is-better similarity scale.
+/// ArchonKit's higher-is-better similarity scale.
 public actor ProximaVectorIndexAdapter: ArchonMemory.VectorIndex {
     public nonisolated let dimension: Int
     public nonisolated let configuration: ProximaVectorIndexConfiguration
