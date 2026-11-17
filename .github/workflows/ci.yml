@@ -188,10 +188,10 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .build
-          # Include metal toolchain hash to avoid restoring stale .build that references old ephemeral /var/run path (6om4nO vs hNozJW)
-          key: ${{ runner.os }}-xcode-${{ steps.toolchain.outputs.xcode_build }}-spm-${{ hashFiles('Package.swift', 'Package.resolved') }}-metal-${{ hashFiles('.github/workflows/ci.yml') }}
-          restore-keys: |
-            ${{ runner.os }}-xcode-${{ steps.toolchain.outputs.xcode_build }}-spm-
+          # Disable cache restore to avoid stale ephemeral metal path (6om4nO vs hNozJW/LvrjWL) – forces fresh build
+          key: ${{ runner.os }}-xcode-${{ steps.toolchain.outputs.xcode_build }}-spm-${{ hashFiles('Package.swift', 'Package.resolved') }}-${{ github.sha }}
+          restore-keys: ""
+          # No fallback to old cache with stale metal path
 
       - name: Resolve dependencies
         run: swift package resolve
