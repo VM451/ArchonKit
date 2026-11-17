@@ -4,8 +4,17 @@ import CompilerPluginSupport
 import Foundation
 import PackageDescription
 
-let isLocalForStubs = ProcessInfo.processInfo.environment["GITHUB_ACTIONS"] != "true"
-let localStubSettings: [SwiftSetting] = isLocalForStubs ? [.define("LOCAL_STUB")] : []
+let isGitHub = ProcessInfo.processInfo.environment["GITHUB_ACTIONS"] == "true"
+let developerDir = ProcessInfo.processInfo.environment["DEVELOPER_DIR"] ?? ""
+let isXcodeToolchain = developerDir.contains("Xcode.app")
+// LOCAL_STUB is only needed for CLT macOS builds that lack Xcode macro plugins
+// (@State, @Model, @Generable). iOS / iPadOS / visionOS always build with Xcode
+// (which has the plugins), and macOS Xcode builds also have them — only CLT
+// macOS needs the stub. Gating to macOS + `!isXcodeToolchain` ensures a local
+// Xcode host (iOS or macOS) always gets the full implementation, never the
+// AppKit stub that fails to import on iOS.
+let isLocalForStubs = !isGitHub && !isXcodeToolchain
+let localStubSettings: [SwiftSetting] = isLocalForStubs ? [.define("LOCAL_STUB", .when(platforms: [.macOS]))] : []
 
 let package = Package(
     name: "ArchonKit",
