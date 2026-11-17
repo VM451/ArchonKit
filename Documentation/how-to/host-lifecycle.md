@@ -1,6 +1,6 @@
 # Host lifecycle, permissions, and App Intents
 
-Archon is a package, not an application delegate. The consuming app must
+ArchonKit is a package, not an application delegate. The consuming app must
 forward platform lifecycle events and register host-owned services.
 
 ## Register the model library

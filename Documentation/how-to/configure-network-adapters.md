@@ -1,6 +1,6 @@
 # Configure network-backed adapters
 
-Network behavior is an application decision. Archon keeps the local core
+Network behavior is an application decision. ArchonKit keeps the local core
 usable without a network, then exposes explicit provider boundaries for cases
 where current web information, hosted models, remote MCP, or remote execution
 is required.
@@ -73,7 +73,7 @@ where credentials are stored.
 ## Remote providers
 
 Cloud LLM providers, hosted search products, remote MCP servers, browser
-sessions, and container/microVM sandboxes should conform to Archon-owned
+sessions, and container/microVM sandboxes should conform to ArchonKit-owned
 contracts at the application boundary. Keep vendor SDK types and credentials
 out of the default public API.
 
