@@ -1,8 +1,8 @@
 # Competitor comparison and scorecard
 
-This document is the readable comparison view for Archon's living competitor
+This document is the readable comparison view for ArchonKit's living competitor
 registry. It explains what each reference product is strong at, scores the
-relevant aspects, and translates the result into a local-first Archon decision.
+relevant aspects, and translates the result into a local-first ArchonKit decision.
 
 **Review snapshot:** 2026-09-08<br>
 **Canonical evidence:** this comparison and its linked official sources<br>
@@ -11,21 +11,21 @@ relevant aspects, and translates the result into a local-first Archon decision.
 ## Executive summary
 
 The scores are decision aids, not market-share rankings. A cloud product can
-score highly for a signature workflow and still fail Archon's local-native
-qualification gate. Archon therefore keeps two questions separate:
+score highly for a signature workflow and still fail ArchonKit's local-native
+qualification gate. ArchonKit therefore keeps two questions separate:
 
 1. **Capability score:** How strong is the documented feature outcome?
 2. **Engineering score:** How suitable is the outcome for a native, local,
    in-process Swift SDK?
 
-| Category | Strongest documented outcome | Highest capability average | Local-native conclusion | Archon action |
+| Category | Strongest documented outcome | Highest capability average | Local-native conclusion | ArchonKit action |
 | --- | --- | :---: | --- | --- |
-| Memory | Zep's temporal truth and Mem0's automatic memory lifecycle | 3.4 / 5 | Cloud services do not qualify as local replacements | Build Archon semantics; adapt qualifying indexes only |
+| Memory | Zep's temporal truth and Mem0's automatic memory lifecycle | 3.4 / 5 | Cloud services do not qualify as local replacements | Build ArchonKit semantics; adapt qualifying indexes only |
 | Agent orchestration | LangGraph recovery and OpenAI Agents SDK tools/handoffs | 3.7 / 5 | Framework runtimes are not native Swift replacements | Adapt patterns into ArchonAgent |
 | Search and research | Firecrawl extraction and Tavily/Exa agent-ready research | 3.1 / 5 | Web search is network-dependent unless using a local corpus | Build local orchestration; add explicit adapters |
 | Sandbox and browser action | E2B/Deno isolation and Stagehand semantic browser actions | 3.3 / 5 | Remote VMs/browsers are not local in-process Swift | Build local safety/semantic boundaries; adapt remote services |
 | Models and runtimes | Foundation Models/Core ML local Apple execution | 4.6 / 5 | Apple-native paths qualify; others qualify only by runtime | Reuse Apple APIs; adapt lifecycle and artifacts |
-| Protocols | MCP's interoperable tools, resources, and prompts | 4.3 / 5 | The SDK is local Swift; connected servers may be remote | Adapt the official SDK; retain Archon policy |
+| Protocols | MCP's interoperable tools, resources, and prompts | 4.3 / 5 | The SDK is local Swift; connected servers may be remote | Adapt the official SDK; retain ArchonKit policy |
 
 ## Evidence addendum (2026-09-16)
 
@@ -96,7 +96,7 @@ the row, not the size, popularity, or revenue of the vendor.
 
 `Capability average` is the arithmetic mean of the aspect scores in that
 category. It is useful for comparing feature coverage, but it does not approve
-an Archon dependency.
+an ArchonKit dependency.
 
 ### Engineering score
 
@@ -119,7 +119,7 @@ engineeringScore = engineering * 20
 | Local feasibility | 26.67% | Apple-device, in-process, native Swift/SwiftPM feasibility |
 | Quality and safety | 20% | Typed failures, bounded resources, privacy, recovery, and safety evidence |
 | Maintainability | 13.33% | API clarity, dependency health, license, platform support, and ownership |
-| Archon strategic fit | 13.33% | Fit with Archon's local-first, vendor-neutral architecture |
+| ArchonKit strategic fit | 13.33% | Fit with ArchonKit's local-first, vendor-neutral architecture |
 
 User pull is reported separately as evidence (`High`, `Medium`, `Low`, or
 `Unknown`). It is never invented, and it never raises the engineering score.
@@ -135,7 +135,7 @@ failed local, security, recovery, license, or platform gate.
 
 ### Engineering-score bands
 
-| Score | Interpretation | Default Archon posture |
+| Score | Interpretation | Default ArchonKit posture |
 | :---: | --- | --- |
 | 80–100 | Strong local or strategic reference | Consider `REUSE`/`ADAPT` only after gates |
 | 60–79 | Strong pattern or adapter opportunity | `ADAPT` or focused `BUILD` |
@@ -156,7 +156,7 @@ Source records: the memory comparison in this document.
 
 ### What users select these products for
 
-| Product | Signature outcome | Archon feature to extract |
+| Product | Signature outcome | ArchonKit feature to extract |
 | --- | --- | --- |
 | [Mem0](https://docs.mem0.ai/features/contextual-add) | Automatic extraction, deduplication, contradiction-aware updates, and hybrid retrieval | Memory decisions should be useful without requiring manual fact authoring |
 | [Supermemory](https://docs.supermemory.ai/memory-api/introduction) | Broad ingestion, connectors, multimodality, filtering, reranking, and profile synthesis | Memory should unify many sources with provenance and a useful profile |
@@ -188,7 +188,7 @@ Source records: the memory comparison in this document.
 
 ### Memory implementation decision
 
-| Keep from the market | Archon implementation boundary | Required proof |
+| Keep from the market | ArchonKit implementation boundary | Required proof |
 | --- | --- | --- |
 | Extraction and `ADD/UPDATE/DELETE/NO_CHANGE` decisions | `MemoryExtractor` plus durable `MemoryItem` history | Contradiction and temporal invalidation tests |
 | Temporal facts and supersession | `validFrom`, `validTo`, `supersededById`, and `GraphStore` | Deterministic temporal queries and migration |
@@ -249,7 +249,7 @@ Source records: the agent comparison in this document.
 
 ### What users select these products for
 
-| Product | Signature outcome | Archon feature to extract |
+| Product | Signature outcome | ArchonKit feature to extract |
 | --- | --- | --- |
 | [LangGraph](https://docs.langchain.com/oss/python/langgraph/persistence) | Durable graph checkpoints, interrupts, recovery, state inspection, and time travel | Agents must resume, fork, and replay without losing state |
 | [CrewAI](https://docs.crewai.com/index) | Crews, Flows, memory, guardrails, and observability | Role-based agents should grow into inspectable production flows |
@@ -281,7 +281,7 @@ Source records: the agent comparison in this document.
 
 ### Agent implementation decision
 
-| Keep from the market | Archon implementation boundary | Required proof |
+| Keep from the market | ArchonKit implementation boundary | Required proof |
 | --- | --- | --- |
 | Durable checkpoints and time travel | `Graph`, `StateCheckpointer`, `GraphInterrupt`, replay, and fork contracts | Crash recovery, idempotence, deterministic replay |
 | Tools, handoffs, and agents-as-tools | Typed `ToolDispatcher`, subgraphs, handoffs, and authorization | Approval, duplicate-side-effect, and cancellation tests |
@@ -294,7 +294,7 @@ Source records: the search comparison in this document.
 
 ### What users select these products for
 
-| Product | Signature outcome | Archon feature to extract |
+| Product | Signature outcome | ArchonKit feature to extract |
 | --- | --- | --- |
 | [Tavily](https://docs.tavily.com/welcome) | Search, extract, crawl, map, reranking, and research context | Research should produce compact, agent-ready evidence |
 | [Exa](https://exa.ai/docs/reference/search) | Neural search, contents, highlights, freshness, and structured search | Semantic relevance and model-ready passages matter |
@@ -340,7 +340,7 @@ Source records: the search comparison in this document.
 
 ### Search implementation decision
 
-| Keep from the market | Archon implementation boundary | Required proof |
+| Keep from the market | ArchonKit implementation boundary | Required proof |
 | --- | --- | --- |
 | Query rewriting and reranking | `SearchQueryRewriter`, `ResultReranker` + `SearchRankingOptions`, `SemanticSimilarity` / `NaturalLanguageSimilarity`, exposed via `rankedSearch` | `SearchRankingTests`: keyword, semantic, freshness, scope, determinism |
 | Crawl, map, and extract | Bounded local WebKit/URLSession orchestration plus adapters | Robots, limits, prompt-injection isolation, cleanup |
@@ -354,7 +354,7 @@ Source records: the sandbox and Computer Use comparisons in this document.
 
 ### What users select these products for
 
-| Product | Signature outcome | Archon feature to extract |
+| Product | Signature outcome | ArchonKit feature to extract |
 | --- | --- | --- |
 | [E2B](https://e2b.dev/) | Disposable Firecracker microVM code execution | Strong isolation behind a convenient agent API |
 | [Modal](https://modal.com/docs/guide/sandboxes) | Secure containers, snapshots, forks, and lifecycle | Reproducible execution state and fast lifecycle control |
@@ -398,7 +398,7 @@ Source records: the sandbox and Computer Use comparisons in this document.
 
 ### Sandbox and action implementation decision
 
-| Keep from the market | Archon implementation boundary | Required proof |
+| Keep from the market | ArchonKit implementation boundary | Required proof |
 | --- | --- | --- |
 | Deny-by-default execution | `SandboxConfiguration`, capability policy, CSP, quotas, and typed failures | Path traversal, CSP, blocked network, quota, and cleanup tests |
 | Snapshots and workspace lifecycle | `SandboxWorkspace` plus explicit remote adapter isolation | Atomic snapshots, teardown, secrets, and recovery |
@@ -411,7 +411,7 @@ Source records: the models and runtimes comparison in this document.
 
 ### What users select these products for
 
-| Product | Signature outcome | Archon feature to extract |
+| Product | Signature outcome | ArchonKit feature to extract |
 | --- | --- | --- |
 | [Foundation Models](https://developer.apple.com/documentation/FoundationModels) | Apple on-device generation, guided output, and tool calling | Reuse the supported Apple model runtime directly |
 | [Core ML](https://developer.apple.com/documentation/CoreML) | Hardware-accelerated local inference and compiled artifacts | Reuse the runtime; build artifact and lifecycle contracts |
@@ -470,21 +470,21 @@ Source records: the protocols comparison in this document.
 
 | Reference | Pull | Diff. | Local | Quality | Maintain. | Fit | Overall / 100 | Decision |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | --- |
-| MCP Swift SDK | 2 | 5 | 5 | 4 | 4 | 5 | **80** | ADAPT official SDK; policy remains Archon-owned |
+| MCP Swift SDK | 2 | 5 | 5 | 4 | 4 | 5 | **80** | ADAPT official SDK; policy remains ArchonKit-owned |
 | A2A | 2 | 4 | 1 | 3 | 3 | 3 | **51** | PENDING identity/auth/device evidence |
 | AG-UI | 2 | 4 | 1 | 3 | 3 | 3 | **51** | PENDING lifecycle/device evidence |
 | ArchonConnect contract | 2 | 5 | 5 | 4 | 4 | 5 | **80** | ADAPT; production conformance open |
 
 ### Protocol implementation decision
 
-| Keep from the market | Archon implementation boundary | Required proof |
+| Keep from the market | ArchonKit implementation boundary | Required proof |
 | --- | --- | --- |
-| MCP tools, resources, prompts, schemas | Official MCP Swift SDK behind Archon-owned values | Pagination, invalid schema, structured output, and content tests |
-| Progress and cancellation | Archon transport events and request context | Loopback and production-server lifecycle tests |
+| MCP tools, resources, prompts, schemas | Official MCP Swift SDK behind ArchonKit-owned values | Pagination, invalid schema, structured output, and content tests |
+| Progress and cancellation | ArchonKit transport events and request context | Loopback and production-server lifecycle tests |
 | Consent and authorization | Host-owned credentials, permissions, risk policy, and redaction | Auth, disconnect, arbitrary notification, and consent tests |
 | A2A/AG-UI concepts | Keep as pending interoperability references | Identity, replay, cancellation, privacy, and device boundary proof |
 
-## 7. Archon product readiness
+## 7. ArchonKit product readiness
 
 This is the full product scorecard for every package product in
 `swift package dump-package`, including the developer CLI and reference app.
@@ -524,7 +524,7 @@ scores and remain provisional until consuming-app and device evidence exists.
 
 ## 8. Cross-category feature extraction map
 
-| User outcome worth keeping | Primary references | Archon owner | Decision | Acceptance gate |
+| User outcome worth keeping | Primary references | ArchonKit owner | Decision | Acceptance gate |
 | --- | --- | --- | --- | --- |
 | Memory appears without manual curation | Mem0, Supermemory | `ArchonMemory` | ADAPT + BUILD | Extraction, dedupe, contradiction, delete, audit |
 | Facts change over time without losing history | Zep | `ArchonMemory` | BUILD semantics | Temporal validity, supersession, migration |
@@ -543,13 +543,13 @@ scores and remain provisional until consuming-app and device evidence exists.
 ### Reuse
 
 Reuse public Apple frameworks when the capability is current, supported, and
-complete for the requirement. Archon adds policy, lifecycle, artifact, or host
+complete for the requirement. ArchonKit adds policy, lifecycle, artifact, or host
 boundaries around the framework; it does not recreate the framework.
 
 ### Adapt
 
 Adapt a candidate when it provides a qualifying local Swift capability but
-Archon still needs vendor-neutral types, stricter safety, lifecycle control,
+ArchonKit still needs vendor-neutral types, stricter safety, lifecycle control,
 compatibility, or a missing contract. The dependency remains product-scoped and
 must not leak vendor types into default APIs.
 
@@ -557,7 +557,7 @@ must not leak vendor types into default APIs.
 
 Build when no complete qualifying local Swift implementation exists, or when
 the existing implementation is unmaintained, unsafe, materially incomplete,
-or incompatible with Archon's recovery/privacy requirements.
+or incompatible with ArchonKit's recovery/privacy requirements.
 
 ### Pending
 
@@ -579,7 +579,7 @@ inspection, cloud demo, or package build into a replacement claim.
 ## Evidence and maintenance policy
 
 - Re-score when a competitor changes a primary capability, when independent
-  user-pull evidence arrives, or when Archon closes a quality gate.
+  user-pull evidence arrives, or when ArchonKit closes a quality gate.
 - Keep capability evidence separate from user-pull evidence. Official docs show
   that a feature exists; they do not prove that users love it.
 - Keep cloud, hosted browser, localhost-server, and non-Swift references visible
