@@ -135,10 +135,10 @@ public struct ReadOnlyComputerUsePolicy: ComputerUsePermissionPolicy, Sendable {
 }
 
 /// A host-executed visual fallback request for screens with no semantic
-/// surface. Archon never captures screenshots or issues coordinate taps
+/// surface. ArchonKit never captures screenshots or issues coordinate taps
 /// itself; it validates the request bounds, requires explicit host opt-in
 /// through the permission policy, and audits the decision. The host performs
-/// the fallback outside Archon and re-observes through the semantic provider.
+/// the fallback outside ArchonKit and re-observes through the semantic provider.
 public struct ComputerUseFallbackRequest: Codable, Equatable, Sendable {
     public let actionID: String
     public let reason: String

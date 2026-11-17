@@ -66,7 +66,7 @@ public struct ComputerUsePostcondition: Sendable {
 }
 
 /// Maps host App Intent identifiers to semantic action descriptors. The host
-/// executes intents itself; Archon only registers the semantic surface.
+/// executes intents itself; ArchonKit only registers the semantic surface.
 ///
 /// ```swift
 /// struct MyIntentBridge: ComputerUseAppIntentBridge {
