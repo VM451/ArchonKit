@@ -1,7 +1,10 @@
 import Foundation
+#if canImport(SwiftDataMacros)
 import SwiftData
+#endif
 import ArchonCore
 
+#if canImport(SwiftDataMacros)
 @ModelActor
 public actor FrontierQueueActor {
     private var robotsParser = RobotsParser()
@@ -416,3 +419,124 @@ public actor FrontierQueueActor {
         }
     }
 }
+#else
+public actor FrontierQueueActor {
+    private var nodes: [CrawlNode] = []
+    private var pages: [ScrapedPage] = []
+    private var robotsParser = RobotsParser()
+    private var lastCrawlTimes: [String: Date] = [:]
+    private let defaultPolitenessDelay: TimeInterval = 1.0
+    var scheduleOptions: CrawlScheduleOptions?
+    private var hostBackoffUntil: [String: Date] = [:]
+    private var servedHostsRound = Set<String>()
+
+    public init() {}
+
+    public func setRobotsSession(_ session: URLSession?) {
+        robotsParser = RobotsParser(session: session)
+    }
+
+    public func configureScheduling(_ options: CrawlScheduleOptions) {
+        scheduleOptions = options
+    }
+
+    public func enqueue(urls: [URL], priority: Int = 0, parentURLString: String? = nil, localWorkspaceRoots: [URL] = []) throws {
+        var affectedHosts = Set<String>()
+        for url in urls {
+            if try insertNode(url: url, priority: priority, parentURLString: parentURLString, depth: 0, localWorkspaceRoots: localWorkspaceRoots) {
+                affectedHosts.insert(url.host?.lowercased() ?? "")
+            }
+        }
+    }
+
+    public func enqueue(urls: [URL], priorities: [Int], parentURLString: String? = nil, depth: Int = 0, localWorkspaceRoots: [URL] = []) throws {
+        for (index, url) in urls.enumerated() {
+            let priority = index < priorities.count ? priorities[index] : 0
+            _ = try insertNode(url: url, priority: priority, parentURLString: parentURLString, depth: max(0, depth), localWorkspaceRoots: localWorkspaceRoots)
+        }
+    }
+
+    private func insertNode(url: URL, priority: Int, parentURLString: String?, depth: Int, localWorkspaceRoots: [URL]) throws -> Bool {
+        guard isPermitted(url, localWorkspaceRoots: localWorkspaceRoots) else { return false }
+        let urlString = url.absoluteString
+        let domain = url.host?.lowercased() ?? ""
+        guard !nodes.contains(where: { $0.urlString == urlString }) && !pages.contains(where: { $0.urlString == urlString }) else { return false }
+        let node = CrawlNode(urlString: urlString, status: .pending, priority: priority, domain: domain, parentURLString: parentURLString, depth: depth)
+        nodes.append(node)
+        return true
+    }
+
+    private func enforcePerHostBounds(hosts: Set<String>) {}
+    private func applyFailure(to node: CrawlNode, delay: TimeInterval, options: CrawlScheduleOptions, now: Date) {
+        node.retryCount += 1
+        if node.retryCount >= options.clampedMaxRetries {
+            node.status = .failed
+            node.backoffUntil = nil
+        } else {
+            node.status = .pending
+            node.backoffUntil = now.addingTimeInterval(delay)
+        }
+    }
+
+    public func reportHostOutcome(host: String, outcome: CrawlHostOutcome) throws {
+        let options = scheduleOptions ?? CrawlScheduleOptions()
+        let normalized = host.lowercased()
+        let now = Date()
+        let hostNodes = nodes.filter { $0.domain == normalized && ($0.status == .pending || $0.status == .crawling) }
+        switch outcome {
+        case .success:
+            hostBackoffUntil[normalized] = nil
+            for node in hostNodes { node.failureCount = 0; node.backoffUntil = nil }
+        case .rateLimited(let retryAfter):
+            for node in hostNodes { node.failureCount += 1 }
+            let worst = hostNodes.map(\.failureCount).max() ?? 1
+            let delay = retryAfter.map { options.clampedDelay($0) } ?? options.exponentialDelay(failures: worst)
+            hostBackoffUntil[normalized] = now.addingTimeInterval(delay)
+            for node in hostNodes { applyFailure(to: node, delay: delay, options: options, now: now) }
+        case .serverError:
+            for node in hostNodes { node.failureCount += 1 }
+            let worst = hostNodes.map(\.failureCount).max() ?? 1
+            hostBackoffUntil[normalized] = now.addingTimeInterval(options.exponentialDelay(failures: worst))
+            for node in hostNodes { applyFailure(to: node, delay: options.exponentialDelay(failures: node.failureCount), options: options, now: now) }
+        }
+    }
+
+    public func markCompleted(urlString: String) throws {
+        if let node = nodes.first(where: { $0.urlString == urlString }) { node.status = .completed }
+    }
+    public func markFailed(urlString: String, retryAfter: TimeInterval? = nil) throws {
+        let maxRetries = scheduleOptions?.clampedMaxRetries ?? 3
+        let cap = scheduleOptions?.clampedBackoffCap ?? 300
+        if let node = nodes.first(where: { $0.urlString == urlString }) {
+            node.retryCount += 1
+            if node.retryCount >= maxRetries { node.status = .failed; node.backoffUntil = nil } else {
+                node.status = .pending
+                let delay: TimeInterval = retryAfter.map { min(max($0,0), cap)} ?? min(pow(2.0, Double(node.retryCount)), cap)
+                node.backoffUntil = Date().addingTimeInterval(delay)
+            }
+        }
+    }
+    public func savePage(urlString: String, html: String, text: String, title: String, signature: [Int64]) throws {
+        pages.append(ScrapedPage(urlString: urlString, rawHTML: html, scrapedText: text, title: title, minHashSignature: signature))
+    }
+    public func isDuplicate(signature: [Int64], threshold: Double = 0.85) throws -> Bool {
+        for page in pages { if MinHashDeduplicator.jaccardSimilarity(sig1: signature, sig2: page.minHashSignature) >= threshold { return true } }
+        return false
+    }
+
+    public func fetchAllNodes() throws -> [QueueNodeInfo] {
+        return nodes.map { QueueNodeInfo(urlString: $0.urlString, status: $0.statusValue, priority: $0.priority, parentURLString: $0.parentURLString, backoffUntil: $0.backoffUntil, depth: $0.depth, failureCount: $0.failureCount, retryCount: $0.retryCount) }
+    }
+
+    public func dequeueNext(localWorkspaceRoots: [URL] = []) async throws -> URL? {
+        try Task.checkCancellation()
+        // Simplified: return first pending
+        guard let next = nodes.first(where: { $0.status == .pending }) else { return nil }
+        guard let url = URL(string: next.urlString) else { return nil }
+        // politeness sleep simplified
+        next.status = .crawling
+        next.lastAttemptedAt = Date()
+        return url
+    }
+}
+#endif

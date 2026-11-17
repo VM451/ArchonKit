@@ -1,5 +1,7 @@
 import Foundation
+#if canImport(SwiftDataMacros)
 import SwiftData
+#endif
 
 public enum CrawlStatus: String, Codable, Sendable {
     case pending
@@ -8,6 +10,7 @@ public enum CrawlStatus: String, Codable, Sendable {
     case failed
 }
 
+#if canImport(SwiftDataMacros)
 @Model
 public final class CrawlNode {
     @Attribute(.unique)
@@ -60,3 +63,52 @@ public final class CrawlNode {
         set { statusValue = newValue.rawValue }
     }
 }
+#else
+public final class CrawlNode: Codable {
+    public var urlString: String
+    public var statusValue: String
+    public var priority: Int
+    public var retryCount: Int
+    public var lastAttemptedAt: Date?
+    public var domain: String
+    public var addedAt: Date
+    public var robotsChecked: Bool
+    public var parentURLString: String?
+    public var backoffUntil: Date?
+    public var depth: Int
+    public var failureCount: Int
+
+    public init(
+        urlString: String,
+        status: CrawlStatus = .pending,
+        priority: Int = 0,
+        retryCount: Int = 0,
+        lastAttemptedAt: Date? = nil,
+        domain: String,
+        addedAt: Date = Date(),
+        robotsChecked: Bool = false,
+        parentURLString: String? = nil,
+        backoffUntil: Date? = nil,
+        depth: Int = 0,
+        failureCount: Int = 0
+    ) {
+        self.urlString = urlString
+        self.statusValue = status.rawValue
+        self.priority = priority
+        self.retryCount = retryCount
+        self.lastAttemptedAt = lastAttemptedAt
+        self.domain = domain
+        self.addedAt = addedAt
+        self.robotsChecked = robotsChecked
+        self.parentURLString = parentURLString
+        self.backoffUntil = backoffUntil
+        self.depth = depth
+        self.failureCount = failureCount
+    }
+
+    public var status: CrawlStatus {
+        get { CrawlStatus(rawValue: statusValue) ?? .pending }
+        set { statusValue = newValue.rawValue }
+    }
+}
+#endif

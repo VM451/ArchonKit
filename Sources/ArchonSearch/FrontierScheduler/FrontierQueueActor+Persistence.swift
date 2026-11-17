@@ -1,4 +1,5 @@
 import Foundation
+#if canImport(SwiftDataMacros)
 import SwiftData
 
 extension FrontierQueueActor {
@@ -59,3 +60,4 @@ extension FrontierQueueActor {
         return false
     }
 }
+#endif
