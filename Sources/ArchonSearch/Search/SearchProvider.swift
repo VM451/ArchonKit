@@ -68,7 +68,7 @@ public struct SearchResponse: Codable, Hashable, Sendable {
     }
 }
 
-/// Archon-owned contract for both offline search and explicit cloud adapters.
+/// ArchonKit-owned contract for both offline search and explicit cloud adapters.
 /// Vendor SDK types and credentials must remain behind conforming adapters.
 public protocol SearchProvider: Sendable {
     var providerID: String { get }
@@ -85,7 +85,7 @@ public extension SearchProvider {
     }
 }
 
-/// Adapts the existing Archon search engine to the provider-neutral contract.
+/// Adapts the existing ArchonKit search engine to the provider-neutral contract.
 ///
 /// Local-only requests are accepted only for `localWorkspace`. This wrapper is
 /// intentionally strict because a generic `ArchonSearch` instance also knows
