@@ -59,7 +59,7 @@ public struct SandboxExecutionResult: Codable, Hashable, Sendable {
     }
 }
 
-/// Archon-owned execution contract for local WebKit and optional remote
+/// ArchonKit-owned execution contract for local WebKit and optional remote
 /// container/microVM adapters. Remote implementations must disclose their
 /// network dependence and must not be presented as local execution.
 public protocol SandboxExecutionProvider: Sendable {
