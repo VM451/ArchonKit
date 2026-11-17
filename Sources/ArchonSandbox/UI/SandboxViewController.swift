@@ -100,5 +100,31 @@ public final class SandboxViewController: ObservableObject {
 #else
 import Foundation
 import Combine
-public final class SandboxViewController: ObservableObject { public var logs: [SandboxEvent] = []; public var auditRecords: [SandboxAuditRecord] = []; public var workspace: SandboxWorkspace { SandboxWorkspace.defaultTemplate() }; public init() {}; public func clearLogs() {}; public func clearAuditRecords() {} }
+
+/// Stub that satisfies call sites compiled with LOCAL_STUB (CLT macOS).
+/// It mirrors the full controller's public surface so tests and hosts link.
+@MainActor
+public final class SandboxViewController: ObservableObject {
+    public var isLoading: Bool = true
+    public var isReady: Bool = false
+    public var errorMessage: String?
+    public var logs: [SandboxEvent] = []
+    public var auditRecords: [SandboxAuditRecord] = []
+    public let workspace: SandboxWorkspace
+    public let configuration: SandboxConfiguration
+    public let engine: SandboxEngine
+    public init(workspace: SandboxWorkspace = SandboxWorkspace.defaultTemplate(), configuration: SandboxConfiguration = .default) {
+        self.workspace = workspace
+        self.configuration = configuration
+        self.engine = SandboxEngine(workspace: workspace, configuration: configuration)
+    }
+    public init() {
+        self.workspace = SandboxWorkspace.defaultTemplate()
+        self.configuration = .default
+        self.engine = SandboxEngine(workspace: self.workspace, configuration: self.configuration)
+    }
+    public func bootstrap() async { isLoading = false; isReady = true }
+    public func clearLogs() { logs.removeAll() }
+    public func clearAuditRecords() { auditRecords.removeAll() }
+}
 #endif
