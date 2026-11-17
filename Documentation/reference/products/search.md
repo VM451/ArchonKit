@@ -1,7 +1,7 @@
 # ArchonSearch Reference
 
 `ArchonSearch` 2.0 is the current-information retrieval, webpage extraction,
-grounding, and autonomous research product of the Archon SDK. It delivers a
+grounding, and autonomous research product of the ArchonKit SDK. It delivers a
 local-first, privacy-preserving pipeline that connects Apple-native applications
 (iOS 27+, macOS 27+, visionOS 27+) to local meta-search engines,
 in-process article extractors, headless microservices, prompt injection defenses,

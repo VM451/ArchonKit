@@ -2,7 +2,7 @@
 
 ## Short answer
 
-Archon's user-facing model discovery is **official-publisher MLX-only**. A
+ArchonKit's user-facing model discovery is **official-publisher MLX-only**. A
 model family such as Qwen, Mistral, Llama, Phi, Gemma, or a future family may
 appear only when an allow-listed first-party namespace publishes a catalogued,
 runnable MLX package. Community conversion namespaces such as `mlx-community`
@@ -12,7 +12,7 @@ users are never offered Core AI, Foundation Models, cloud providers, raw
 conversion-required checkpoints, or unverified community conversions by the
 discovery surface.
 
-That does not mean that every checkpoint is automatically runnable. Archon
+That does not mean that every checkpoint is automatically runnable. ArchonKit
 separates four different questions:
 
 1. Can the model be described by a catalog?
@@ -43,7 +43,7 @@ browser.
 
 ## Runtime and artifact support
 
-| Model/runtime path | What Archon can represent | Conditions for runnable use |
+| Model/runtime path | What ArchonKit can represent | Conditions for runnable use |
 | --- | --- | --- |
 | MLX | Any model family for which a compatible MLX package is catalogued or imported | The variant must declare `.mlx`/MLX, include the required model and tokenizer resources, fit the current memory envelope, and be supported by the linked MLX runtime/model configuration. |
 | Core AI, Foundation Models, or remote providers | Lower-level adapters remain available for explicit host integrations | These paths are not returned by the user-facing model-discovery boundary. |
@@ -217,10 +217,10 @@ device without preparation.
 Apple lists every iPhone 11 through iPhone 17 model below as compatible with
 [iOS 27](https://www.apple.com/os/ios/). OS compatibility is not a model-size
 guarantee: storage determines whether an artifact can be retained, while
-Archon requires its declared **peak runtime memory** to fit the current process
+ArchonKit requires its declared **peak runtime memory** to fit the current process
 budget before download or load.
 
-| iPhone generation | Included models | Archon starting point |
+| iPhone generation | Included models | ArchonKit starting point |
 | --- | --- | --- |
 | 11 | 11, 11 Pro, 11 Pro Max | Use a compact catalogued MLX model with a peak estimate under the live device budget. |
 | 12 | 12 mini, 12, 12 Pro, 12 Pro Max | Use the same live peak-memory gate; Pro and non-Pro variants are not interchangeable. |

@@ -6,7 +6,7 @@
 import ArchonFull
 ```
 
-It re-exports the base Archon products without adding duplicate logic. It
+It re-exports the base ArchonKit products without adding duplicate logic. It
 intentionally excludes `ArchonMemoryProxima` and therefore does not force the
 optional ProximaKit dependency.
 

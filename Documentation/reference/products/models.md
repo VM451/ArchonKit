@@ -64,4 +64,4 @@ staging/temporary split.
 `ModelFamilyBenchmark` records carry measured quality/speed with explicit
 provenance. `recommendedVariant(for:device:task:benchmarks:)` consumes them
 after fit, filling in only when a variant has no declared estimate. Invalid
-records are ignored; Archon never invents scores.
+records are ignored; ArchonKit never invents scores.
