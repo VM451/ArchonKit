@@ -1,6 +1,6 @@
-# Archon Example App
+# ArchonKit Example App
 
-SwiftUI example target for validating Archon package composition. The
+SwiftUI example target for validating ArchonKit package composition. The
 executable can be launched directly on macOS; iOS and visionOS validation
 requires embedding the package in a consuming Xcode application.
 
@@ -47,7 +47,7 @@ production app. Follow the [quality scorecard](../context/quality-scorecard.md)
 for the consuming-app, accessibility, permission, and physical-device gates.
 
 The example currently demonstrates the model-library and system-model slice of
-the SDK. It is not a complete production composition of every Archon product;
+the SDK. It is not a complete production composition of every ArchonKit product;
 memory, search, MCP, sandbox, and Computer Use integrations still require the
 host boundaries described in the root README.
 
