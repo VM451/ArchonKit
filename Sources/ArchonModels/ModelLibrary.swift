@@ -842,7 +842,7 @@ public actor ModelLibrary {
         await loadManager.unload(installed)
     }
 
-    /// Removes only Archon-created staging and backup directories, never installed models.
+    /// Removes only ArchonKit-created staging and backup directories, never installed models.
     public func clearTemporaryStorage() throws {
         try ensureRoot()
         let temporaryPrefixes = [".staging", ".backup-", ".install-"]
@@ -945,7 +945,7 @@ public actor ModelLibrary {
     private static func defaultRootURL() -> URL {
         let applicationSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
         return (applicationSupport ?? FileManager.default.temporaryDirectory)
-            .appendingPathComponent("Archon", isDirectory: true)
+            .appendingPathComponent("ArchonKit", isDirectory: true)
             .appendingPathComponent("Models", isDirectory: true)
     }
 }

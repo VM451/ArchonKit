@@ -72,7 +72,7 @@ public struct ModelCapabilityRequirements: Codable, Equatable, Sendable {
     }
 }
 
-/// Runtime capabilities derived from an Archon model manifest. This is
+/// Runtime capabilities derived from an ArchonKit model manifest. This is
 /// metadata negotiation only; the runtime adapter still owns actual loading.
 public struct ModelRuntimeCapabilities: Codable, Equatable, Sendable {
     public let runtime: ArchonModelRuntime
@@ -204,7 +204,7 @@ public struct ModelVariant: Codable, Equatable, Sendable, Identifiable {
     /// KV cache, and a safety margin.
     public let estimatedMemoryBytes: Int64?
     /// Optional normalized quality estimate supplied by a catalog or host.
-    /// Archon never invents this value from a model name.
+    /// ArchonKit never invents this value from a model name.
     public let estimatedQualityScore: Double?
     /// Optional expected generation speed, normally in tokens per second.
     public let estimatedTokensPerSecond: Double?
@@ -215,7 +215,7 @@ public struct ModelVariant: Codable, Equatable, Sendable, Identifiable {
     public let requiresAuthentication: Bool
     /// True when the artifact came from an export path that has not yet passed
     /// runtime, output, and device validation. Experimental variants are never
-    /// treated as loadable by Archon.
+    /// treated as loadable by ArchonKit.
     public let isExperimental: Bool
 
     public init(
@@ -339,7 +339,7 @@ public struct ModelDescriptor: Codable, Equatable, Sendable, Identifiable {
     public let supportedLanguages: [String]
     public let variants: [ModelVariant]
     /// Measured family benchmark records supplied by the catalog or host.
-    /// Always explicit provenance; never invented by Archon. Empty when the
+    /// Always explicit provenance; never invented by ArchonKit. Empty when the
     /// catalog provides no measurements.
     public let benchmarks: [ModelFamilyBenchmark]
     /// Provider publication metadata used for freshness sorting and age filters.
@@ -490,7 +490,7 @@ public struct ModelDownloadAttempt: Codable, Sendable, Equatable, Hashable {
 }
 
 /// A measured quality/speed record for one model family, supplied by a
-/// catalog or host. Archon never invents these values: records arrive with
+/// catalog or host. ArchonKit never invents these values: records arrive with
 /// explicit provenance, invalid records are ignored by routing, and a
 /// missing record simply leaves the heuristic fallback in place.
 public struct ModelFamilyBenchmark: Codable, Sendable, Equatable, Hashable {
@@ -550,7 +550,7 @@ public struct ModelStorageBreakdown: Sendable, Equatable {
     public let perModelBytes: [ModelStorageEntry]
     /// Bytes under `.staging` (partial downloads resumable by range).
     public let stagingBytes: Int64
-    /// Bytes under all Archon-created temporary directories (`.staging`,
+    /// Bytes under all ArchonKit-created temporary directories (`.staging`,
     /// `.backup-*`, `.install-*`). Always >= stagingBytes.
     public let tempBytes: Int64
     /// Sum of per-model bytes.
@@ -1387,7 +1387,7 @@ public struct DirectURLModelCatalog: PaginatedModelCatalogProvider, Sendable {
     }
 }
 
-/// Discovers Archon model manifests from a local managed-library directory or
+/// Discovers ArchonKit model manifests from a local managed-library directory or
 /// a list of explicit model package directories. Local discovery never creates
 /// a download URL; callers can import the advertised `sourceURL` with the
 /// manifest through `ModelLibrary.importArtifact(at:manifest:)`.
@@ -1525,7 +1525,7 @@ public struct AppleCoreAIModelCatalog: PaginatedModelCatalogProvider, Sendable {
     }
 }
 
-/// A developer-hosted Archon-compatible catalog. It is intentionally data-driven;
+/// A developer-hosted ArchonKit-compatible catalog. It is intentionally data-driven;
 /// VM451 infrastructure is not required for publishing or consuming entries.
 public struct ArchonCompatibleModelCatalog: PaginatedModelCatalogProvider, Sendable {
     private let provider: any ModelCatalogProvider
@@ -1840,7 +1840,7 @@ public enum ModelCompatibilityAnalyzer {
             return ModelCompatibility(
                 status: .conversionRequired,
                 fit: .cannotRun,
-                reasons: ["\(variant.format.rawValue) is not a directly runnable Archon artifact; convert it to a supported runtime representation first."]
+                reasons: ["\(variant.format.rawValue) is not a directly runnable ArchonKit artifact; convert it to a supported runtime representation first."]
             )
         }
 
@@ -1848,7 +1848,7 @@ public enum ModelCompatibilityAnalyzer {
             return ModelCompatibility(
                 status: .unsupportedFormat,
                 fit: .cannotRun,
-                reasons: ["The \(variant.format.rawValue) artifact must declare the \(expectedRuntime.rawValue) runtime; Archon will not reinterpret it through \(variant.runtime.rawValue)."]
+                reasons: ["The \(variant.format.rawValue) artifact must declare the \(expectedRuntime.rawValue) runtime; ArchonKit will not reinterpret it through \(variant.runtime.rawValue)."]
             )
         }
 
@@ -2533,10 +2533,10 @@ public struct ModelManifestValidationReport: Codable, Equatable, Sendable {
     public var isValid: Bool { errors.isEmpty }
 }
 
-/// Validates the metadata and optional local artifact for an Archon model package.
+/// Validates the metadata and optional local artifact for an ArchonKit model package.
 ///
 /// Validation is deliberately conservative: raw Hugging Face formats remain
-/// invalid until a conversion tool emits a directly runnable Archon artifact.
+/// invalid until a conversion tool emits a directly runnable ArchonKit artifact.
 public enum ModelManifestValidator {
     public static func validate(
         _ manifest: ArchonModelManifest,
@@ -2850,7 +2850,7 @@ public enum ArchonModelsError: Error, LocalizedError, Equatable, Sendable {
         switch self {
         case .invalidModelIdentifier(let value): "Invalid model identifier: \(value)"
         case .invalidResponse: "The model catalog returned an invalid response."
-        case .invalidManifest(let errors): "Invalid Archon model manifest: \(errors.joined(separator: " "))"
+        case .invalidManifest(let errors): "Invalid ArchonKit model manifest: \(errors.joined(separator: " "))"
         case .httpFailure(let statusCode): "Model service returned HTTP \(statusCode)."
         case .unsupportedArtifact(let value): "Unsupported model artifact: \(value)"
         case .manifestRequired: "A model manifest is required before importing this artifact."

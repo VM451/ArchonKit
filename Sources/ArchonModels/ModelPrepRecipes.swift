@@ -2,7 +2,7 @@ import Foundation
 import ArchonCore
 
 /// A developer-side preparation recipe that maps raw source weights to a
-/// directly runnable Archon runtime representation.
+/// directly runnable ArchonKit runtime representation.
 ///
 /// Recipes are data plus documentation only. They never make a raw artifact
 /// runnable: `ModelCompatibilityAnalyzer`, `ModelArtifactInspector.isRunnable`,
