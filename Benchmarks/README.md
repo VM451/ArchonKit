@@ -1,5 +1,7 @@
 # ArchonKit Benchmarks
 
+> ✅ = opt-in benchmark kernel verified (see [VerificationReport](../VerificationReport.md)); full product matrix verified ✅/❓ there
+
 Timing-sensitive checks are opt-in so normal builds and CI remain bounded.
 
 ## Run
