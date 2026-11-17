@@ -139,6 +139,13 @@ jobs:
           metal_path="$(xcrun --find metal)"
           test -x "$metal_path"
           echo "Metal compiler: $metal_path"
+          # Stabilize ephemeral MetalToolchain asset path (can change between check and build)
+          # Copy metal to a stable location so SwiftPM's direct 'metal' invocation survives asset updates
+          sudo cp "$metal_path" /usr/local/bin/metal 2>/dev/null || sudo cp "$metal_path" /tmp/metal 2>/dev/null && sudo chmod +x /tmp/metal 2>/dev/null && sudo ln -sf /tmp/metal /usr/local/bin/metal 2>/dev/null || true
+          if [[ -x /usr/local/bin/metal ]]; then
+            echo "Metal staged at /usr/local/bin/metal"
+            echo "/usr/local/bin" >> "$GITHUB_PATH"
+          fi
           # Retry waiting for stable metal path – the toolchain asset mount can change after download
           for i in 1 2 3; do
             metal_path="$(xcrun --find metal 2>/dev/null || true)"
@@ -150,6 +157,8 @@ jobs:
           metal_path="$(xcrun --find metal)"
           test -x "$metal_path" || { echo "::error::Metal not found after retries"; exit 1; }
           echo "Metal verified: $metal_path"
+          # Also ensure 'metal' in PATH resolves
+          which metal || echo "metal not in PATH but xcrun finds it"
 
           # The package requires Swift 6.4+ (swift-tools-version 6.4). Fail
           # early with a clear message instead of an opaque resolve error.
