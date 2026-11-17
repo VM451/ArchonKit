@@ -4,7 +4,7 @@ import Foundation
 ///
 /// Mirrors the session-config surface of the OpenAI Realtime API (VAD
 /// threshold, silence handling) and Gemini Live API (responsiveness) as an
-/// Archon-owned value type, so hosts get one policy regardless of which
+/// ArchonKit-owned value type, so hosts get one policy regardless of which
 /// speech/model adapter sits behind the session.
 public struct RealtimeTurnPolicy: Sendable, Codable, Equatable {
     /// Audio sample rate the session expects for PCM ingest.

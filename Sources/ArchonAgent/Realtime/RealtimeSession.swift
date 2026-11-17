@@ -33,7 +33,7 @@ public enum RealtimeEvent: Sendable, Equatable {
 /// Full-duplex interactive agent session: simultaneous voice, text, and
 /// visual input with barge-in, live transcription, and spoken responses.
 ///
-/// This is the Archon-owned orchestration behind Gemini Live / GPT-Live style
+/// This is the ArchonKit-owned orchestration behind Gemini Live / GPT-Live style
 /// dynamics: the user can speak over the agent, type while it talks, and
 /// stream camera/screen frames at any moment. Speech recognition, speech
 /// synthesis, and language generation stay behind vendor-neutral seams, so the
