@@ -188,7 +188,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .build
-          key: ${{ runner.os }}-xcode-${{ steps.toolchain.outputs.xcode_build }}-spm-${{ hashFiles('Package.swift', 'Package.resolved') }}
+          # Include metal toolchain hash to avoid restoring stale .build that references old ephemeral /var/run path (6om4nO vs hNozJW)
+          key: ${{ runner.os }}-xcode-${{ steps.toolchain.outputs.xcode_build }}-spm-${{ hashFiles('Package.swift', 'Package.resolved') }}-metal-${{ hashFiles('.github/workflows/ci.yml') }}
           restore-keys: |
             ${{ runner.os }}-xcode-${{ steps.toolchain.outputs.xcode_build }}-spm-
 
