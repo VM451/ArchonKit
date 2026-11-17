@@ -139,7 +139,7 @@ struct ArchonCoreCoverageTests {
             Issue.record("should throw")
         } catch let error as ArchonCapabilityError {
             #expect(error == .unavailable(id: "x", reason: nil))
-            #expect(error.errorDescription == "Archon capability is unavailable: x")
+            #expect(error.errorDescription == "ArchonKit capability is unavailable: x")
         } catch {
             Issue.record("wrong error type")
         }
@@ -186,10 +186,10 @@ struct ArchonCoreCoverageTests {
 
     @Test("Capability error descriptions cover all cases")
     func capabilityErrorDescriptions() {
-        #expect(ArchonCapabilityError.notRegistered("a").errorDescription == "Archon capability is not registered: a")
-        #expect(ArchonCapabilityError.unavailable(id: "a", reason: "why").errorDescription == "Archon capability is unavailable: a. why")
+        #expect(ArchonCapabilityError.notRegistered("a").errorDescription == "ArchonKit capability is not registered: a")
+        #expect(ArchonCapabilityError.unavailable(id: "a", reason: "why").errorDescription == "ArchonKit capability is unavailable: a. why")
         let perms = ArchonCapabilityError.permissionsRequired(id: "a", permissions: [.network, .camera])
-        #expect(perms.errorDescription == "Archon capability requires permission before use: a [camera, network]")
+        #expect(perms.errorDescription == "ArchonKit capability requires permission before use: a [camera, network]")
     }
 
     // MARK: - OS version boundaries
@@ -264,10 +264,10 @@ struct ArchonCoreCoverageTests {
 
     @Test("Core error descriptions and cancellation classification")
     func coreErrorsAndCancellation() {
-        #expect(ArchonCoreError.invalidIdentifier("x").errorDescription == "Invalid Archon identifier: x")
-        #expect(ArchonCoreError.invalidConfiguration("y").errorDescription == "Invalid Archon configuration: y")
+        #expect(ArchonCoreError.invalidIdentifier("x").errorDescription == "Invalid ArchonKit identifier: x")
+        #expect(ArchonCoreError.invalidConfiguration("y").errorDescription == "Invalid ArchonKit configuration: y")
         #expect(ArchonCoreError.unsupportedPlatform(.iOS).errorDescription == "Unsupported platform: iOS")
-        #expect(ArchonCoreError.cancelled.errorDescription == "The Archon operation was cancelled.")
+        #expect(ArchonCoreError.cancelled.errorDescription == "The ArchonKit operation was cancelled.")
         #expect(!ArchonCoreError.invalidIdentifier("x").isCancellation)
         #expect(!ArchonCoreError.cancelled.isCancellation) // domain-specific, not task cancellation
         #expect(CancellationError().isCancellation)
