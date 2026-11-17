@@ -8,7 +8,7 @@ import Foundation
 struct ArchonModelCLI: AsyncParsableCommand {
     static let configuration = CommandConfiguration(
         commandName: "archon-model",
-        abstract: "Inspect, validate, package, search, and download Archon model artifacts.",
+        abstract: "Inspect, validate, package, search, and download ArchonKit model artifacts.",
         subcommands: [
             Inspect.self,
             Validate.self,
@@ -166,7 +166,7 @@ private struct Search: AsyncParsableCommand {
 }
 
 private struct Download: AsyncParsableCommand {
-    static let configuration = CommandConfiguration(abstract: "Download a directly runnable Hugging Face artifact into the Archon model library.")
+    static let configuration = CommandConfiguration(abstract: "Download a directly runnable Hugging Face artifact into the ArchonKit model library.")
 
     @Argument(help: "Hugging Face repository identifier, for example Qwen/Qwen3.")
     var repository: String
@@ -334,7 +334,7 @@ private struct Convert: ParsableCommand {
             }
             let manifestURL = artifact.appendingPathComponent(ArchonModelManifest.filename)
             guard !fileManager.fileExists(atPath: manifestURL.path) else {
-                throw ValidationError("The exporter already produced an Archon manifest; refusing to overwrite it.")
+                throw ValidationError("The exporter already produced an ArchonKit manifest; refusing to overwrite it.")
             }
             try encodeJSON(manifest).write(to: manifestURL, options: .atomic)
         }
