@@ -13,10 +13,10 @@ extension MCP.Client {
     }
 }
 
-/// Archon policy adapter over the official Model Context Protocol Swift SDK.
+/// ArchonKit policy adapter over the official Model Context Protocol Swift SDK.
 ///
 /// The official SDK owns MCP wire types, protocol negotiation, and transport
-/// behavior. Archon keeps its own `MCPTransport`, risk classification, typed
+/// behavior. ArchonKit keeps its own `MCPTransport`, risk classification, typed
 /// errors, and host permission boundary so callers do not depend on vendor
 /// types. Authentication remains a consuming-app responsibility through
 /// already-resolved request headers; credentials are never discovered or
@@ -24,7 +24,7 @@ extension MCP.Client {
 public actor OfficialMCPTransport: MCPTransport {
     public let endpoint: URL
 
-    /// Server notifications forwarded to Archon consumers. Anything outside
+    /// Server notifications forwarded to ArchonKit consumers. Anything outside
     /// this allowlist is never surfaced: unknown or arbitrary vendor
     /// notifications are dropped at the adapter boundary instead of being
     /// forwarded to host streams.
@@ -47,7 +47,7 @@ public actor OfficialMCPTransport: MCPTransport {
     private var activeRequestIDs: Set<MCP.ID> = []
 
     /// Creates the adapter. `authorizer` passes through to the official SDK
-    /// transport untouched: Archon never stores, prints, or caches the
+    /// transport untouched: ArchonKit never stores, prints, or caches the
     /// credentials it produces, and validation/header callbacks run on the
     /// SDK's networking path. Pass nil to send no Authorization headers.
     public init(
@@ -56,7 +56,7 @@ public actor OfficialMCPTransport: MCPTransport {
         headers: [String: String] = [:],
         streaming: Bool = true,
         requestTimeout: TimeInterval? = 60,
-        clientName: String = "Archon",
+        clientName: String = "ArchonKit",
         clientVersion: String = "1.0",
         authorizer: (any MCP.HTTPClientAuthorizer)? = nil
     ) {
@@ -159,24 +159,24 @@ public actor OfficialMCPTransport: MCPTransport {
         return stream
     }
 
-    /// Teardown ordering (both `disconnect` spellings): (1) finish Archon
+    /// Teardown ordering (both `disconnect` spellings): (1) finish ArchonKit
     /// stream continuations so consumers observe termination promptly, (2)
     /// cancel SDK request contexts while the connection is still live — the
     /// official SDK keeps the HTTP request task separate from its message
-    /// loop, so merely finishing the Archon stream could otherwise leave an
+    /// loop, so merely finishing the ArchonKit stream could otherwise leave an
     /// in-flight POST waiting — (3) clear tool grants, (4) disconnect the SDK
     /// client. Hosted capabilities persist across disconnect; pass `.init()`
     /// to `setHostedCapabilities` to clear them. Idempotent.
     public func disconnect() async {
         // Cancel request contexts while the client connection is still live.
         // The official SDK keeps the HTTP request task separate from its
-        // message loop; merely finishing the Archon stream can otherwise leave
+        // message loop; merely finishing the ArchonKit stream can otherwise leave
         // an in-flight POST waiting for a server response.
         let requestIDs = Array(activeRequestIDs)
         for requestID in requestIDs {
             try? await client.cancelRequest(
                 requestID,
-                reason: "The Archon MCP transport is disconnecting."
+                reason: "The ArchonKit MCP transport is disconnecting."
             )
         }
         await finishTeardown()
@@ -194,7 +194,7 @@ public actor OfficialMCPTransport: MCPTransport {
                     for requestID in requestIDs {
                         try? await client.cancelRequest(
                             requestID,
-                            reason: "The Archon MCP transport is disconnecting."
+                            reason: "The ArchonKit MCP transport is disconnecting."
                         )
                     }
                 }
@@ -208,7 +208,7 @@ public actor OfficialMCPTransport: MCPTransport {
             for requestID in requestIDs {
                 try? await client.cancelRequest(
                     requestID,
-                    reason: "The Archon MCP transport is disconnecting."
+                    reason: "The ArchonKit MCP transport is disconnecting."
                 )
             }
         }
@@ -507,7 +507,7 @@ public actor OfficialMCPTransport: MCPTransport {
             Task {
                 try? await client.cancelRequest(
                     context.requestID,
-                    reason: "The Archon stream consumer was cancelled."
+                    reason: "The ArchonKit stream consumer was cancelled."
                 )
             }
         }
