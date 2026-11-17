@@ -1,3 +1,4 @@
+#if canImport(ObservationMacros)
 import Foundation
 import SwiftUI
 import ArchonCore
@@ -186,3 +187,8 @@ public final class ModelLibraryViewModel: ObservableObject {
         return error.localizedDescription.localizedCaseInsensitiveContains("network")
     }
 }
+
+#else
+import Foundation
+public final class ModelLibraryViewModel: ObservableObject { public init(library: Any) {} }
+#endif

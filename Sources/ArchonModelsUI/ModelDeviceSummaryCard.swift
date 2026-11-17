@@ -1,3 +1,4 @@
+#if canImport(SwiftUIMacros)
 //
 //  ModelDeviceSummaryCard.swift
 //  ArchonModelsUI
@@ -94,3 +95,8 @@ public struct ModelDeviceSummaryCard: View {
         "\(device.deviceDisplayName), \(osDisplay), \(ramString), \(budgetString)."
     }
 }
+
+#else
+import SwiftUI
+public struct ModelDeviceSummaryCard: View { public var body: some View { EmptyView() } }
+#endif

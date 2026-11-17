@@ -1,3 +1,4 @@
+#if canImport(SwiftUIMacros)
 import SwiftUI
 import UniformTypeIdentifiers
 import ArchonCore
@@ -1139,3 +1140,8 @@ private extension Collection {
         indices.contains(index) ? self[index] : nil
     }
 }
+
+#else
+import SwiftUI
+public struct ModelLibraryView: View { public var body: some View { EmptyView() } }
+#endif

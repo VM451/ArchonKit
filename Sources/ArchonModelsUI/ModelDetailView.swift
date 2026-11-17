@@ -1,3 +1,4 @@
+#if canImport(SwiftUIMacros)
 import SwiftUI
 import ArchonCore
 import ArchonModels
@@ -615,3 +616,8 @@ public typealias ModelDiscoveryView = ModelBrowserView
 
 @available(iOS 27.0, macOS 27.0, visionOS 27.0, *)
 public typealias ModelDownloadView = ModelBrowserView
+
+#else
+import SwiftUI
+public struct ModelDetailView: View { public var body: some View { EmptyView() } }
+#endif

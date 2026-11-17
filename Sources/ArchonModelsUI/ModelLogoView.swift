@@ -1,3 +1,4 @@
+#if canImport(SwiftUIMacros)
 import SwiftUI
 import ArchonModels
 
@@ -128,3 +129,8 @@ struct ModelLogoView: View {
         return .secondary
     }
 }
+
+#else
+import SwiftUI
+public struct ModelLogoView: View { public var body: some View { EmptyView() } }
+#endif

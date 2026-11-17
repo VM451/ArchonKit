@@ -1,3 +1,4 @@
+#if canImport(SwiftUIMacros)
 //
 //  ModelBrowserRowView.swift
 //  ArchonModelsUI
@@ -410,3 +411,8 @@ private extension ArchonModelRuntime {
         }
     }
 }
+
+#else
+import SwiftUI
+public struct ModelBrowserRowView: View { public var body: some View { EmptyView() } }
+#endif
