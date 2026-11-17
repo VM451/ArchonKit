@@ -20,7 +20,7 @@ enum CheckpointStateProtector {
 
     static func open(_ ciphertext: Data) throws -> Data {
         guard ciphertext.starts(with: envelopePrefix) else {
-            throw GraphError.stateDeserializationFailed("Checkpoint state is not encrypted with the Archon checkpoint envelope.")
+            throw GraphError.stateDeserializationFailed("Checkpoint state is not encrypted with the ArchonKit checkpoint envelope.")
         }
         let box = try AES.GCM.SealedBox(combined: ciphertext.dropFirst(envelopePrefix.count))
         return try AES.GCM.open(box, using: key())

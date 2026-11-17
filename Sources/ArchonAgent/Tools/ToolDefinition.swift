@@ -24,7 +24,7 @@ public struct ToolDefinition: Sendable, Codable, Equatable, Identifiable {
 
     /// Validates a JSON argument object against this tool's declared schema.
     /// The validator intentionally implements only the small JSON Schema
-    /// subset emitted by Archon tools: object/array primitives, required
+    /// subset emitted by ArchonKit tools: object/array primitives, required
     /// fields, enums, properties, items, and `additionalProperties`.
     public func validate(argumentsJSON: String) throws {
         guard !parametersJSONSchema.isEmpty else { return }

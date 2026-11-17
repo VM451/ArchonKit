@@ -1,11 +1,11 @@
 import Foundation
 
-/// Ecosystem capability registrar providing one-line registration of all Archon capabilities:
+/// Ecosystem capability registrar providing one-line registration of all ArchonKit capabilities:
 /// ArchonMemory (Memory & Knowledge), ArchonSandbox (Execution & UI Canvas), ArchonSearch (Web & Local Discovery),
 /// and Apple Platform Connectors (Calendar, Reminders, Notes, Contacts, Mail, Files, Maps, SystemControl, Timer).
 public extension ToolRegistry {
 
-    /// Registers the standard full suite of Archon Ecosystem capabilities.
+    /// Registers the standard full suite of ArchonKit Ecosystem capabilities.
     func registerAllEcosystemCapabilities(
         memoryTools: [any Tool] = [MemorySearchTool(), MemoryStoreTool(), CoreMemoryTool()],
         sandboxTools: [any Tool] = [SandboxRenderTool(), SandboxPatchTool(), SandboxInspectDOMTool()],
