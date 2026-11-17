@@ -414,5 +414,7 @@ private extension ArchonModelRuntime {
 
 #else
 import SwiftUI
-public struct ModelBrowserRowView: View { public var body: some View { EmptyView() } }
+struct ModelBrowserRowView: View {
+    public var body: some View { EmptyView() }
+}
 #endif
