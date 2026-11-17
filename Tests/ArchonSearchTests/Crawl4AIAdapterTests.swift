@@ -72,7 +72,7 @@ struct Crawl4AIAdapterTests {
             },
             "metadata": {
                 "title": "Article Title",
-                "author": "Archon"
+                "author": "ArchonKit"
             }
         }
         """.data(using: .utf8) ?? Data()
@@ -94,7 +94,7 @@ struct Crawl4AIAdapterTests {
         #expect(doc.title == "Article Title")
         #expect(doc.markdown.contains("Trimmed fit content"))
         #expect(doc.text.contains("Full content"))
-        #expect(doc.metadata["author"] == "Archon")
+        #expect(doc.metadata["author"] == "ArchonKit")
 
         let isHealthy = await client.checkHealth()
         #expect(isHealthy)

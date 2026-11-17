@@ -66,7 +66,7 @@ struct SearXNGAdapterTests {
             "results": [
                 {
                     "url": "https://example.com/archon",
-                    "title": "Archon Local AI",
+                    "title": "ArchonKit Local AI",
                     "content": "On-device private agent",
                     "engine": "duckduckgo",
                     "score": 0.95
@@ -81,7 +81,7 @@ struct SearXNGAdapterTests {
         #expect(decoded.query == "archon")
         #expect(decoded.numberOfResults == 1)
         #expect(decoded.results.count == 1)
-        #expect(decoded.results[0].title == "Archon Local AI")
+        #expect(decoded.results[0].title == "ArchonKit Local AI")
         #expect(decoded.results[0].content == "On-device private agent")
         #expect(decoded.answers == ["42"])
         #expect(decoded.suggestions == ["archon swift"])
