@@ -12,6 +12,9 @@
 
 ### Changed
 
+- Package renamed from Archon (archon-swift) to ArchonKit. Update the SwiftPM
+  dependency URL to https://github.com/VM451/ArchonKit.git; product names
+  (`ArchonCore`, `ArchonModels`, …) are unchanged.
 - Graph builders are single-owner, require an explicit entry point, validate
   references before compilation, and install reducers synchronously.
 - Tool effect ledgers reserve call IDs atomically and replay completed effects
