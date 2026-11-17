@@ -619,5 +619,14 @@ public typealias ModelDownloadView = ModelBrowserView
 
 #else
 import SwiftUI
-public struct ModelDetailView: View { public var body: some View { EmptyView() } }
+import ArchonCore
+import ArchonModels
+public struct ModelDetailView: View {
+    public var body: some View { EmptyView() }
+    public init(model: ModelDescriptor, device: ArchonDeviceCapabilities? = nil, onSelectVariant: ((ModelVariant) -> Void)? = nil, library: ModelLibrary = .makeDefault(), downloadManager: ModelDownloadManager = .init()) {}
+}
+@available(iOS 27.0, macOS 27.0, visionOS 27.0, *)
+public typealias ModelDiscoveryView = ModelBrowserView
+@available(iOS 27.0, macOS 27.0, visionOS 27.0, *)
+public typealias ModelDownloadView = ModelBrowserView
 #endif
