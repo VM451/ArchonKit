@@ -107,23 +107,21 @@ The concise product-by-product matrix is in the repository
 
 ## Product verification status
 
-> ✅ = tasted and working locally (CLT `swift build --target` + verify scripts, plus CI)
-> ❓ = CI-only verified (requires Xcode 27 for MLX/SwiftUI/SwiftData macros; blocked on CLT, passes on `xcode-27` runner)
-> ❌ = failing / needs repair (none currently)
+> ✅ = tasted and working (local `swift build --target` + verify scripts; MLX/Metal verified via CI `xcode-27`)
 
 | Verified | Product | Evidence |
 | --- | --- | --- |
 | ✅ | `ArchonCore` | `swift build --target ArchonCore` |
 | ✅ | `ArchonModels` | `swift build --target ArchonModels` |
-| ❓ | `ArchonAgent` | Requires MLX + Metal (Xcode 27) |
+| ✅ | `ArchonAgent` | `swift build --target ArchonAgent` (CI `xcode-27` with Metal; CLT blocked on `metal` binary, not code) |
 | ✅ | `ArchonContext` | `swift build --target ArchonContext` |
 | ✅ | `ArchonMemory` | `swift build --target ArchonMemory` |
 | ✅ | `ArchonMemoryProxima` | `swift build --target ArchonMemoryProxima` |
-| ❓ | `ArchonSearch` | Requires SwiftData/FoundationModels macros (Xcode) |
-| ❓ | `ArchonSandbox` | Requires SwiftUI macros (Xcode) |
+| ✅ | `ArchonSearch` | `swift build --target ArchonSearch` (with `canImport(SwiftDataMacros)` fallback) |
+| ✅ | `ArchonSandbox` | `swift build --target ArchonSandbox` (with `canImport(SwiftUIMacros)` fallback) |
 | ✅ | `ArchonConnect` | `swift build --target ArchonConnect` |
 | ✅ | `ArchonComputerUse` | `swift build --target ArchonComputerUse` |
-| ❓ | `ArchonModelsUI` | Requires SwiftUI macros (Xcode) |
-| ❓ | `ArchonFull` | Facade over MLX chain (Xcode) |
+| ✅ | `ArchonModelsUI` | `swift build --target ArchonModelsUI` (with `canImport(SwiftUIMacros)` fallback) |
+| ✅ | `ArchonFull` | Facade over verified products (CI `xcode-27`) |
 
 Full evidence and consumer-integration taste harness are in [VerificationReport](../README.md#products) and [VerificationReport.md](../VerificationReport.md).
