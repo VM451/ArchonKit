@@ -68,5 +68,13 @@ public final class ArchonChatViewModel {
 
 #else
 import Foundation
-@MainActor public final class ArchonChatViewModel { public var messages: [ArchonChatMessage] = []; public var inputText: String = ""; public var mode: SearchComposerMode = .standard; public var isSearching: Bool = false; public var errorMessage: String?; public init(client: ArchonSearchClient) {} }
+@MainActor public final class ArchonChatViewModel {
+    public var messages: [ArchonChatMessage] = []
+    public var inputText: String = ""
+    public var mode: SearchComposerMode = .standard
+    public var isSearching: Bool = false
+    public var errorMessage: String?
+    public init(client: ArchonSearchClient) {}
+    public func sendQuery() async {}
+}
 #endif
