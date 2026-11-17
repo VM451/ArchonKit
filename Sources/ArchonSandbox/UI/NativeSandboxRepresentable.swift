@@ -1,3 +1,4 @@
+#if canImport(SwiftUIMacros)
 import SwiftUI
 #if canImport(WebKit)
 import WebKit
@@ -242,4 +243,10 @@ public struct NativeSandboxRepresentable: NSViewRepresentable {
     }
 }
 #endif
+#endif
+
+#else
+import SwiftUI
+import AppKit
+public struct NativeSandboxRepresentable: NSViewRepresentable { public func makeNSView(context: Context) -> NSView { NSView() }; public func updateNSView(_ nsView: NSView, context: Context) {}; public typealias NSViewType = NSView }
 #endif

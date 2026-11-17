@@ -1,3 +1,4 @@
+#if canImport(SwiftUIMacros)
 import SwiftUI
 import Combine
 #if canImport(WebKit)
@@ -95,3 +96,9 @@ public final class SandboxViewController: ObservableObject {
         self.auditRecords.removeAll()
     }
 }
+
+#else
+import Foundation
+import Combine
+public final class SandboxViewController: ObservableObject { public var logs: [SandboxEvent] = []; public var auditRecords: [SandboxAuditRecord] = []; public var workspace: SandboxWorkspace { SandboxWorkspace.defaultTemplate() }; public init() {}; public func clearLogs() {}; public func clearAuditRecords() {} }
+#endif

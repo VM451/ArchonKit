@@ -1,3 +1,4 @@
+#if canImport(SwiftUIMacros)
 import SwiftUI
 import ArchonCore
 
@@ -44,3 +45,8 @@ public struct SandboxIsolationDisclosureView: View {
         .padding(10)
     }
 }
+
+#else
+import SwiftUI
+public struct SandboxIsolationDisclosureView: View { public var body: some View { EmptyView() } }
+#endif

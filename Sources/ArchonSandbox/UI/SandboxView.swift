@@ -1,3 +1,4 @@
+#if canImport(SwiftUIMacros)
 import SwiftUI
 
 /// iOS/macOS SwiftUI view that renders the embedded Web Sandbox and wires it to platform features.
@@ -63,3 +64,8 @@ public struct ArchonSandboxView: View {
 
 /// Convenience typealias for `ArchonSandboxView`.
 public typealias SandboxView = ArchonSandboxView
+
+#else
+import SwiftUI
+public struct ArchonSandboxView: View { public var body: some View { EmptyView() } }
+#endif

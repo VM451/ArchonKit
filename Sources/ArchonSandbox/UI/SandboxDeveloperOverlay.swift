@@ -1,3 +1,4 @@
+#if canImport(SwiftUIMacros)
 import SwiftUI
 import ArchonCore
 
@@ -289,3 +290,8 @@ public struct SandboxDeveloperOverlay: View {
         }
     }
 }
+
+#else
+import SwiftUI
+public struct SandboxDeveloperOverlay: View { public var body: some View { EmptyView() } }
+#endif
