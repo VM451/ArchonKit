@@ -1,6 +1,6 @@
 # Security policy
 
-Archon is a local-first SDK. Security-sensitive changes include credential
+ArchonKit is a local-first SDK. Security-sensitive changes include credential
 handling, model artifact validation, network destination policy, tool effects,
 filesystem boundaries, sandbox capabilities, persistence, and privacy behavior.
 
