@@ -98,5 +98,9 @@ public struct ModelDeviceSummaryCard: View {
 
 #else
 import SwiftUI
-public struct ModelDeviceSummaryCard: View { public var body: some View { EmptyView() } }
+import ArchonCore
+public struct ModelDeviceSummaryCard: View {
+    public var body: some View { EmptyView() }
+    public init(device: ArchonDeviceCapabilities) {}
+}
 #endif
