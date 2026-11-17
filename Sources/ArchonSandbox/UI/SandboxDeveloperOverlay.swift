@@ -293,5 +293,8 @@ public struct SandboxDeveloperOverlay: View {
 
 #else
 import SwiftUI
-public struct SandboxDeveloperOverlay: View { public var body: some View { EmptyView() } }
+public struct SandboxDeveloperOverlay: View {
+    public var body: some View { EmptyView() }
+    public init(controller: SandboxViewController) {}
+}
 #endif
