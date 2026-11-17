@@ -1,6 +1,6 @@
 import Foundation
 
-/// A vector record owned by Archon’s durable memory layer.
+/// A vector record owned by ArchonKit’s durable memory layer.
 ///
 /// An index stores only the stable identifier and embedding. Memory text,
 /// metadata, temporal validity, tombstones, history, and synchronization stay
@@ -15,9 +15,9 @@ public struct VectorIndexRecord: Codable, Equatable, Hashable, Sendable {
     }
 }
 
-/// A bounded vector query for an Archon-owned index.
+/// A bounded vector query for an ArchonKit-owned index.
 ///
-/// `allowedIDs` is the result of applying Archon memory scope, metadata,
+/// `allowedIDs` is the result of applying ArchonKit memory scope, metadata,
 /// deletion, and temporal filters against the durable store. An approximate
 /// index must never broaden that allow-list.
 public struct VectorIndexQuery: Hashable, Sendable {
@@ -32,7 +32,7 @@ public struct VectorIndexQuery: Hashable, Sendable {
     }
 }
 
-/// A vector match normalized to Archon’s higher-is-better similarity scale.
+/// A vector match normalized to ArchonKit’s higher-is-better similarity scale.
 public struct VectorIndexMatch: Codable, Equatable, Hashable, Sendable {
     public let id: UUID
     public let similarity: Float
@@ -71,7 +71,7 @@ public enum VectorIndexError: Error, LocalizedError, Equatable, Sendable {
 ///
 /// Implementations may be exact or approximate and may be resident or
 /// persistent. Persistence, rebuilding, and recovery must remain explicit;
-/// conforming to this protocol alone does not authorize replacing Archon’s
+/// conforming to this protocol alone does not authorize replacing ArchonKit’s
 /// durable memory store.
 public protocol VectorIndex: Sendable {
     /// The fixed number of components accepted by this index.
