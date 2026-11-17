@@ -51,7 +51,7 @@ struct ArchonSearchFeaturesTests {
 
     @Test("Provider contract keeps local-only search off the network")
     func providerNetworkPolicy() async throws {
-        let content = "Local Archon memory and offline search."
+        let content = "Local ArchonKit memory and offline search."
         let tempDir = try makeTempHTMLDirectory(fileName: "local.md", content: content)
         defer { try? FileManager.default.removeItem(at: tempDir) }
 

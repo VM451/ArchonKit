@@ -20,7 +20,7 @@ struct AgentSandboxToolsTests {
     func testVirtualFileOperations() async throws {
         var workspace = SandboxWorkspace(name: "TestSpace", fileMap: [:])
 
-        let writeArgs = "{\"path\": \"app.js\", \"content\": \"console.log('Hello Archon');\"}"
+        let writeArgs = "{\"path\": \"app.js\", \"content\": \"console.log('Hello ArchonKit');\"}"
         let writeRes = try await ArchonSandboxAgentTools.handleToolCall(
             workspace: &workspace,
             toolName: "sandbox_write_file",
@@ -41,7 +41,7 @@ struct AgentSandboxToolsTests {
             toolName: "sandbox_read_file",
             argumentsJSON: readArgs
         )
-        #expect(readRes.contains("console.log('Hello Archon');"))
+        #expect(readRes.contains("console.log('Hello ArchonKit');"))
     }
 
     @Test("handleToolCall renders web app and updates workspace index.html")
