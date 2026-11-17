@@ -59,5 +59,8 @@ public struct CitationBadgeView: View {
 
 #else
 import SwiftUI
-public struct CitationBadgeView: View { public var body: some View { EmptyView() } }
+public struct CitationBadgeView: View {
+    public var body: some View { EmptyView() }
+    public init(citation: Citation) {}
+}
 #endif
