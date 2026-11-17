@@ -6,7 +6,7 @@ model contract is now split by concern:
 - [Model contract](reference/model-contract.md) — manifest, format/runtime
   compatibility, resource rules, and installation state machine.
 - [Model catalogs](reference/model-catalogs.md) — local, static, direct URL,
-  Apple, Archon, Hugging Face, remote, and composite discovery.
+  Apple, ArchonKit, Hugging Face, remote, and composite discovery.
 - [Supported models](reference/supported-models.md) — official-publisher
   MLX-only user-facing browsing, model-family coverage, catalog wiring, and
   the Gemma compatibility convenience.
