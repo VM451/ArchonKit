@@ -1,7 +1,7 @@
 #if !LOCAL_STUB
 import SwiftUI
 
-/// iOS/macOS SwiftUI view that renders the embedded Web Sandbox and wires it to platform features.
+/// iOS / iPadOS / macOS / visionOS SwiftUI view that renders the embedded Web Sandbox and wires it to platform features.
 public struct ArchonSandboxView: View {
     @StateObject private var controller: SandboxViewController
     private let configuration: SandboxConfiguration
@@ -13,7 +13,7 @@ public struct ArchonSandboxView: View {
     
     public var body: some View {
         ZStack(alignment: .bottom) {
-            #if (os(iOS) || os(macOS)) && canImport(WebKit)
+            #if (os(iOS) || os(macOS) || os(visionOS)) && canImport(WebKit)
             NativeSandboxRepresentable(controller: controller)
                 .clipShape(RoundedRectangle(cornerRadius: configuration.cornerRadius, style: .continuous))
             #else
