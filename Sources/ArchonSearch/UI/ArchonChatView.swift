@@ -1,3 +1,4 @@
+#if canImport(SwiftUIMacros)
 import SwiftUI
 
 /// Main conversational search view adhering to Liquid Glass HIG.
@@ -100,3 +101,8 @@ public struct ArchonChatView: View {
         #endif
     }
 }
+
+#else
+import SwiftUI
+public struct ArchonChatView: View { public var body: some View { EmptyView() } }
+#endif

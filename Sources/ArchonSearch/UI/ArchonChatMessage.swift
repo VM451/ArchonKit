@@ -1,3 +1,4 @@
+#if canImport(SwiftUIMacros)
 import Foundation
 
 /// Represents a single message in the ArchonChat UI.
@@ -27,3 +28,8 @@ public struct ArchonChatMessage: Identifiable, Sendable, Hashable {
         self.timestamp = timestamp
     }
 }
+
+#else
+import Foundation
+public struct ArchonChatMessage: Identifiable, Sendable { public let id = UUID(); public var content: String; public var role: String; public init(content: String, role: String) { self.content = content; self.role = role } }
+#endif

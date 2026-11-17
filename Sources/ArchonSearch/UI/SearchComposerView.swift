@@ -1,3 +1,4 @@
+#if canImport(SwiftUIMacros)
 import SwiftUI
 
 /// Search mode selected in the composer bar.
@@ -68,3 +69,9 @@ public struct SearchComposerView: View {
         .padding(.bottom, 8)
     }
 }
+
+#else
+import SwiftUI
+public struct SearchComposerView: View { public var body: some View { EmptyView() } }
+public enum SearchComposerMode: String, CaseIterable, Identifiable, Sendable { case standard = "Search"; case deepResearch = "Deep Research"; public var id: String { rawValue } }
+#endif

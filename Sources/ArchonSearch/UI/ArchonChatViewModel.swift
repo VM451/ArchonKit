@@ -1,3 +1,4 @@
+#if canImport(ObservationMacros)
 import Foundation
 import Observation
 
@@ -64,3 +65,8 @@ public final class ArchonChatViewModel {
         isSearching = false
     }
 }
+
+#else
+import Foundation
+@MainActor public final class ArchonChatViewModel { public var messages: [ArchonChatMessage] = []; public var inputText: String = ""; public var mode: SearchComposerMode = .standard; public var isSearching: Bool = false; public var errorMessage: String?; public init(client: ArchonSearchClient) {} }
+#endif
