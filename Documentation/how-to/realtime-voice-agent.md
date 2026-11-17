@@ -1,6 +1,6 @@
 # Realtime voice + vision agent
 
-`RealtimeSession` (`ArchonAgent`) is the Archon-owned orchestration for
+`RealtimeSession` (`ArchonAgent`) is the ArchonKit-owned orchestration for
 Gemini Live / GPT-Live style interaction: full-duplex voice with barge-in,
 live transcription of both sides, text sent at any moment (even while the
 agent talks), and camera/screen frames streamed alongside audio.

@@ -2,7 +2,7 @@
 
 This guide wires a macOS app to models running in [LM Studio](https://lmstudio.ai)
 through `ArchonAgent.LMStudioProvider`. LM Studio hosts the model and its
-OpenAI-compatible server on the Mac; Archon supplies the typed graph,
+OpenAI-compatible server on the Mac; ArchonKit supplies the typed graph,
 provider routing, tools, and lifecycle around it.
 
 ## 1. Start the server in LM Studio
@@ -12,7 +12,7 @@ provider routing, tools, and lifecycle around it.
 3. Note the exact model identifier shown for the loaded model.
 
 No API key is needed unless the server settings define one. The provider,
-the model weights, and server lifecycle stay entirely in LM Studio; Archon
+the model weights, and server lifecycle stay entirely in LM Studio; ArchonKit
 never launches, downloads, or manages them.
 
 ## 2. Resolve the provider
