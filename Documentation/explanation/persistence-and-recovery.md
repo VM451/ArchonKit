@@ -1,6 +1,6 @@
 # Persistence and recovery
 
-Archon separates durable state from request state and from runtime caches. Each
+ArchonKit separates durable state from request state and from runtime caches. Each
 owner has a recovery contract so a process restart cannot silently turn an
 active operation into a successful result.
 

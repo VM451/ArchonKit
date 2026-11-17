@@ -152,7 +152,7 @@ Apple devices.
     extraction.
   - Custom crawl options (`CrawlOptions`) supporting user-agent overrides, wait
     selectors, and CSS scoping.
-- **Network security:** In accordance with Archon security contracts,
+- **Network security:** In accordance with ArchonKit security contracts,
   `Crawl4AIClient` validates endpoints through
   `ArchonNetworkSecurity.ensureLoopbackEndpointAllowed` or
   `ArchonNetworkSecurity.ensureRemoteNetworkAllowed`, preventing unintended
@@ -237,7 +237,7 @@ truncated with a `... [truncated]` marker.
 
 ## Library adoption and Decision D-017
 
-In early Archon releases, third-party extraction libraries were deferred pending
+In early ArchonKit releases, third-party extraction libraries were deferred pending
 empirical probes. Decision D-017 resolved these evaluations into the production
 ArchonSearch 2.0 architecture:
 
@@ -247,7 +247,7 @@ ArchonSearch 2.0 architecture:
 | Mozilla Readability JS | Rule-based content extraction | **ADOPTED in-process:** Wrapped in `ReadabilityWebKitBridge` via headless `WKWebView` on `@MainActor` for JavaScript-heavy or thin-content pages. |
 | `Crawl4AI` (Apache 2.0) | Advanced dynamic web crawler | **ADOPTED as companion:** Integrated via `Crawl4AIClient` as a local HTTP microservice (Docker port `11235`) for heavy SPAs and complex crawls. |
 | `GRDB.swift` (MIT) | SQLite persistence engine | **ADOPTED:** Added as a direct dependency of `ArchonSearch` for search session storage, query caching, source records, and TTL page caching. |
-| Trafilatura / Cloud Scraping APIs | Remote hosted scrapers | **REJECTED:** Violates Archon's local-first, privacy-preserving core architecture. All extraction runs in-process or via local companion containers. |
+| Trafilatura / Cloud Scraping APIs | Remote hosted scrapers | **REJECTED:** Violates ArchonKit's local-first, privacy-preserving core architecture. All extraction runs in-process or via local companion containers. |
 
 Under this design, `ArchonSearch` maintains a minimal dependency surface: it
 depends only on `ArchonCore` and `GRDB`. Heavy crawling capabilities remain

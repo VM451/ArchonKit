@@ -1,6 +1,6 @@
 # Local-first boundaries
 
-“Local” has a precise meaning in Archon: the capability runs in-process on the
+“Local” has a precise meaning in ArchonKit: the capability runs in-process on the
 user's Apple device through native Swift/SwiftPM APIs and does not require a
 cloud service or a separate local server. A product can be useful and still be
 an adapter rather than a local-core replacement.
