@@ -1,4 +1,4 @@
-# Archon Benchmarks
+# ArchonKit Benchmarks
 
 Timing-sensitive checks are opt-in so normal builds and CI remain bounded.
 
@@ -12,13 +12,13 @@ ARCHON_ENABLE_BENCHMARKS=1 swift test --no-parallel -j 2 --disable-sandbox \
 ## Measures
 
 `VectorSearchBenchmarkTests` exercises the real Accelerate-backed cosine
-similarity kernel used by Archon's vector path and checks the documented
+similarity kernel used by ArchonKit's vector path and checks the documented
 10,000-item latency SLA. It is a focused kernel check, not a substitute for the
 full index comparison below.
 
 The current competitive index comparison is recorded in
 [`context/memory-index-benchmark.md`](../context/memory-index-benchmark.md). It
-uses the same deterministic workload across Archon's current vector store, the
+uses the same deterministic workload across ArchonKit's current vector store, the
 optional `ArchonMemoryProxima` adapter, and RecallKit's sparse index. Dense
 vector and sparse text rows are separate workloads and should not be compared
 as if they measured the same ranking operation.
@@ -32,12 +32,12 @@ uses a clustered corpus that models topic structure.
 
 | Corpus | Dims | Engine | Build (ms) | Query median / p95 (ms) | Recall@10 |
 | ---: | ---: | --- | ---: | ---: | ---: |
-| 2,000 | 64 | Archon `LocalVectorStore` | 263.53 | 12.52 / 12.67 | 1.000 |
+| 2,000 | 64 | ArchonKit `LocalVectorStore` | 263.53 | 12.52 / 12.67 | 1.000 |
 | 2,000 | 64 | `ArchonMemoryProxima`, `efSearch=64` | 601.97 | 0.12 / 0.13 | 1.000 |
-| 10,000 | 64 | Archon `LocalVectorStore` | 4,881.96 | 61.97 / 63.07 | 1.000 |
+| 10,000 | 64 | ArchonKit `LocalVectorStore` | 4,881.96 | 61.97 / 63.07 | 1.000 |
 | 10,000 | 64 | `ArchonMemoryProxima`, `efSearch=64` | 3,771.16 | 0.27 / 0.30 | 0.968 |
 | 10,000 | 64 | `ArchonMemoryProxima`, `efSearch=256` | 3,760.56 | 0.73 / 0.75 | 1.000 |
-| 10,000 | 384 | Archon `LocalVectorStore`, batched blocks | 5,804 | steady p95 9.1 | 1.000 |
+| 10,000 | 384 | ArchonKit `LocalVectorStore`, batched blocks | 5,804 | steady p95 9.1 | 1.000 |
 | 10,000 | 384 | `ArchonMemoryProxima`, `efSearch=256`, clustered | 60,430 | 5.33 / 5.89 | 1.000 |
 
 The 10k x 384 `LocalVectorStore` row holds the package gate (steady p95
@@ -63,9 +63,9 @@ identical corpus, queries, and ground truth.
 
 | Corpus | Engine | Build (ms) | Query median / p95 (ms) |
 | ---: | --- | ---: | ---: |
-| 2,000 | Archon `LocalVectorStore` FTS5 path | 263.53 | 12.62 / 12.90 |
+| 2,000 | ArchonKit `LocalVectorStore` FTS5 path | 263.53 | 12.62 / 12.90 |
 | 2,000 | RecallKit sparse index | 47.62 | 6.72 / 9.12 |
-| 10,000 | Archon `LocalVectorStore` FTS5 path | 4,881.96 | 62.46 / 64.25 |
+| 10,000 | ArchonKit `LocalVectorStore` FTS5 path | 4,881.96 | 62.46 / 64.25 |
 | 10,000 | RecallKit sparse index | 216.23 | 34.04 / 37.49 |
 
 The macOS rows are arm64 Apple Silicon package timings. The iPhone 16 rows
