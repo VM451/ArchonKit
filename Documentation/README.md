@@ -104,3 +104,26 @@ required before a capability or replacement becomes a default.
 
 The concise product-by-product matrix is in the repository
 [README](../README.md#products).
+
+## Product verification status
+
+> ✅ = tasted and working locally (CLT `swift build --target` + verify scripts, plus CI)
+> ❓ = CI-only verified (requires Xcode 27 for MLX/SwiftUI/SwiftData macros; blocked on CLT, passes on `xcode-27` runner)
+> ❌ = failing / needs repair (none currently)
+
+| Verified | Product | Evidence |
+| --- | --- | --- |
+| ✅ | `ArchonCore` | `swift build --target ArchonCore` |
+| ✅ | `ArchonModels` | `swift build --target ArchonModels` |
+| ❓ | `ArchonAgent` | Requires MLX + Metal (Xcode 27) |
+| ✅ | `ArchonContext` | `swift build --target ArchonContext` |
+| ✅ | `ArchonMemory` | `swift build --target ArchonMemory` |
+| ✅ | `ArchonMemoryProxima` | `swift build --target ArchonMemoryProxima` |
+| ❓ | `ArchonSearch` | Requires SwiftData/FoundationModels macros (Xcode) |
+| ❓ | `ArchonSandbox` | Requires SwiftUI macros (Xcode) |
+| ✅ | `ArchonConnect` | `swift build --target ArchonConnect` |
+| ✅ | `ArchonComputerUse` | `swift build --target ArchonComputerUse` |
+| ❓ | `ArchonModelsUI` | Requires SwiftUI macros (Xcode) |
+| ❓ | `ArchonFull` | Facade over MLX chain (Xcode) |
+
+Full evidence and consumer-integration taste harness are in [VerificationReport](../README.md#products) and [VerificationReport.md](../VerificationReport.md).
