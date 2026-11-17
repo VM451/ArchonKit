@@ -4,7 +4,7 @@ import CompilerPluginSupport
 import PackageDescription
 
 let package = Package(
-    name: "Archon",
+    name: "ArchonKit",
     platforms: [
         .iOS(.v27),
         .macOS(.v27),
