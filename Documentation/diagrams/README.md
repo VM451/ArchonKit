@@ -11,6 +11,7 @@ its entry points, internal flow, and boundaries with other products.
 | `ArchonContext` | [archon-context.md](archon-context.md) |
 | `ArchonMemory` | [archon-memory.md](archon-memory.md) — durable memory, RAG, and competitive research archive |
 | `ArchonMemoryProxima` | [archon-memory-proxima.md](archon-memory-proxima.md) |
+| `ArchonInference` | [archon-inference.md](archon-inference.md) |
 | `ArchonSearch` | [archon-search.md](archon-search.md) |
 | `ArchonSandbox` | [archon-sandbox.md](archon-sandbox.md) |
 | `ArchonConnect` | [archon-connect.md](archon-connect.md) |
