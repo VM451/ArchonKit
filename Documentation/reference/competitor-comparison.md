@@ -416,6 +416,7 @@ Source records: the models and runtimes comparison in this document.
 | [Foundation Models](https://developer.apple.com/documentation/FoundationModels) | Apple on-device generation, guided output, and tool calling | Reuse the supported Apple model runtime directly |
 | [Core ML](https://developer.apple.com/documentation/CoreML) | Hardware-accelerated local inference and compiled artifacts | Reuse the runtime; build artifact and lifecycle contracts |
 | [MLX Swift](https://github.com/ml-explore/mlx-swift) | Apple Silicon local tensor/runtime path for open models | Adapt the local runtime without leaking MLX types |
+| [llama.cpp](https://github.com/ggml-org/llama.cpp) | Quantized GGUF local inference with Metal/CPU acceleration and GBNF grammars | Adapt `LlamaFramework` XCFramework with Swift 6 actor lifecycle, GGUF header inspection, and memory gates |
 | [Hugging Face Swift](https://github.com/huggingface/swift-transformers) | Tokenizers, Hub metadata/downloads, and model ecosystem tooling | Adapt catalog/artifact tooling; validate runnable formats explicitly |
 | [AnyLanguageModel](https://github.com/huggingface/AnyLanguageModel) | Provider-neutral model/session abstraction | Compare narrowly against `LLMProvider` |
 | [Conduit](https://github.com/christopherkarani/Conduit) | Swift model abstraction and provider interoperability | Compare provider boundaries without making cloud paths local core |
@@ -430,6 +431,7 @@ Source records: the models and runtimes comparison in this document.
 | Foundation Models | 5 | 5 | 3 | 5 | 4 | 3 | 4 | **4.1** | ✅ |
 | Core ML | 5 | 5 | 5 | 4 | 4 | 4 | 5 | **4.6** | ✅ |
 | MLX Swift | 5 | 5 | 3 | 3 | 4 | 4 | 4 | **4.0** | ✅ |
+| llama.cpp | 5 | 3 | 4 | 4 | 4 | 5 | 4 | **4.1** | ✅ |
 | Hugging Face Swift | 3 | 5 | 4 | 3 | 4 | 5 | 3 | **3.9** | ⚠️ |
 | AnyLanguageModel | 2 | 5 | 2 | 4 | 3 | 4 | 2 | **3.1** | ⚠️ |
 | Conduit | 3 | 5 | 3 | 4 | 4 | 4 | 3 | **3.7** | ⚠️ |
@@ -445,6 +447,7 @@ Source records: the models and runtimes comparison in this document.
 | Foundation Models | 3 | 5 | 5 | 5 | 5 | 5 | **90** | REUSE Apple foundation |
 | Core ML | 3 | 4 | 5 | 5 | 5 | 5 | **86** | REUSE runtime; BUILD lifecycle |
 | MLX Swift | 2 | 4 | 5 | 4 | 3 | 4 | **72** | ADAPT local provider |
+| llama.cpp | 2 | 4 | 5 | 4 | 4 | 4 | **74** | PARTIAL / ADAPT (`ArchonInference`) |
 | Hugging Face Swift | 2 | 4 | 3 | 4 | 4 | 4 | **66** | ADAPT catalog/artifact tooling |
 | AnyLanguageModel | 2 | 3 | 2 | 3 | 3 | 3 | **51** | PENDING narrow provider probe |
 | Conduit | 2 | 3 | 2 | 3 | 3 | 3 | **51** | PENDING/ADAPT reference |
@@ -505,6 +508,7 @@ scores and remain provisional until consuming-app and device evidence exists.
 | `ArchonContext` | SDK | 4 | 5 | 4 | 5 | 5 | **91** | None recorded | Medium | BUILD focused boundary |
 | `ArchonMemory` | SDK | 5 | 5 | 4 | 4 | 5 | **93** | None recorded | Medium | BUILD semantics; index adoption pending |
 | `ArchonMemoryProxima` | Optional adapter | 3 | 5 | 3 | 3 | 4 | **73** | None recorded | Medium | ADAPT; ceiling/device gates open |
+| `ArchonInference` | Optional adapter | 4 | 5 | 4 | 4 | 4 | **85** | None recorded | Medium | PARTIAL / ADAPT; device/real-GGUF gates open |
 | `ArchonSearch` | SDK | 5 | 5 | 4 | 4 | 5 | **93** | None recorded | Medium | BUILD local orchestrator |
 | `ArchonSandbox` | SDK | 5 | 5 | 4 | 4 | 5 | **93** | None recorded | Medium | BUILD safety boundary |
 | `ArchonConnect` | SDK | 4 | 5 | 4 | 4 | 5 | **88** | None recorded | Medium | ADAPT official SDK; conformance open |
@@ -536,6 +540,7 @@ scores and remain provisional until consuming-app and device evidence exists.
 | Untrusted execution is isolated and auditable | E2B, Modal, Deno Sandbox | `ArchonSandbox` | BUILD local; ADAPT remote | Isolation label, secrets, quotas, cleanup |
 | Browser work uses semantic actions | Stagehand, TinyFish | `ArchonComputerUse` | BUILD semantic controller | Stale state, approvals, postconditions |
 | Local inference uses supported Apple runtimes | Foundation Models, Core ML | `ArchonModels` | REUSE + ADAPT | Artifact/runtime match, device, memory, offline inference |
+| Local GGUF inference runs offline with memory safety | llama.cpp | `ArchonInference` | PARTIAL / ADAPT | GGUF header inspection, memory budget, cancellation, GBNF JSON, real-GGUF device check |
 | Tools and resources interoperate | MCP Swift SDK | `ArchonConnect` | ADAPT | Conformance, auth, cancellation, lifecycle |
 
 ## 9. Decision rules and next actions
