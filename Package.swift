@@ -35,6 +35,7 @@ let package = Package(
         .library(name: "ArchonConnect", targets: ["ArchonConnect"]),
         .library(name: "ArchonComputerUse", targets: ["ArchonComputerUse"]),
         .library(name: "ArchonModelsUI", targets: ["ArchonModelsUI"]),
+        .library(name: "ArchonInference", targets: ["ArchonInference"]),
         .library(name: "ArchonFull", targets: ["ArchonFull"]),
         .executable(name: "archon-model", targets: ["ArchonModelCLI"]),
         .executable(name: "archon-example-app", targets: ["ArchonExampleApp"])
@@ -153,6 +154,22 @@ let package = Package(
             resources: [.process("Resources")],
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         ),
+        .binaryTarget(
+            name: "LlamaFramework",
+            url: "https://github.com/ggml-org/llama.cpp/releases/download/b12492/llama-b12492-xcframework.zip",
+            checksum: "7905f33221e4c562099fa6a8be5f2279b607653ecd4c77989bd3b13f7d3c15c7"
+        ),
+        .target(
+            name: "ArchonInference",
+            dependencies: [
+                "ArchonCore",
+                "ArchonModels",
+                "ArchonAgent",
+                .target(name: "LlamaFramework", condition: .when(platforms: [.macOS, .iOS]))
+            ],
+            path: "Sources/ArchonInference",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
+        ),
         .target(
             name: "ArchonFull",
             dependencies: [
@@ -263,6 +280,12 @@ let package = Package(
             name: "ArchonModelsUITests",
             dependencies: ["ArchonModelsUI", "ArchonModels"],
             path: "Tests/ArchonModelsUITests",
+            swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
+        ),
+        .testTarget(
+            name: "ArchonInferenceTests",
+            dependencies: ["ArchonInference", "ArchonAgent", "ArchonModels", "ArchonCore"],
+            path: "Tests/ArchonInferenceTests",
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings
         )
     ],
