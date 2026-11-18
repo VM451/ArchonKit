@@ -20,11 +20,13 @@ ArchonAgent ──> ArchonCore + ArchonModels
 ArchonModelsUI ──> ArchonCore + ArchonModels
 ArchonFull ──> base public products
 ArchonMemoryProxima ──> ArchonMemory + ProximaKit (optional)
+ArchonInference ──> ArchonCore + ArchonModels + ArchonAgent + LlamaFramework (optional)
 ```
 
 `ArchonFull` is a facade, not a second implementation. It re-exports the base
-products and intentionally excludes `ArchonMemoryProxima`, so importing the
-facade does not force an optional dense-index dependency.
+products and intentionally excludes `ArchonMemoryProxima` and `ArchonInference`, so
+importing the facade does not force optional dense-index or `llama.cpp`
+dependencies.
 
 ## Ownership boundaries
 
