@@ -122,6 +122,7 @@ The concise product-by-product matrix is in the repository
 | ✅ | `ArchonConnect` | `swift build --target ArchonConnect` |
 | ✅ | `ArchonComputerUse` | `swift build --target ArchonComputerUse` |
 | ✅ | `ArchonModelsUI` | `swift build --target ArchonModelsUI` (with `canImport(SwiftUIMacros)` fallback) |
+| ✅ | `ArchonInference` | `swift build -j 2`, `swift test --filter ArchonInferenceTests` (13 tests), and `xcodebuild` for `iOS` + `visionOS` (optional; excluded from `ArchonFull`) |
 | ✅ | `ArchonFull` | Facade over verified products (CI `xcode-27`) |
 
 Full evidence and consumer-integration taste harness are in [VerificationReport](../README.md#products) and [VerificationReport.md](../VerificationReport.md).

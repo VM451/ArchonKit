@@ -5,6 +5,7 @@
 ### Added
 
 - Shared HTTPS and resolved-address network policy with fail-closed defaults.
+- Optional `ArchonInference` product adapting `ggml-org/llama.cpp` (`LlamaFramework` `b12492` XCFramework, MIT) behind `LLMProvider` and `ModelRuntimeAdapter` with pure-Swift GGUF header inspection, peak-memory gating, GBNF JSON grammar support, streaming cancellation, and multi-model memory-pressure management.
 - CI checks for package builds, Swift Testing, product scope, dependency-license
   evidence, scorecard structure, and whitespace.
 - Resource and request-size limits for model catalogs, agent tools, providers,
