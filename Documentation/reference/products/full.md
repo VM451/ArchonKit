@@ -7,8 +7,8 @@ import ArchonFull
 ```
 
 It re-exports the base ArchonKit products without adding duplicate logic. It
-intentionally excludes `ArchonMemoryProxima` and therefore does not force the
-optional ProximaKit dependency.
+intentionally excludes `ArchonMemoryProxima` and `ArchonInference` and therefore does
+not force optional ProximaKit or `LlamaFramework` dependencies.
 
 Use direct product imports when a feature module should make its dependency
 graph explicit or avoid heavier integrations. Use `ArchonFull` at an

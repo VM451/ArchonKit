@@ -23,7 +23,7 @@ import ArchonAgent
 ```
 
 Use `ArchonFull` only when the convenience facade is worth importing the full
-base graph. It does not include `ArchonMemoryProxima`.
+base graph. It does not include `ArchonMemoryProxima` or `ArchonInference`.
 
 ## 3. Configure the host boundary
 

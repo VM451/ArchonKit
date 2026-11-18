@@ -15,5 +15,6 @@ Exact symbols and overloads remain in the product's Swift DocC/API reference.
 - [ArchonModelsUI](models-ui.md)
 - [ArchonFull](full.md)
 
-The optional [ArchonMemoryProxima](memory-proxima.md) adapter has its own page
-because it is not included in `ArchonFull`.
+The optional [ArchonMemoryProxima](memory-proxima.md) and
+[ArchonInference](inference.md) adapters have their own pages because they are not
+included in `ArchonFull`.
