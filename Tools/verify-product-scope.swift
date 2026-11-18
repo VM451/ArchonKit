@@ -45,6 +45,7 @@ private let expectedDependencies: [String: Set<String>] = [
     "ArchonConnect": ["ArchonCore", "MCP@swift-sdk"],
     "ArchonComputerUse": ["ArchonCore"],
     "ArchonModelsUI": ["ArchonCore", "ArchonModels"],
+    "ArchonInference": ["ArchonCore", "ArchonModels", "ArchonAgent", "LlamaFramework"],
     "ArchonFull": [
         "ArchonCore", "ArchonModels", "ArchonAgent", "ArchonContext",
         "ArchonMemory", "ArchonSearch", "ArchonSandbox", "ArchonConnect",
@@ -86,6 +87,10 @@ func dependencies(in target: [String: Any]) -> Set<String> {
     return Set(rawDependencies.compactMap { dependency in
         if let byName = dependency["byName"] as? [Any],
            let name = byName.first as? String {
+            return name
+        }
+        if let target = dependency["target"] as? [Any],
+           let name = target.first as? String {
             return name
         }
         if let product = dependency["product"] as? [Any],

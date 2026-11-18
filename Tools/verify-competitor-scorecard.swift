@@ -161,7 +161,7 @@ while lineIndex < lines.count {
 
 let expectedProducts = [
     "ArchonCore", "ArchonModels", "ArchonAgent", "ArchonContext", "ArchonMemory",
-    "ArchonMemoryProxima", "ArchonSearch", "ArchonSandbox", "ArchonConnect",
+    "ArchonMemoryProxima", "ArchonInference", "ArchonSearch", "ArchonSandbox", "ArchonConnect",
     "ArchonComputerUse", "ArchonModelsUI", "ArchonFull", "archon-model",
     "archon-example-app"
 ]
