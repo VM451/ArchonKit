@@ -4,6 +4,12 @@
 
 ### Added
 
+- AI / LLM context quality for `ArchonSearchClient.ask`: parallel page fetch,
+  `PassageChunker` (query-scored paragraph chunking with a 0.7 relevance
+  threshold and best-passage fail-safe), `AIContextPacker` (token-budget
+  packing with `ContextQualityStats` and an extractive `directAnswer`),
+  `SearchHostAuthority` (deterministic 0...1 domain weights), and date
+  grounding (`lastModified`/`effectiveDate` on results, sources, citations).
 - Shared HTTPS and resolved-address network policy with fail-closed defaults.
 - Optional `ArchonInference` product adapting `ggml-org/llama.cpp` (`LlamaFramework` `b12492` XCFramework, MIT) behind `LLMProvider` and `ModelRuntimeAdapter` with pure-Swift GGUF header inspection, peak-memory gating, GBNF JSON grammar support, streaming cancellation, and multi-model memory-pressure management.
 - CI checks for package builds, Swift Testing, product scope, dependency-license
