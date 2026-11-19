@@ -63,6 +63,7 @@ public actor ArchonSearchClient: Sendable {
     public func read(url: URL, options: ReaderOptions = ReaderOptions()) async throws -> WebDocument
     public func ask(query: String) async throws -> (context: String, sources: [Source], citations: [Citation])
     public func ask(_ query: String) async throws -> SearchAnswer
+    public func ask(query: String, options: ContextQualityOptions) async throws -> SearchAnswer
     public func research(topic: String, options: ResearchOptions = ResearchOptions()) async throws -> ResearchReport
     public func checkHealth() async -> (searxngHealthy: Bool, crawlerHealthy: Bool)
 }
@@ -71,7 +72,7 @@ public actor ArchonSearchClient: Sendable {
 - `search(_:categories:page:)`: Dispatches queries to the configured `SearchEngine` (`DuckDuckGoSearchEngine` by default) and returns `[SearchResult]`.
 - `rankedSearch(_:categories:page:options:)`: Applies the local `ResultReranker` (term overlap + freshness decay + host allow/block scoping + max-age filter) with no network or model. The optional `embedding:` parameter (or `SearchRankingOptions.embedding`) opts into the Apple-API embedding blend; `rankedSearchWithDiagnostics` additionally reports `SearchDiagnostics.usedSemanticRerank`.
 - `read(url:options:)`: Extracts clean text and Markdown from a URL using `RetrievalRouter` (`NativeReader` by default).
-- `ask(query:)` / `ask(_:)`: Executes search, extracts source pages, encapsulates content inside `<reference_data>`, and verifies citations (returning tuple or `SearchAnswer`).
+- `ask(query:)` / `ask(_:)`: Executes search, extracts source pages, encapsulates content inside `<reference_data>`, and verifies citations (returning tuple or `SearchAnswer`). `ask(query:options:)` adds the AI context-quality pipeline: parallel fetch, relevance-filtered passage chunking, token-budget packing with stats, authority/date metadata, and an extractive `directAnswer` (see §4b).
 - `research(topic:options:)`: Executes autonomous multi-round iterative research.
 - `checkHealth()`: Reports availability status of companion SearXNG and Crawl4AI endpoints.
 
@@ -543,6 +544,59 @@ for citation in citations {
     print("Citation \(citation.label): \(citation.title ?? "") (\(citation.url))")
 }
 ```
+
+### 4b. AI-Grade Context Quality (Compact / On-Device Models)
+`ask(query:options:)` upgrades the same pipeline for agents feeding small
+context windows (2B–4B local models, Apple Foundation Models): pages are
+fetched **in parallel**, split into query-scored passages (filler below the
+relevance bar is dropped), packed into a token budget, and returned with
+authority/date metadata plus an extractive direct answer.
+
+```swift
+var options = ContextQualityOptions()
+options.relevanceThreshold = 0.7   // drop passages scoring below 0.7
+options.maxPassagesPerSource = 3   // top-3 passages per page
+options.maxCharacters = 12_000     // ~3k tokens of dense Markdown
+
+let answer = try await client.ask(
+    query: "Swift 6 strict concurrency data races",
+    options: options
+)
+
+// Fast single-hop lookup: top passages stitched with citation tags (no model).
+print(answer.directAnswer ?? "no extract")
+
+// Budget accounting for evals and logs.
+if let stats = answer.qualityStats {
+    print("tokens≈\(stats.estimatedTokens) kept=\(stats.passagesKept) dropped=\(stats.passagesDropped)")
+}
+
+// Grounding signals per source and citation.
+for source in answer.sources {
+    print("\(source.domain ?? "?") authority=\(source.authority) date=\(source.effectiveDate?.description ?? "undated")")
+}
+```
+
+Building blocks (all deterministic, on-device, no network):
+
+- `PassageChunker`: paragraph-aware splitting that keeps Markdown headings
+  with their passages, scores each against the query (query-term coverage
+  blended with an optional `SemanticSimilarity` scorer), and drops passages
+  below `relevanceThreshold`. When filtering would empty the context, the
+  single best passage survives as a fail-safe.
+- `AIContextPacker` + `ContextQualityStats`: per-source caps, global budget
+  packing in score order, and observed numbers (`estimatedTokens`,
+  `signalToTokenRatio`, kept/dropped counts) plus an extractive
+  `directAnswer` (first sentences of top passages with `[Sn]` tags).
+- `SearchHostAuthority`: deterministic `0...1` host weights — official docs
+  (`developer.apple.com`, `swift.org`, …) rank `1.0`, known publishers `0.8`,
+  ordinary hosts `0.5`, spam signals `0.25`. Surfaced via
+  `SearchResult.hostAuthority`, `Source.authority`/`domain`, and
+  `Citation.authority`.
+- Date grounding: `SearchResult.lastModified`/`effectiveDate`,
+  `Source.publishedAt`/`lastModified`/`effectiveDate`, and
+  `Citation.publishedAt` now travel from engine metadata through packing
+  into resolved citations, so agents can prefer fresh docs.
 
 ### 5. Autonomous Multi-Round Research
 ```swift
