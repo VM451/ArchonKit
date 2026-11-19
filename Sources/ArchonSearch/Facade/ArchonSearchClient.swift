@@ -1,4 +1,5 @@
 import Foundation
+import NaturalLanguage
 import ArchonCore
 
 /// High-level public facade for ArchonSearch 2.0.
@@ -111,46 +112,119 @@ public actor ArchonSearchClient: Sendable {
     }
 
     /// Performs grounded web search and assembles prompt-injection-safe context with verified citations.
+    ///
+    /// AI-grade pipeline: pages are fetched in parallel, stripped to clean
+    /// Markdown upstream, split into query-scored passages (below-threshold
+    /// filler is dropped), packed into a token budget, and returned with
+    /// authority/date metadata plus an extractive direct answer.
     public func ask(query: String) async throws -> (context: String, sources: [Source], citations: [Citation]) {
-        let results = try await search(query, page: 1)
-        var sources: [Source] = []
-
-        for result in results.prefix(configuration.limits.maxResults) {
-            do {
-                let doc = try await read(url: result.url)
-                let passage = SourcePassage(
-                    sourceID: doc.id,
-                    passageID: UUID(),
-                    text: String(doc.text.prefix(800)),
-                    score: 1.0
-                )
-                let source = Source(
-                    id: doc.id,
-                    url: doc.url,
-                    title: doc.title.isEmpty ? result.title : doc.title,
-                    passages: [passage]
-                )
-                sources.append(source)
-            } catch {
-                continue
-            }
-        }
-
-        let builder = ContextBuilder(maxCharacters: 12_000)
-        let context = builder.buildContext(from: sources)
-        let graph = CitationGraph(sources: sources)
-        let parsed = graph.parseCitations(from: context)
-        let verified = graph.verify(citations: parsed).valid
-        let citations = graph.resolve(citations: verified)
-
-        return (context: context, sources: sources, citations: citations)
+        let answer = try await ask(query: query, options: ContextQualityOptions())
+        return (context: answer.context, sources: answer.sources, citations: answer.citations)
     }
 
     /// Performs grounded web search returning an answer with text, context, sources, and verified citations.
     @discardableResult
     public func ask(_ query: String) async throws -> SearchAnswer {
-        let res = try await ask(query: query)
-        return SearchAnswer(text: res.context, context: res.context, sources: res.sources, citations: res.citations)
+        try await ask(query: query, options: ContextQualityOptions())
+    }
+
+    /// Grounded web search with explicit context-quality controls.
+    ///
+    /// - `options.relevanceThreshold` drops passages below the bar (default
+    ///   `0.7`); the single best passage survives as a fail-safe.
+    /// - `options.maxCharacters` caps the packed context for compact models.
+    /// - `options.useSemanticRerank` blends on-device embedding similarity
+    ///   into passage scores; off by default for determinism.
+    public func ask(query: String, options: ContextQualityOptions) async throws -> SearchAnswer {
+        let results = try await search(query, page: 1)
+        let candidates = Array(results.prefix(configuration.limits.maxResults))
+        let fetched = await fetchDocuments(for: candidates, query: query)
+
+        let chunker = PassageChunker(relevanceThreshold: options.relevanceThreshold)
+        let similarity: (any SemanticSimilarity)? =
+            options.useSemanticRerank ? NaturalLanguageSimilarity() : nil
+        var sources: [Source] = []
+        var rawCharacters = 0
+        for (result, doc) in fetched {
+            let body = doc.markdown.isEmpty ? doc.text : doc.markdown
+            rawCharacters += body.count
+            let scored = chunker.chunk(body, query: query, similarity: similarity)
+            guard !scored.isEmpty else { continue }
+            let passages = scored.prefix(options.maxPassagesPerSource).map { item in
+                SourcePassage(
+                    sourceID: doc.id,
+                    passageID: UUID(),
+                    text: item.heading.map { "## \($0)\n\(item.text)" } ?? item.text,
+                    score: item.score
+                )
+            }
+            sources.append(Source(
+                id: doc.id,
+                url: result.effectiveURL,
+                title: doc.title.isEmpty ? result.title : doc.title,
+                passages: Array(passages),
+                publishedAt: doc.publishedAt ?? result.publishedAt,
+                lastModified: result.lastModified
+            ))
+        }
+
+        let packer = AIContextPacker(options: options)
+        let (packed, stats) = packer.pack(sources: sources)
+        var statsWithRaw = stats
+        statsWithRaw.rawCharacters = rawCharacters
+        statsWithRaw.signalToTokenRatio = rawCharacters > 0
+            ? Double(stats.packedCharacters) / Double(rawCharacters) : 0
+
+        let builder = ContextBuilder(
+            maxTokens: max(1, options.maxCharacters / max(1, Int(options.charsPerToken))),
+            charsPerToken: options.charsPerToken
+        )
+        let context = builder.buildContext(from: packed)
+        let graph = CitationGraph(sources: packed)
+        let parsed = graph.parseCitations(from: context)
+        let verified = graph.verify(citations: parsed).valid
+        let citations = graph.resolve(citations: verified)
+        let directAnswer = options.includeDirectAnswer
+            ? packer.directAnswer(from: packed) : nil
+
+        return SearchAnswer(
+            text: directAnswer ?? context,
+            context: context,
+            sources: packed,
+            citations: citations,
+            directAnswer: directAnswer,
+            qualityStats: statsWithRaw
+        )
+    }
+
+    /// Fetches candidate pages concurrently, preserving search-result order.
+    private func fetchDocuments(
+        for results: [SearchResult],
+        query _: String
+    ) async -> [(SearchResult, WebDocument)] {
+        let indexed = await withTaskGroup(
+            of: (Int, SearchResult, WebDocument)?.self,
+            returning: [(Int, SearchResult, WebDocument)].self
+        ) { group in
+            for (index, result) in results.enumerated() {
+                group.addTask {
+                    do {
+                        let doc = try await self.read(url: result.url)
+                        return (index, result, doc)
+                    } catch {
+                        return nil
+                    }
+                }
+            }
+            var collected: [(Int, SearchResult, WebDocument)] = []
+            for await item in group {
+                if let item { collected.append(item) }
+            }
+            return collected
+        }
+        return indexed
+            .sorted { $0.0 < $1.0 }
+            .map { ($0.1, $0.2) }
     }
 
     /// Returns health check status across the search engine and Crawl4AI instances.
@@ -167,11 +241,26 @@ public struct SearchAnswer: Sendable {
     public let context: String
     public let sources: [Source]
     public let citations: [Citation]
+    /// Extractive one-glance synthesis (top passages + citation tags, no
+    /// model involved), or `nil` when nothing was retrieved or the caller
+    /// opted out via `ContextQualityOptions.includeDirectAnswer`.
+    public let directAnswer: String?
+    /// Observed packing numbers (token estimate, signal-to-token ratio).
+    public let qualityStats: ContextQualityStats?
 
-    public init(text: String, context: String, sources: [Source], citations: [Citation]) {
+    public init(
+        text: String,
+        context: String,
+        sources: [Source],
+        citations: [Citation],
+        directAnswer: String? = nil,
+        qualityStats: ContextQualityStats? = nil
+    ) {
         self.text = text
         self.context = context
         self.sources = sources
         self.citations = citations
+        self.directAnswer = directAnswer
+        self.qualityStats = qualityStats
     }
 }
