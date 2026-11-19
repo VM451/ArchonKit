@@ -125,7 +125,9 @@ public struct CitationGraph: Sendable {
                 passageID: passageID,
                 url: source.url,
                 title: source.title,
-                snippet: snippet
+                snippet: snippet,
+                publishedAt: source.publishedAt ?? source.lastModified,
+                authority: source.authority
             ))
         }
         return resolved

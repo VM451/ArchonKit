@@ -9,7 +9,11 @@ public struct Citation: Sendable, Codable, Identifiable, Hashable {
     public let url: URL
     public let title: String?
     public let snippet: String?
-    
+    /// Newest known date of the cited source, when reported.
+    public let publishedAt: Date?
+    /// Authority weight `0...1` of the cited host. See `SearchHostAuthority`.
+    public let authority: Double?
+
     public init(
         id: UUID = UUID(),
         label: String,
@@ -17,7 +21,9 @@ public struct Citation: Sendable, Codable, Identifiable, Hashable {
         passageID: UUID? = nil,
         url: URL,
         title: String? = nil,
-        snippet: String? = nil
+        snippet: String? = nil,
+        publishedAt: Date? = nil,
+        authority: Double? = nil
     ) {
         self.id = id
         self.label = label
@@ -26,6 +32,8 @@ public struct Citation: Sendable, Codable, Identifiable, Hashable {
         self.url = url
         self.title = title
         self.snippet = snippet
+        self.publishedAt = publishedAt
+        self.authority = authority
     }
 
     /// Convenience initializer maintaining backwards compatibility with earlier API.
@@ -37,6 +45,8 @@ public struct Citation: Sendable, Codable, Identifiable, Hashable {
         self.url = URL(string: sourceURLString) ?? URL(fileURLWithPath: "/")
         self.title = nil
         self.snippet = snippet
+        self.publishedAt = nil
+        self.authority = nil
     }
     
     /// Numeric index derived from citation label if formatted as [1], [2], etc.
