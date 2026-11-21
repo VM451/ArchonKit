@@ -46,8 +46,9 @@ browser.
 | Model/runtime path | What ArchonKit can represent | Conditions for runnable use |
 | --- | --- | --- |
 | MLX | Any model family for which a compatible MLX package is catalogued or imported | The variant must declare `.mlx`/MLX, include the required model and tokenizer resources, fit the current memory envelope, and be supported by the linked MLX runtime/model configuration. |
-| Core AI, Foundation Models, or remote providers | Lower-level adapters remain available for explicit host integrations | These paths are not returned by the user-facing model-discovery boundary. |
-| Raw `GGUF`, `SafeTensors`, or Transformers files | Source artifacts can be described and inspected by lower-level APIs | They are never shown by MLX discovery; developer-side preparation must produce a validated runnable MLX artifact before load. |
+| Exported Core AI model or local GGUF | [`ArchonInference`](products/inference.md) selects between explicit local assets | Core AI needs an Apple export directory with model and tokenizer resources; llama.cpp loads GGUF on supported slices. Neither is part of MLX discovery. |
+| Apple Intelligence system model or remote providers | Separate `ArchonAgent` providers | Explicit host integration, not `ArchonInference` or MLX discovery. |
+| Raw `SafeTensors` or Transformers files | Source artifacts can be described and inspected by lower-level APIs | They are never shown by MLX discovery; developer-side preparation must produce a validated runnable MLX artifact before load. |
 
 The discovery data model can describe text, vision, audio, embedding, image
 generation, and classification tasks. A particular runtime/provider still has
