@@ -42,6 +42,13 @@ documentation surface.
 6. [Build a realtime voice + vision agent](how-to/realtime-voice-agent.md)
 7. [Read the competitor comparison and scorecard](reference/competitor-comparison.md)
 
+### On-device inference
+
+Use [ArchonInference](reference/products/inference.md) for exported Apple Core
+AI models first, or local GGUF through llama.cpp when Core AI cannot be selected.
+This opt-in product is separate from [MLX model discovery](reference/supported-models.md)
+and is not included in `ArchonFull`.
+
 ### Existing ArchonKit integration
 
 1. [Local-first boundaries](explanation/local-first-boundaries.md)
@@ -122,7 +129,7 @@ The concise product-by-product matrix is in the repository
 | ✅ | `ArchonConnect` | `swift build --target ArchonConnect` |
 | ✅ | `ArchonComputerUse` | `swift build --target ArchonComputerUse` |
 | ✅ | `ArchonModelsUI` | `swift build --target ArchonModelsUI` (with `canImport(SwiftUIMacros)` fallback) |
-| ✅ | `ArchonInference` | `swift build -j 2`, `swift test --filter ArchonInferenceTests` (13 tests), and `xcodebuild` for `iOS` + `visionOS` (optional; excluded from `ArchonFull`) |
+| ✅ (macOS) | `ArchonInference` | `swift test` filtering `InferenceSelectionTests` and `LlamaLocalProviderTests` (10 macOS tests: provider selection, the Core AI missing-memory-estimate guard, and llama.cpp regressions). Real-model generation and host-app verification remain open. |
 | ✅ | `ArchonFull` | Facade over verified products (CI `xcode-27`) |
 
 Full evidence and consumer-integration taste harness are in [VerificationReport](../README.md#products) and [VerificationReport.md](../VerificationReport.md).
