@@ -15,6 +15,7 @@ Exact symbols and overloads remain in the product's Swift DocC/API reference.
 - [ArchonModelsUI](models-ui.md)
 - [ArchonFull](full.md)
 
-The optional [ArchonMemoryProxima](memory-proxima.md) and
-[ArchonInference](inference.md) adapters have their own pages because they are not
-included in `ArchonFull`.
+The optional products are not included in `ArchonFull`:
+
+- [ArchonMemoryProxima](memory-proxima.md) — dense-index adapter.
+- [ArchonInference](inference.md) — Apple Core AI first, llama.cpp for local GGUF second.
