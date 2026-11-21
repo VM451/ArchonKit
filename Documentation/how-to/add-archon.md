@@ -25,6 +25,12 @@ import ArchonAgent
 Use `ArchonFull` only when the convenience facade is worth importing the full
 base graph. It does not include `ArchonMemoryProxima` or `ArchonInference`.
 
+For on-device text generation from local assets, add
+[`ArchonInference`](../reference/products/inference.md) to the app target. Pass
+an exported Core AI model directory and/or a local GGUF file to
+`ArchonInference.makeProvider(...)`. It prefers Core AI and selects llama.cpp
+only if no Core AI asset was supplied or the device cannot run Core AI.
+
 ## 3. Configure the host boundary
 
 The application, not the package, provides:
