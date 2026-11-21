@@ -14,7 +14,7 @@ vendor APIs from leaking through default ArchonKit contracts.
 | `ArchonContext` | `ArchonCore` | Request assembly is intentionally independent of durable storage |
 | `ArchonMemory` | `ArchonCore`, GRDB | SQLite-backed durable memory owns its persistence engine |
 | `ArchonMemoryProxima` | `ArchonMemory`, ProximaKit | Optional dense indexing stays replaceable and out of `ArchonFull` |
-| `ArchonInference` | `ArchonCore`, `ArchonModels`, `ArchonAgent`, `LlamaFramework` | Optional local GGUF inference via `llama.cpp` (`llama.xcframework`, MIT) stays replaceable and out of `ArchonFull` |
+| `ArchonInference` | `ArchonCore`, `ArchonModels`, `ArchonAgent`, `LlamaFramework`, `CoreAILM@coreai-models` | Optional on-device inference — Apple Core AI (`CoreAILM` 1.0.0) first, `llama.cpp` GGUF (`llama.xcframework`, MIT) second — stays replaceable and out of `ArchonFull`; transitive `ArchonAgent` dependencies (MLX, Hugging Face, Transformers) are unchanged |
 | `ArchonSearch` | `ArchonCore`, `GRDB` | Search uses ArchonKit-owned contracts, local-first SearXNG/Crawl4AI clients, in-process SwiftSoup/WebKit extraction, and GRDB SQLite persistence for caching and search sessions |
 | `ArchonSandbox` | `ArchonCore` | WebKit is an Apple platform boundary, not a remote runtime dependency |
 | `ArchonConnect` | `ArchonCore`, official MCP Swift SDK | MCP wire behavior is reused; ArchonKit owns policy and error boundaries |
