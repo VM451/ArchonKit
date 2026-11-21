@@ -30,7 +30,7 @@ boundary.
 | Graph agents and local model adapters | `ArchonAgent` | MLX, MLX LM, Hugging Face, Transformers, and Swift macros |
 | Durable memory and RAG | `ArchonMemory` | GRDB/SQLite |
 | Alternative dense indexing | `ArchonMemoryProxima` | ProximaKit; optional and not included in `ArchonFull` |
-| Local GGUF inference (`llama.cpp`) | `ArchonInference` | `LlamaFramework` (`llama.xcframework`, MIT); optional and not included in `ArchonFull` |
+| On-device inference (Apple Core AI first, llama.cpp GGUF second) | `ArchonInference` | `CoreAILM` and `LlamaFramework` (optional; not included in `ArchonFull`) |
 | MCP connectivity | `ArchonConnect` | Official MCP Swift SDK |
 | Search, sandbox, semantic actions | `ArchonSearch`, `ArchonSandbox`, `ArchonComputerUse` | ArchonKit-owned contracts; integrations remain explicit |
 
