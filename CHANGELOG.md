@@ -11,7 +11,11 @@
   `SearchHostAuthority` (deterministic 0...1 domain weights), and date
   grounding (`lastModified`/`effectiveDate` on results, sources, citations).
 - Shared HTTPS and resolved-address network policy with fail-closed defaults.
-- Optional `ArchonInference` product adapting `ggml-org/llama.cpp` (`LlamaFramework` `b12492` XCFramework, MIT) behind `LLMProvider` and `ModelRuntimeAdapter` with pure-Swift GGUF header inspection, peak-memory gating, GBNF JSON grammar support, streaming cancellation, and multi-model memory-pressure management.
+- Optional [`ArchonInference`](Documentation/reference/products/inference.md)
+  selects Apple Core AI for exported models first and llama.cpp for local GGUF
+  second. Both use `LLMProvider`; GGUF also offers a `ModelRuntimeAdapter`
+  with header inspection, memory gating, GBNF JSON constraints, streaming
+  cancellation, and memory-pressure management.
 - CI checks for package builds, Swift Testing, product scope, dependency-license
   evidence, scorecard structure, and whitespace.
 - Resource and request-size limits for model catalogs, agent tools, providers,
