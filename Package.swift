@@ -51,7 +51,8 @@ let package = Package(
         .package(url: "https://github.com/modelcontextprotocol/swift-sdk.git", from: "0.12.1"),
         .package(url: "https://github.com/groue/GRDB.swift.git", "6.29.3" ..< "8.0.0"),
         .package(url: "https://github.com/vivekptnk/ProximaKit.git", revision: "9074a52e28baa4fb3abbb971bbc4b43ad8a24a65"),
-        .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.8.0")
+        .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.8.0"),
+        .package(url: "https://github.com/apple/coreai-models.git", exact: "1.0.0")
     ],
     targets: [
         .target(
@@ -165,7 +166,8 @@ let package = Package(
                 "ArchonCore",
                 "ArchonModels",
                 "ArchonAgent",
-                .target(name: "LlamaFramework", condition: .when(platforms: [.macOS, .iOS]))
+                .target(name: "LlamaFramework", condition: .when(platforms: [.macOS, .iOS])),
+                .product(name: "CoreAILM", package: "coreai-models", condition: .when(platforms: [.macOS, .iOS]))
             ],
             path: "Sources/ArchonInference",
             swiftSettings: [.enableUpcomingFeature("StrictConcurrency")] + localStubSettings

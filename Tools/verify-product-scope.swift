@@ -45,7 +45,7 @@ private let expectedDependencies: [String: Set<String>] = [
     "ArchonConnect": ["ArchonCore", "MCP@swift-sdk"],
     "ArchonComputerUse": ["ArchonCore"],
     "ArchonModelsUI": ["ArchonCore", "ArchonModels"],
-    "ArchonInference": ["ArchonCore", "ArchonModels", "ArchonAgent", "LlamaFramework"],
+    "ArchonInference": ["ArchonCore", "ArchonModels", "ArchonAgent", "LlamaFramework", "CoreAILM@coreai-models"],
     "ArchonFull": [
         "ArchonCore", "ArchonModels", "ArchonAgent", "ArchonContext",
         "ArchonMemory", "ArchonSearch", "ArchonSandbox", "ArchonConnect",
