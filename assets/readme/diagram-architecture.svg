@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="1200" height="470" viewBox="0 0 1200 470"
+     role="img" aria-labelledby="title desc">
+  <title id="title">ArchonKit system map</title>
+  <desc id="desc">C4 level 1 map: an on-device boundary holds the ArchonFull facade, eleven product modules, and the ArchonCore foundation; five gold gates mark the only approved exits to Hugging Face, cloud providers, Private Cloud Compute, MCP and the web, and CloudKit.</desc>
+
+  <rect width="1200" height="470" rx="26" fill="#0C0E12"/>
+  <rect x="0.75" y="0.75" width="1198.5" height="468.5" rx="25" fill="none" stroke="#1F232C" stroke-width="1.5"/>
+
+  <text x="56" y="48" font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+        font-size="16" letter-spacing="2" fill="#7E8590">SYSTEM MAP — ON-DEVICE CORE, EXPLICIT EXITS</text>
+
+  <!-- On-device boundary -->
+  <rect x="56" y="72" width="760" height="360" rx="18" fill="#0F1219"
+        stroke="#3A3F4A" stroke-width="1.5" stroke-dasharray="7 6"/>
+  <text x="76" y="104" font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+        font-size="15" letter-spacing="2" fill="#7E8590">ON DEVICE · ARCHON* MODULES</text>
+
+  <!-- Facade -->
+  <rect x="88" y="116" width="696" height="48" rx="10" fill="#12151C"
+        stroke="#565D6B" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="436" y="146" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="17">
+    <tspan fill="#F2EFE6">ArchonFull</tspan><tspan fill="#9AA0AA"> — optional umbrella facade</tspan>
+  </text>
+  <line x1="436" y1="164" x2="436" y2="184" stroke="#3A3F4A" stroke-width="1.5"/>
+  <text x="448" y="179" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" fill="#7E8590">re-exports</text>
+
+  <!-- Product modules -->
+  <g id="modules" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" fill="#E6E2D6">
+    <rect x="88"  y="184" width="162" height="54" rx="10" fill="#161A21" stroke="#2C313C"/><text x="169" y="217" text-anchor="middle">Agent</text>
+    <rect x="266" y="184" width="162" height="54" rx="10" fill="#161A21" stroke="#2C313C"/><text x="347" y="217" text-anchor="middle">Models</text>
+    <rect x="444" y="184" width="162" height="54" rx="10" fill="#161A21" stroke="#2C313C"/><text x="525" y="217" text-anchor="middle">Memory</text>
+    <rect x="622" y="184" width="162" height="54" rx="10" fill="#161A21" stroke="#2C313C"/><text x="703" y="217" text-anchor="middle">Search</text>
+
+    <rect x="88"  y="246" width="162" height="54" rx="10" fill="#161A21" stroke="#2C313C"/><text x="169" y="279" text-anchor="middle">Context</text>
+    <rect x="266" y="246" width="162" height="54" rx="10" fill="#161A21" stroke="#2C313C"/><text x="347" y="279" text-anchor="middle">Connect</text>
+    <rect x="444" y="246" width="162" height="54" rx="10" fill="#161A21" stroke="#2C313C"/><text x="525" y="279" text-anchor="middle">Sandbox</text>
+    <rect x="622" y="246" width="162" height="54" rx="10" fill="#161A21" stroke="#2C313C"/><text x="703" y="279" text-anchor="middle">ComputerUse</text>
+
+    <rect x="88"  y="308" width="162" height="54" rx="10" fill="#161A21" stroke="#2C313C"/><text x="169" y="341" text-anchor="middle">ModelsUI</text>
+    <rect x="266" y="308" width="162" height="54" rx="10" fill="#0F1219" stroke="#565D6B" stroke-dasharray="5 4"/><text x="347" y="341" text-anchor="middle">Inference*</text>
+    <rect x="444" y="308" width="162" height="54" rx="10" fill="#0F1219" stroke="#565D6B" stroke-dasharray="5 4"/><text x="525" y="341" text-anchor="middle">Proxima*</text>
+    <rect x="622" y="308" width="162" height="54" rx="10" fill="#0F1219" stroke="#3A3F4A"/><text x="703" y="341" text-anchor="middle" font-size="16" fill="#9AA0AA">CLI + host app</text>
+  </g>
+  <line x1="436" y1="362" x2="436" y2="374" stroke="#3A3F4A" stroke-width="1.5"/>
+  <text x="448" y="372" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" fill="#7E8590">depend on</text>
+
+  <!-- Foundation -->
+  <rect x="88" y="374" width="696" height="44" rx="10" fill="#1B2029" stroke="#2C313C"/>
+  <text x="436" y="402" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18">
+    <tspan fill="#F2EFE6">ArchonCore</tspan><tspan fill="#9AA0AA"> — capabilities · policy · errors · logging</tspan>
+  </text>
+
+  <!-- External systems via gates -->
+  <text x="840" y="104" font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+        font-size="15" letter-spacing="2" fill="#7E8590">EXTERNAL — VIA GATES</text>
+
+  <g id="gates" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+    <g>
+      <rect x="806" y="140" width="20" height="20" rx="6" fill="#0C0E12" stroke="#E0A93E" stroke-width="1.5"/>
+      <path d="M811 150 l4 4 l7 -9" fill="none" stroke="#E0A93E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="826" y1="150" x2="864" y2="150" stroke="#3A3F4A" stroke-width="1.5"/>
+      <path d="M864 145 l8 5 l-8 5 z" fill="#3A3F4A"/>
+      <text x="880" y="146" font-size="17" fill="#E6E2D6">Hugging Face</text>
+      <text x="880" y="166" font-size="15" fill="#7E8590">model catalog &amp; downloads</text>
+    </g>
+    <g>
+      <rect x="806" y="202" width="20" height="20" rx="6" fill="#0C0E12" stroke="#E0A93E" stroke-width="1.5"/>
+      <path d="M811 212 l4 4 l7 -9" fill="none" stroke="#E0A93E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="826" y1="212" x2="864" y2="212" stroke="#3A3F4A" stroke-width="1.5"/>
+      <path d="M864 207 l8 5 l-8 5 z" fill="#3A3F4A"/>
+      <text x="880" y="208" font-size="17" fill="#E6E2D6">Cloud LLM APIs</text>
+      <text x="880" y="228" font-size="15" fill="#7E8590">opt-in · host credentials</text>
+    </g>
+    <g>
+      <rect x="806" y="264" width="20" height="20" rx="6" fill="#0C0E12" stroke="#E0A93E" stroke-width="1.5"/>
+      <path d="M811 274 l4 4 l7 -9" fill="none" stroke="#E0A93E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="826" y1="274" x2="864" y2="274" stroke="#3A3F4A" stroke-width="1.5"/>
+      <path d="M864 269 l8 5 l-8 5 z" fill="#3A3F4A"/>
+      <text x="880" y="270" font-size="17" fill="#E6E2D6">Private Cloud Compute</text>
+      <text x="880" y="290" font-size="15" fill="#7E8590">eligible offload only</text>
+    </g>
+    <g>
+      <rect x="806" y="326" width="20" height="20" rx="6" fill="#0C0E12" stroke="#E0A93E" stroke-width="1.5"/>
+      <path d="M811 336 l4 4 l7 -9" fill="none" stroke="#E0A93E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="826" y1="326" x2="864" y2="326" stroke="#3A3F4A" stroke-width="1.5"/>
+      <path d="M864 331 l8 5 l-8 5 z" fill="#3A3F4A"/>
+      <text x="880" y="332" font-size="17" fill="#E6E2D6">MCP servers · Web</text>
+      <text x="880" y="352" font-size="15" fill="#7E8590">tools, search &amp; citations</text>
+    </g>
+    <g>
+      <rect x="806" y="388" width="20" height="20" rx="6" fill="#0C0E12" stroke="#E0A93E" stroke-width="1.5"/>
+      <path d="M811 398 l4 4 l7 -9" fill="none" stroke="#E0A93E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="826" y1="398" x2="864" y2="398" stroke="#3A3F4A" stroke-width="1.5"/>
+      <path d="M864 393 l8 5 l-8 5 z" fill="#3A3F4A"/>
+      <text x="880" y="394" font-size="17" fill="#E6E2D6">CloudKit</text>
+      <text x="880" y="414" font-size="15" fill="#7E8590">optional sync</text>
+    </g>
+  </g>
+
+  <text x="600" y="456" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+        font-size="15" fill="#7E8590">every crossing is explicit, consent-gated, and fails closed — the host owns credentials, entitlements, permissions</text>
+</svg>
