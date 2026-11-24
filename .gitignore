@@ -1,6 +1,7 @@
 .build/
 .swiftpm/
 /context/
+graphify-out/
 .devterm/
 DerivedData/
 .DS_Store
