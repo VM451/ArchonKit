@@ -102,6 +102,7 @@ extension DesktopSemanticBridge: ComputerUseObservationProvider {
 
 // MARK: - cua-driver CLI host
 
+#if os(macOS)
 /// Host adapter that shells out to the `cua-driver` CLI (agent-desktop's
 /// native counterpart). The CLI owns AX access; this type only marshals
 /// bounded, audited requests. It follows the cua always-on rule:
@@ -115,23 +116,7 @@ public struct CUADriverProvider: Sendable {
 
     /// Runs `cua-driver <subcommand>` and returns stdout + exit code.
     public func run(arguments: [String]) async throws -> (Data, Int32) {
-        try await withCheckedThrowingContinuation { continuation in
-            DispatchQueue.global(qos: .userInitiated).async {
-                let process = Process()
-                process.executableURL = executableURL
-                process.arguments = arguments
-                let pipe = Pipe()
-                process.standardOutput = pipe
-                process.standardError = pipe
-                do {
-                    try process.run()
-                    process.waitUntilExit()
-                    continuation.resume(returning: (pipe.fileHandleForReading.readDataToEndOfFile(), process.terminationStatus))
-                } catch {
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
+        try await HostProcessRunner.run(executableURL: executableURL, arguments: arguments)
     }
 
     public func listWindowsJSON() async throws -> Data {
@@ -153,9 +138,10 @@ public struct CUADriverProvider: Sendable {
 
     public func typeText(_ text: String, token: String, pid: pid_t, windowID: String) async throws {
         let (data, code) = try await run(arguments: ["type_text", "--pid", "\(pid)", "--window", windowID, "--token", token, text])
-        guard code == 0 else { throw ComputerUseError.verificationFailed("cua-driver type_text failed") }
+        guard code == 0 else { throw ComputerUseError.verificationFailed("cua-driver type_text failed: \(String(data: data, encoding: .utf8) ?? "")") }
     }
 }
+#endif
 
 // MARK: - Catalog
 
@@ -191,6 +177,7 @@ public struct DesktopActionCatalog: Sendable {
     }
 }
 
+#if os(macOS)
 /// Desktop observation provider that mediates between the cua-driver CLI
 /// JSON and the semantic controller. Enforces the cua rule: exact window,
 /// fresh snapshot per action, no stale token reuse.
@@ -216,6 +203,7 @@ extension DesktopObservationProvider: ComputerUseObservationProvider {
         return SemanticSnapshot(screenID: "\(window.appIdentifier)/\(window.windowID)", elements: elements)
     }
 }
+#endif
 
 /// Tolerant parser for cua-driver JSON (handles schema drift).
 public struct DesktopSnapshotParser: Sendable {

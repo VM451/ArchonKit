@@ -20,7 +20,7 @@ struct EvaluationTests {
             expectedOutputSubstrings: ["ArchonKit", "Apple"]
         )
 
-        let finalState = EvalTestState(output: "ArchonAgent runs on Apple platforms.")
+        let finalState = EvalTestState(output: "ArchonKit runs on Apple platforms.")
         let trace = RunTrace(threadId: "t1", runId: "r1", entryPoint: "start")
 
         let score = try await evaluator.evaluate(scenario: scenario, finalState: finalState, trace: trace)

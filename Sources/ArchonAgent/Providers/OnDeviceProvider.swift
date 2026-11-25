@@ -200,9 +200,13 @@ public final class OnDeviceProvider: LLMProvider, @unchecked Sendable {
     /// Use the `catalog` initializer for other model families.
     public static func gemma(
         _ variant: GemmaVariant,
-        runtime: OnDeviceRuntimePreference = .auto
+        runtime: OnDeviceRuntimePreference = .auto,
+        hardwareProfile: DeviceHardwareProfile = .current
     ) -> OnDeviceProvider {
-        OnDeviceProvider(strategy: .gemma(variant, runtime: runtime))
+        OnDeviceProvider(
+            strategy: .gemma(variant, runtime: runtime),
+            hardwareProfile: hardwareProfile
+        )
     }
 
     /// Creates an on-device provider explicitly routing through Apple's Core AI framework.

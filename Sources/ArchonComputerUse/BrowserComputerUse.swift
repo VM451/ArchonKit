@@ -134,6 +134,7 @@ public struct BrowserActionCatalog: Sendable {
     }
 }
 
+#if os(macOS)
 /// Host adapter that shells out to the vercel-labs/agent-browser CLI
 /// (JSON-RPC over stdio). The CLI owns Chrome/CDP; this type only marshals
 /// verified requests with bounds and audits. Credential-free: state is
@@ -160,23 +161,7 @@ public struct AgentBrowserCLIProvider: Sendable {
     }
 
     public func run(arguments: [String]) async throws -> (Data, Int32) {
-        try await withCheckedThrowingContinuation { continuation in
-            DispatchQueue.global(qos: .userInitiated).async {
-                let process = Process()
-                process.executableURL = executableURL
-                process.arguments = arguments
-                let pipe = Pipe()
-                process.standardOutput = pipe
-                process.standardError = pipe
-                do {
-                    try process.run()
-                    process.waitUntilExit()
-                    continuation.resume(returning: (pipe.fileHandleForReading.readDataToEndOfFile(), process.terminationStatus))
-                } catch {
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
+        try await HostProcessRunner.run(executableURL: executableURL, arguments: arguments)
     }
 
     private func run(_ args: [String]) async throws -> (Data, Int32) {
@@ -197,12 +182,12 @@ extension AgentBrowserCLIProvider: BrowserPageProvider {
 
     public func activate(ref: String) async throws {
         let (data, code) = try await run(["click", ref] + baseArguments())
-        guard code == 0 else { throw ComputerUseError.verificationFailed("agent-browser click failed") }
+        guard code == 0 else { throw ComputerUseError.verificationFailed("agent-browser click failed: \(String(data: data, encoding: .utf8) ?? "")") }
     }
 
     public func fill(ref: String, text: String) async throws {
         let (data, code) = try await run(["fill", ref, text] + baseArguments())
-        guard code == 0 else { throw ComputerUseError.verificationFailed("agent-browser fill failed") }
+        guard code == 0 else { throw ComputerUseError.verificationFailed("agent-browser fill failed: \(String(data: data, encoding: .utf8) ?? "")") }
     }
 
     public func back() async throws {
@@ -210,6 +195,7 @@ extension AgentBrowserCLIProvider: BrowserPageProvider {
         guard code == 0 else { throw ComputerUseError.verificationFailed("agent-browser back failed") }
     }
 }
+#endif
 
 /// Parser for agent-browser snapshot JSON (tolerant of schema drift).
 public struct BrowserSnapshotParser: Sendable {

@@ -97,32 +97,95 @@ internal struct LocalCLIBridge: ReachBackend, Sendable {
         return nil
     }
 
-    private func runProcess(executable: URL, arguments: [String], timeout: TimeInterval) async throws -> Data {
+    func runProcess(executable: URL, arguments: [String], timeout: TimeInterval) async throws -> Data {
         try await withCheckedThrowingContinuation { continuation in
-            let process = Process()
-            process.executableURL = executable
-            process.arguments = arguments
-            let stdout = Pipe()
-            let stderr = Pipe()
-            process.standardOutput = stdout
-            process.standardError = stderr
+            DispatchQueue.global(qos: .userInitiated).async {
+                let process = Process()
+                process.executableURL = executable
+                process.arguments = arguments
+                let stdout = Pipe()
+                let stderr = Pipe()
+                process.standardOutput = stdout
+                process.standardError = stderr
 
-            process.terminationHandler = { _ in
-                let data = stdout.fileHandleForReading.readDataToEndOfFile()
-                if !data.isEmpty {
+                do {
+                    try process.run()
+                } catch {
+                    continuation.resume(throwing: ReachError(code: .upstreamBroken, message: error.localizedDescription))
+                    return
+                }
+
+                let timedOut = TimeoutFlag()
+                let watchdog = DispatchWorkItem {
+                    guard process.isRunning else { return }
+                    timedOut.set()
+                    process.terminate()
+                }
+                DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + timeout, execute: watchdog)
+
+                // Drain both pipes while waiting so a chatty child cannot
+                // deadlock on a full pipe buffer.
+                let output = PipeCollector(stdout.fileHandleForReading)
+                let errorOutput = PipeCollector(stderr.fileHandleForReading)
+                process.waitUntilExit()
+                watchdog.cancel()
+
+                // A grandchild that inherited the pipes can hold them open
+                // after the CLI exits, so stop reading shortly after exit.
+                let drainDeadline = DispatchTime.now() + 1
+                let data = output.finish(by: drainDeadline)
+                let errorData = errorOutput.finish(by: drainDeadline)
+
+                if timedOut.isSet {
+                    continuation.resume(throwing: ReachError(
+                        code: .timeout,
+                        message: "agent-reach CLI did not finish within \(Int(timeout)) seconds."
+                    ))
+                } else if !data.isEmpty {
                     continuation.resume(returning: data)
                 } else {
-                    let errStr = String(data: stderr.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? "Process failed."
+                    let errStr = String(data: errorData, encoding: .utf8) ?? "Process failed."
                     continuation.resume(throwing: ReachError(code: .upstreamBroken, message: errStr))
                 }
-            }
-
-            do {
-                try process.run()
-            } catch {
-                continuation.resume(throwing: ReachError(code: .upstreamBroken, message: error.localizedDescription))
             }
         }
     }
     #endif
 }
+
+#if os(macOS)
+private final class TimeoutFlag: @unchecked Sendable {
+    private let lock = NSLock()
+    private var value = false
+    func set() { lock.withLock { value = true } }
+    var isSet: Bool { lock.withLock { value } }
+}
+
+private final class PipeCollector: @unchecked Sendable {
+    private let lock = NSLock()
+    private let handle: FileHandle
+    private let reachedEOF = DispatchSemaphore(value: 0)
+    private var data = Data()
+
+    init(_ handle: FileHandle) {
+        self.handle = handle
+        handle.readabilityHandler = { [self] handle in
+            let chunk = handle.availableData
+            if chunk.isEmpty {
+                handle.readabilityHandler = nil
+                reachedEOF.signal()
+            } else {
+                lock.withLock { data.append(chunk) }
+            }
+        }
+    }
+
+    /// Waits for end-of-file until `deadline`, then stops reading.
+    func finish(by deadline: DispatchTime) -> Data {
+        if reachedEOF.wait(timeout: deadline) == .timedOut {
+            handle.readabilityHandler = nil
+        }
+        return lock.withLock { data }
+    }
+}
+#endif

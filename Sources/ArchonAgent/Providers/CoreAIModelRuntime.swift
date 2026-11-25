@@ -92,6 +92,7 @@ public actor CoreAIModelRuntime {
 
     /// Inspects a bundled or local asset using `AIModelAsset`.
     public func inspect(source: CoreAIModelSource) throws -> CoreAIModelInspection {
+        try Self.rejectUnresolvedIdentifier(source)
         #if canImport(CoreAI)
         guard #available(iOS 27.0, macOS 27.0, visionOS 27.0, *) else {
             throw CoreAIProviderError.runtimeUnavailable("Core AI requires iOS 27, macOS 27, or visionOS 27.")
@@ -223,12 +224,24 @@ public actor CoreAIModelRuntime {
             }
             return url
         case .modelIdentifier(let identifier):
-            throw CoreAIProviderError.sourceUnsupported(
-                "The public Core AI API loads URL-backed assets; resolve model identifier '\(identifier)' to a local or bundled asset first."
-            )
+            throw Self.unresolvedIdentifierError(identifier)
         }
     }
     #endif
+
+    /// Configuration errors are reported before runtime availability so an
+    /// unresolved identifier fails the same way on every platform and build.
+    private static func rejectUnresolvedIdentifier(_ source: CoreAIModelSource) throws {
+        if case .modelIdentifier(let identifier) = source {
+            throw unresolvedIdentifierError(identifier)
+        }
+    }
+
+    private static func unresolvedIdentifierError(_ identifier: String) -> CoreAIProviderError {
+        .sourceUnsupported(
+            "The public Core AI API loads URL-backed assets; resolve model identifier '\(identifier)' to a local or bundled asset first."
+        )
+    }
 }
 
 /// A concrete `ModelRuntimeAdapter` for installed ArchonKit Core AI packages.

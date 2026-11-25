@@ -1183,7 +1183,8 @@ struct ArchonModelsTests {
                 modelName: "License Policy",
                 license: ModelLicenseMetadata(identifier: "unknown-license")
             ),
-            into: library
+            into: library,
+            on: device
         )
 
         do {
@@ -1488,7 +1489,8 @@ struct ArchonModelsTests {
         let manager = ModelDownloadManager(session: session, tokenStore: nil)
         let events = try await manager.download(
             ModelDownloadRequest(variant: variant, modelName: "Example"),
-            into: library
+            into: library,
+            on: device
         )
 
         var states: [ModelDownloadState] = []
@@ -1527,7 +1529,8 @@ struct ArchonModelsTests {
         )
         let events = try await manager.download(
             ModelDownloadRequest(variant: variant, modelName: "Pause Resume"),
-            into: library
+            into: library,
+            on: device
         )
 
         var sawPaused = false
@@ -1549,7 +1552,7 @@ struct ArchonModelsTests {
         }
         #expect(sawPaused)
 
-        let resumedEvents = try await manager.resume(variantID: variant.id, into: library)
+        let resumedEvents = try await manager.resume(variantID: variant.id, into: library, on: device)
         await transfer.waitForRequest()
         #expect(await transfer.lastRangeHeader() == "bytes=65536-")
         await transfer.yield(Array(payload.dropFirst(65_536)))
@@ -1588,7 +1591,8 @@ struct ArchonModelsTests {
         )
         let events = try await manager.download(
             ModelDownloadRequest(variant: variant, modelName: "Cancelled"),
-            into: library
+            into: library,
+            on: device
         )
         await transfer.waitForRequest()
         await manager.cancel(variantID: variant.id)
@@ -1633,7 +1637,8 @@ struct ArchonModelsTests {
         )
         let events = try await manager.download(
             ModelDownloadRequest(variant: variant, modelName: "Stream Cancelled"),
-            into: library
+            into: library,
+            on: device
         )
         let consumer = Task {
             do {
@@ -1826,7 +1831,8 @@ struct ArchonModelsTests {
         let events = try await manager.downloadInBackground(
             ModelDownloadRequest(variant: variant, modelName: "Background Cancelled"),
             into: ModelLibrary(rootURL: root.appendingPathComponent("library")),
-            using: coordinator
+            using: coordinator,
+            on: device
         )
         let consumer = Task {
             do {
@@ -1880,7 +1886,7 @@ struct ArchonModelsTests {
             policy: ModelDownloadPolicy(maxAttempts: 2, initialBackoff: 0)
         )
         let library = ModelLibrary(rootURL: root.appendingPathComponent("library"))
-        let events = try await manager.download(ModelDownloadRequest(variant: variant, modelName: "Retry"), into: library)
+        let events = try await manager.download(ModelDownloadRequest(variant: variant, modelName: "Retry"), into: library, on: device)
 
         var ready = false
         for try await event in events {
@@ -1921,7 +1927,8 @@ struct ArchonModelsTests {
         )
         let events = try await manager.download(
             ModelDownloadRequest(variant: variant, modelName: "Failed"),
-            into: ModelLibrary(rootURL: root.appendingPathComponent("library"))
+            into: ModelLibrary(rootURL: root.appendingPathComponent("library")),
+            on: device
         )
 
         var states: [ModelDownloadState] = []
@@ -1967,7 +1974,7 @@ struct ArchonModelsTests {
             policy: ModelDownloadPolicy(maxAttempts: 1, initialBackoff: 0)
         )
         let library = ModelLibrary(rootURL: root.appendingPathComponent("library"))
-        let events = try await manager.download(ModelDownloadRequest(variant: variant, modelName: "Checksum"), into: library)
+        let events = try await manager.download(ModelDownloadRequest(variant: variant, modelName: "Checksum"), into: library, on: device)
 
         var states: [ModelDownloadState] = []
         do {
@@ -2002,7 +2009,8 @@ struct ArchonModelsTests {
         let manager = ModelDownloadManager(tokenStore: nil)
         let events = try await manager.download(
             ModelDownloadRequest(variant: variant, modelName: "Too Large"),
-            into: ModelLibrary(rootURL: root.appendingPathComponent("library"))
+            into: ModelLibrary(rootURL: root.appendingPathComponent("library")),
+            on: device
         )
 
         do {
@@ -2031,7 +2039,8 @@ struct ArchonModelsTests {
         let manager = ModelDownloadManager(tokenStore: nil)
         let events = try await manager.download(
             ModelDownloadRequest(variant: variant, modelName: "Gated Example"),
-            into: ModelLibrary(rootURL: root.appendingPathComponent("library"))
+            into: ModelLibrary(rootURL: root.appendingPathComponent("library")),
+            on: device
         )
 
         do {
@@ -2082,7 +2091,8 @@ struct ArchonModelsTests {
         let logoURL = URL(string: "https://cdn.example.test/example.png")!
         let events = try await manager.download(
             ModelDownloadRequest(variant: variant, modelName: "Example", logoURL: logoURL),
-            into: library
+            into: library,
+            on: device
         )
 
         var states: [ModelDownloadState] = []
@@ -2550,7 +2560,7 @@ struct ArchonModelsTests {
             variant: newVariant
         )
 
-        let events = try await manager.update(candidate, into: library)
+        let events = try await manager.update(candidate, into: library, on: device)
         for try await _ in events {}
 
         let replaced = try #require(try await library.installedModel(id: installed.id))
@@ -2648,7 +2658,8 @@ struct ArchonModelsTests {
                 license: ModelLicenseMetadata(identifier: "unknown-license")
             ),
             into: ModelLibrary(rootURL: root.appendingPathComponent("library")),
-            using: coordinator
+            using: coordinator,
+            on: device
         )
 
         do {

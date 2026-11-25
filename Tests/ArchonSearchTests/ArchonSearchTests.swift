@@ -116,6 +116,14 @@ struct SemanticCoreTests {
         #expect(!swiftDataContext.contains("Paris"))
     }
     
+    @Test("Term-overlap fallback ranks paragraphs without sentence embeddings")
+    func termOverlapFallback() {
+        let query = ArchonSemanticCore.terms(in: "Where is Paris?")
+        #expect(ArchonSemanticCore.termOverlap(query, "The capital of France is Paris.") > 0.5)
+        #expect(ArchonSemanticCore.termOverlap(query, "SwiftData manages data storage.") == 0)
+        #expect(ArchonSemanticCore.termOverlap([], "Anything") == 0)
+    }
+
     @Test("Structured extraction uses an explicitly injected model handler")
     func guidedExtractionFallback() async throws {
         let core = ArchonSemanticCore { _, _, _ in

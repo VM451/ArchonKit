@@ -27,7 +27,7 @@ public actor GRDBConversationRepository: ConversationRepository {
     
     public func saveConversation(id: String, title: String) async throws {
         try await database.write { db in
-            var record = ConversationRecord(id: id, title: title)
+            let record = ConversationRecord(id: id, title: title)
             try record.save(db)
         }
     }
@@ -38,7 +38,7 @@ public actor GRDBConversationRepository: ConversationRepository {
     
     public func saveMessage(id: String, conversationId: String, role: String, content: String) async throws {
         try await database.write { db in
-            var record = MessageRecord(id: id, conversationId: conversationId, role: role, content: content)
+            let record = MessageRecord(id: id, conversationId: conversationId, role: role, content: content)
             try record.save(db)
         }
     }
@@ -60,7 +60,7 @@ public actor GRDBSourceRepository: SourceRepository {
         let passagesData = try JSONEncoder().encode(source.passages)
         let passagesJson = String(decoding: passagesData, as: UTF8.self)
         try await database.write { db in
-            var record = SourceRecord(id: source.id.uuidString, sessionId: sessionId, url: source.url.absoluteString, title: source.title, passagesJson: passagesJson, retrievedAt: source.retrievedAt)
+            let record = SourceRecord(id: source.id.uuidString, sessionId: sessionId, url: source.url.absoluteString, title: source.title, passagesJson: passagesJson, retrievedAt: source.retrievedAt)
             try record.save(db)
         }
     }
@@ -78,7 +78,7 @@ public actor GRDBSourceRepository: SourceRepository {
     
     public func saveCitation(_ citation: Citation) async throws {
         try await database.write { db in
-            var record = CitationRecord(id: citation.id.uuidString, sourceId: citation.sourceID.uuidString, passageId: citation.passageID?.uuidString, label: citation.label, url: citation.url.absoluteString, title: citation.title, snippet: citation.snippet)
+            let record = CitationRecord(id: citation.id.uuidString, sourceId: citation.sourceID.uuidString, passageId: citation.passageID?.uuidString, label: citation.label, url: citation.url.absoluteString, title: citation.title, snippet: citation.snippet)
             try record.save(db)
         }
     }
@@ -113,7 +113,7 @@ public actor GRDBCacheRepository: WebPageCacheRepository {
         let metaJson = String(decoding: metaData, as: UTF8.self)
         let expiresAt = Date().addingTimeInterval(ttl)
         try await database.write { db in
-            var record = CacheEntryRecord(url: document.url.absoluteString, title: document.title, text: document.text, markdown: document.markdown, metadataJson: metaJson, expiresAt: expiresAt)
+            let record = CacheEntryRecord(url: document.url.absoluteString, title: document.title, text: document.text, markdown: document.markdown, metadataJson: metaJson, expiresAt: expiresAt)
             try record.save(db)
         }
     }

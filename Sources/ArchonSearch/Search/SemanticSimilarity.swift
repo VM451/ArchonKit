@@ -34,8 +34,8 @@ public final class NaturalLanguageSimilarity: SemanticSimilarity, @unchecked Sen
     public func similarity(between query: String, and text: String) -> Double? {
         guard let embedding,
               !query.isEmpty, !text.isEmpty,
-              let queryVector = try? embedding.vector(for: query),
-              let textVector = try? embedding.vector(for: String(text.prefix(500))),
+              let queryVector = embedding.vector(for: query),
+              let textVector = embedding.vector(for: String(text.prefix(500))),
               queryVector.count == textVector.count, !queryVector.isEmpty
         else { return nil }
         var dot = 0.0, queryNorm = 0.0, textNorm = 0.0

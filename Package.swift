@@ -5,15 +5,22 @@ import Foundation
 import PackageDescription
 
 let isGitHub = ProcessInfo.processInfo.environment["GITHUB_ACTIONS"] == "true"
-let developerDir = ProcessInfo.processInfo.environment["DEVELOPER_DIR"] ?? ""
-let isXcodeToolchain = developerDir.contains("Xcode.app")
+let environment = ProcessInfo.processInfo.environment
+// Resolve the active developer directory the same way xcrun does: an explicit
+// DEVELOPER_DIR wins, then the SDK SwiftPM selected, then `xcode-select`.
+let activeDeveloperDir = environment["DEVELOPER_DIR"]
+    ?? environment["SDKROOT"]
+    ?? (try? FileManager.default.destinationOfSymbolicLink(atPath: "/var/db/xcode_select_link"))
+    ?? ""
+let isCommandLineTools = activeDeveloperDir.contains("/CommandLineTools")
 // LOCAL_STUB is only needed for CLT macOS builds that lack Xcode macro plugins
 // (@State, @Model, @Generable). iOS / iPadOS / visionOS always build with Xcode
 // (which has the plugins), and macOS Xcode builds also have them — only CLT
-// macOS needs the stub. Gating to macOS + `!isXcodeToolchain` ensures a local
+// macOS needs the stub. Gating to macOS + Command Line Tools ensures a local
 // Xcode host (iOS or macOS) always gets the full implementation, never the
-// AppKit stub that fails to import on iOS.
-let isLocalForStubs = !isGitHub && !isXcodeToolchain
+// AppKit stub that fails to import on iOS. Any Xcode bundle name counts
+// (Xcode.app, Xcode-beta.app, Xcode_27.app, ...).
+let isLocalForStubs = !isGitHub && isCommandLineTools
 let localStubSettings: [SwiftSetting] = isLocalForStubs ? [.define("LOCAL_STUB", .when(platforms: [.macOS]))] : []
 
 let package = Package(
