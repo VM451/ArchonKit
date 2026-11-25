@@ -123,13 +123,18 @@ internal struct LocalCLIBridge: ReachBackend, Sendable {
                 }
                 DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + timeout, execute: watchdog)
 
-                // Drain both pipes before waiting so a chatty child cannot
+                // Drain both pipes while waiting so a chatty child cannot
                 // deadlock on a full pipe buffer.
-                let errorOutput = PipeDrain(stderr.fileHandleForReading)
-                let data = stdout.fileHandleForReading.readDataToEndOfFile()
-                let errorData = errorOutput.wait()
+                let output = PipeCollector(stdout.fileHandleForReading)
+                let errorOutput = PipeCollector(stderr.fileHandleForReading)
                 process.waitUntilExit()
                 watchdog.cancel()
+
+                // A grandchild that inherited the pipes can hold them open
+                // after the CLI exits, so stop reading shortly after exit.
+                let drainDeadline = DispatchTime.now() + 1
+                let data = output.finish(by: drainDeadline)
+                let errorData = errorOutput.finish(by: drainDeadline)
 
                 if timedOut.isSet {
                     continuation.resume(throwing: ReachError(
@@ -156,21 +161,31 @@ private final class TimeoutFlag: @unchecked Sendable {
     var isSet: Bool { lock.withLock { value } }
 }
 
-private final class PipeDrain: @unchecked Sendable {
-    private let group = DispatchGroup()
+private final class PipeCollector: @unchecked Sendable {
+    private let lock = NSLock()
+    private let handle: FileHandle
+    private let reachedEOF = DispatchSemaphore(value: 0)
     private var data = Data()
 
     init(_ handle: FileHandle) {
-        group.enter()
-        DispatchQueue.global(qos: .utility).async {
-            self.data = handle.readDataToEndOfFile()
-            self.group.leave()
+        self.handle = handle
+        handle.readabilityHandler = { [self] handle in
+            let chunk = handle.availableData
+            if chunk.isEmpty {
+                handle.readabilityHandler = nil
+                reachedEOF.signal()
+            } else {
+                lock.withLock { data.append(chunk) }
+            }
         }
     }
 
-    func wait() -> Data {
-        group.wait()
-        return data
+    /// Waits for end-of-file until `deadline`, then stops reading.
+    func finish(by deadline: DispatchTime) -> Data {
+        if reachedEOF.wait(timeout: deadline) == .timedOut {
+            handle.readabilityHandler = nil
+        }
+        return lock.withLock { data }
     }
 }
 #endif
