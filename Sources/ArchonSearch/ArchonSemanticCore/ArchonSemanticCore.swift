@@ -83,10 +83,7 @@ public struct ArchonSemanticCore: Sendable {
                 guard let vec = try? await embedding.vector(for: paragraph) else { continue }
                 scoredParagraphs.append((paragraph, embedding.similarity(queryVector, vec)))
             } else {
-                let score = Self.termOverlap(queryTerms, paragraph)
-                if score > 0 {
-                    scoredParagraphs.append((paragraph, score))
-                }
+                scoredParagraphs.append((paragraph, Self.termOverlap(queryTerms, paragraph)))
             }
         }
         
