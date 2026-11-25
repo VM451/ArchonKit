@@ -127,7 +127,10 @@ struct CoreAIProviderTests {
         let intelligence = OnDeviceProvider.intelligenceFirst()
         #expect(intelligence.capabilities.isOnDevice)
 
-        let gemma = OnDeviceProvider.gemma(GemmaModelCatalog.gemma4_4b_4bit)
+        let gemma = OnDeviceProvider.gemma(
+            GemmaModelCatalog.gemma4_4b_4bit,
+            hardwareProfile: .macAppleSilicon
+        )
         #expect(gemma.selectedGemmaVariant?.huggingFaceID == "mlx-community/gemma-4-4b-it-4bit")
 
         let coreAI = OnDeviceProvider.coreAI(model: "custom-llama.coreai")

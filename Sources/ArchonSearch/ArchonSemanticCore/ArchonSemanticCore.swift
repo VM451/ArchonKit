@@ -66,7 +66,10 @@ public struct ArchonSemanticCore: Sendable {
     /// Ranks text chunks by semantic similarity to the query and return a concatenated context.
     public func extractRelevantContext(from text: String, query: String, maxCharacters: Int = 4000) async throws -> String {
         try Task.checkCancellation()
-        let queryVector = try await embedding.vector(for: query)
+        // Sentence-embedding assets are not present on every device or the
+        // simulator; rank by term overlap instead of failing the whole search.
+        let queryVector = try? await embedding.vector(for: query)
+        let queryTerms = Self.terms(in: query)
         
         // Split text by paragraphs
         let paragraphs = text.components(separatedBy: .newlines)
@@ -76,12 +79,14 @@ public struct ArchonSemanticCore: Sendable {
         var scoredParagraphs = [(text: String, score: Double)]()
         for paragraph in paragraphs {
             try Task.checkCancellation()
-            do {
-                let vec = try await embedding.vector(for: paragraph)
-                let score = embedding.similarity(queryVector, vec)
-                scoredParagraphs.append((paragraph, score))
-            } catch {
-                // Skip paragraph if vector generation fails
+            if let queryVector {
+                guard let vec = try? await embedding.vector(for: paragraph) else { continue }
+                scoredParagraphs.append((paragraph, embedding.similarity(queryVector, vec)))
+            } else {
+                let score = Self.termOverlap(queryTerms, paragraph)
+                if score > 0 {
+                    scoredParagraphs.append((paragraph, score))
+                }
             }
         }
         
@@ -103,6 +108,15 @@ public struct ArchonSemanticCore: Sendable {
         return result.isEmpty ? text : result
     }
     
+    static func terms(in text: String) -> Set<String> {
+        Set(text.lowercased().split { !$0.isLetter && !$0.isNumber }.map(String.init))
+    }
+
+    static func termOverlap(_ queryTerms: Set<String>, _ text: String) -> Double {
+        guard !queryTerms.isEmpty else { return 0 }
+        return Double(queryTerms.intersection(terms(in: text)).count) / Double(queryTerms.count)
+    }
+
     /// Extracts structured data from text using semantic structural parsing.
     public func extract<T: ArchonGenerable>(from text: String, query: String, as type: T.Type) async throws -> T {
         guard let structuredExtractionHandler else {

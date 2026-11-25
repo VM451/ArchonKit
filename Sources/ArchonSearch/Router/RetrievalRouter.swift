@@ -59,7 +59,7 @@ public actor RetrievalRouter: Sendable {
         } else {
             isCrawlerAvailable = false
         }
-        let crawlerEndpoint = await crawlClient?.endpoint
+        let crawlerEndpoint = crawlClient?.endpoint
         return RetrievalHealthReport(
             isCrawlerAvailable: isCrawlerAvailable,
             isNativeAvailable: true,

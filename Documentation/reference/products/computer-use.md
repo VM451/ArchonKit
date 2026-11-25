@@ -41,6 +41,9 @@ audit — no Rust or Playwright code is vendored.
   Enforces cua rule: exact window (pid+windowID), fresh snapshot per action,
   no stale token reuse, verify from fresh state. `DesktopActionCatalog`
   provides `desktop.click`/`typeText`/`navigate` with the same risk model.
+- The CLI-backed hosts (`AgentBrowserCLIProvider`, `CUADriverProvider`,
+  `DesktopObservationProvider`) are macOS-only because they launch a host
+  process; the parsers, bridges, and catalogs build on every platform.
 
 Both adapters stay coordinate-free: targeting is by `@eN`/token via semantic
 roles. Visual fallback (`requestFallback`) remains default-deny.

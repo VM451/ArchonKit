@@ -105,7 +105,7 @@ public actor RealtimeSession {
         recognitionStream?.cancel()
         recognitionStream = nil
         await interruptActiveResponse(reason: .stopped, emitEvent: false)
-        try? await recognizer.end()
+        _ = try? await recognizer.end()
         frames.removeAll()
         started = false
         setState(.idle)
@@ -217,7 +217,7 @@ public actor RealtimeSession {
                     guard await self.isCurrent(epoch: epoch) else { break }
                     if let delta = chunk.deltaText, !delta.isEmpty {
                         accumulated += delta
-                        await self.emit(.responseChunk(delta))
+                        self.emit(.responseChunk(delta))
                     }
                     if chunk.isFinished { break }
                 }
@@ -225,7 +225,7 @@ public actor RealtimeSession {
                 // Barge-in path below commits whatever arrived so far.
             } catch {
                 if await self.isCurrent(epoch: epoch) {
-                    await self.emit(.frameDropped(reason: "Generation failed: \(error.localizedDescription)"))
+                    self.emit(.frameDropped(reason: "Generation failed: \(error.localizedDescription)"))
                 }
             }
             await self.completeResponse(accumulated, interrupted: Task.isCancelled, epoch: epoch)
@@ -258,7 +258,7 @@ public actor RealtimeSession {
                 // Yielded the floor; state is set by the interrupter.
             } catch {
                 if await self.isCurrent(epoch: epoch) {
-                    await self.emit(.frameDropped(reason: "Speech synthesis failed: \(error.localizedDescription)"))
+                    self.emit(.frameDropped(reason: "Speech synthesis failed: \(error.localizedDescription)"))
                 }
             }
             await self.speakingFinished(epoch: epoch)
